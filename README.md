@@ -1,6 +1,6 @@
 # PyramidalTests
 
-PyramidalTests es una extensión para PHPUnit que permite crear los casos de prueba así como sus partes mediante el empleo de funciones anónimas. Sus principales objetivos son el de simplificar la creación de casos de prueba complejos además de extender las aplicaciones de PHPUnit al campo [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development).
+PyramidalTests es una extensión para [PHPUnit](https://phpunit.de/) que permite crear los casos de prueba así como sus partes mediante el empleo de funciones anónimas. Sus principales objetivos son el de simplificar la creación de casos de prueba complejos además de extender las aplicaciones de [PHPUnit](https://phpunit.de/) al campo [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development).
 
 Su filosofía de desarrollo está inspirada en proyectos como [mochajs][1], [jasmine][2], [peridotphp][3], etc.
 
@@ -8,7 +8,7 @@ Su filosofía de desarrollo está inspirada en proyectos como [mochajs][1], [jas
 [2]: https://jasmine.github.io/
 [3]: http://peridot-php.github.io/
 
->Para comprender el trabajo con esta extensión es necesario que usted tenga conocimientos sobre PHPUnit y de las pruebas de software en general.
+>Para comprender el trabajo con esta extensión es necesario que usted tenga conocimientos sobre [PHPUnit](https://phpunit.de/) y de las pruebas de software en general.
 
 ## Instalación.
 
@@ -123,15 +123,15 @@ Es totalmente recomendable que cada archivo de pruebas defina el espacio de nomb
 
 ## Ejecutando las pruebas.
 
-Una vez que PHPUnit sea invocado se ejecutarán todas las pruebas definidas de esta manera tal y como se muestra en la siguiente imagen.
+Una vez que [PHPUnit](https://phpunit.de/) sea invocado se ejecutarán todas las pruebas definidas de esta manera tal y como se muestra en la siguiente imagen.
 
     $ ./vendor/bin/phpunit --testdox
 
 ![](full_results.png)
 
-Como puede ver existe un bloque de texto que indica que la sección superior se corresponde con el resultado de la ejecución de las pruebas de la extensión, mientras que la inferior con el resto de pruebas escritas en la manera tradicional de PHPUnit.
+Como puede ver existe un bloque de texto que indica que la sección superior se corresponde con el resultado de la ejecución de las pruebas de la extensión, mientras que la inferior con el resto de pruebas escritas en la manera tradicional de [PHPUnit](https://phpunit.de/).
 
->Queremos comentar que el motivo de existencia de esta división se debe a que no hemos encontrado ningún evento en la arquitectura de PHPUnit que permita agregar pruebas en el `TestRunner` por defecto.
+>Queremos comentar que el motivo de existencia de esta división se debe a que no hemos encontrado ningún evento en la arquitectura de [PHPUnit](https://phpunit.de/) que permita agregar pruebas en el `TestRunner` por defecto.
 
 De esta manera, se cumple con el principal objetivo de la extensión que es el de ampliar las posibilidades del framework ya que las pruebas de la extensión pueden coexistir con las tradicionales.
 
@@ -145,7 +145,7 @@ Si en su proyecto pretende escribir TODAS las pruebas al estilo de la extensión
 </php>
 ```
 
-De esta forma PHPUnit solo ejecutará las pruebas de la extensión y en los resultados no se mostrará el bloque informativo.
+De esta forma [PHPUnit](https://phpunit.de/) solo ejecutará las pruebas de la extensión y en los resultados no se mostrará el bloque informativo.
 
 ![](results.png)
 
