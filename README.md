@@ -10,7 +10,7 @@ Su filosofía de desarrollo está inspirada en proyectos como [mochajs][1], [jas
 
 >Para comprender el trabajo con esta extensión es necesario que usted tenga conocimientos sobre [PHPUnit](https://phpunit.de/) y de las pruebas de software en general.
 
-Para una rápida toma de contacto usted puede clonar y modificar el proyecto[PyramidalTests-Demo](https://github.com/andaniel05/PyramidalTests-Demo). El mismo contiene ya implementado todas las funcionalidades que aquí se muestran.
+Para una rápida toma de contacto usted puede clonar y modificar el proyecto [PyramidalTests-Demo](https://github.com/andaniel05/PyramidalTests-Demo). El mismo contiene ya implementado todas las funcionalidades que aquí se muestran.
 
 ## Instalación.
 
