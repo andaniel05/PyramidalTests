@@ -22,7 +22,9 @@ namespace Andaniel05\PyramidalTests\DSL;
 
 use Andaniel05\PyramidalTests\Model\Record;
 use Andaniel05\PyramidalTests\Model\Test;
+use Andaniel05\PyramidalTests\Model\Macro;
 use Andaniel05\PyramidalTests\Model\TestCase;
+use Andaniel05\PyramidalTests\Exception\MacroNotFoundException;
 use Andaniel05\PyramidalTests\Exception\InvalidContextException;
 use Closure;
 
@@ -157,5 +159,53 @@ abstract class DSL
         }
 
         $testCase->createStaticMethod($method, $closure);
+    }
+
+    public static function createMacro(string $description, Closure $closure): void
+    {
+        $macro = new Macro($description, $closure);
+
+        $currentTestCase = Record::getCurrentTestCase();
+
+        if (! $currentTestCase) {
+            Record::addGlobalMacro($macro);
+        } else {
+            $currentTestCase->addMacro($macro);
+        }
+
+        Record::setCurrentTestCase($macro);
+
+        call_user_func($closure);
+
+        Record::setCurrentTestCase($currentTestCase);
+    }
+
+    public static function useMacro(string $description): void
+    {
+        $testCase = Record::getCurrentTestCase();
+
+        if (! $testCase instanceof TestCase) {
+            throw new InvalidContextException;
+        }
+
+        $node = $testCase;
+        while ($node) {
+            $macro = $node->getMacro($description);
+            if ($macro) {
+                break;
+            }
+
+            $node = $node->getParent();
+        }
+
+        if (! $macro) {
+            $macro = Record::getGlobalMacro($description);
+        }
+
+        if (! $macro) {
+            throw new MacroNotFoundException($description);
+        }
+
+        $testCase->useMacro($macro);
     }
 }

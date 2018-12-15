@@ -38,6 +38,7 @@ class TestCase extends Model
     protected $setUp;
     protected $tests = [];
     protected $methods = [];
+    protected $macros = [];
     protected $staticMethods = [];
     protected $tearDown;
     protected $tearDownAfterClass;
@@ -192,6 +193,7 @@ class TestCase extends Model
         }
 
         $testMethods = null;
+
         foreach ($this->tests as $test) {
             $testMethods .= "
                 /**
@@ -417,5 +419,33 @@ class TestCase extends Model
     public function getStaticMethodClosure(string $methodName): ?Closure
     {
         return $this->staticMethods[$methodName] ?? null;
+    }
+
+    public function addMacro(Macro $macro): void
+    {
+        $this->macros[$macro->getDescription()] = $macro;
+    }
+
+    public function getMacros(): array
+    {
+        return $this->macros;
+    }
+
+    public function getMacro(string $description): ?Macro
+    {
+        return $this->macros[$description] ?? null;
+    }
+
+    public function useMacro(Macro $macro): void
+    {
+        foreach ($macro->getTests() as $test) {
+            $this->addTest($test);
+        }
+
+        foreach ($macro->getTestCases() as $testCase) {
+            $this->addTestCase($testCase);
+            $testCase->setParent($this);
+            $testCase->setNamespace($this->getNamespace() . '\\' . $this->getName());
+        }
     }
 }

@@ -33,6 +33,7 @@ abstract class Record
 {
     protected static $currentTestCase;
     protected static $testCases = [];
+    protected static $globalMacros = [];
     protected static $testCaseNamespace = 'Andaniel05\PyramidalTests\__Dynamic__';
     protected static $testCaseClass = '\PHPUnit\Framework\TestCase';
 
@@ -157,5 +158,15 @@ abstract class Record
     public static function setCurrentTestCase(?TestCase $testCase): void
     {
         static::$currentTestCase = $testCase;
+    }
+
+    public static function addGlobalMacro(Macro $macro): void
+    {
+        static::$globalMacros[$macro->getDescription()] = $macro;
+    }
+
+    public static function getGlobalMacro(string $description): ?Macro
+    {
+        return static::$globalMacros[$description] ?? null;
     }
 }

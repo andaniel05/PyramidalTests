@@ -69,3 +69,13 @@ function createStaticMethod(string $method, Closure $closure): void
 {
     DSL::createStaticMethod($method, $closure);
 }
+
+function createMacro(string $description, Closure $closure): void
+{
+    DSL::createMacro($description, $closure);
+}
+
+function useMacro(string $description): void
+{
+    DSL::useMacro($description);
+}

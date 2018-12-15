@@ -26,6 +26,7 @@ use Andaniel05\PyramidalTests\Exception\DuplicatedTestException;
 use Andaniel05\PyramidalTests\Exception\InvalidContextException;
 use Andaniel05\PyramidalTests\Exception\InvalidMethodNameException;
 use Andaniel05\PyramidalTests\Exception\InvalidTestCaseClassException;
+use Andaniel05\PyramidalTests\Exception\MacroNotFoundException;
 use Andaniel05\PyramidalTests\Tests\Utils\Registry;
 use Andaniel05\PyramidalTests\Tests\Dummies\Observer;
 use Andaniel05\PyramidalTests\Tests\Dummies\SomeClass;
@@ -1176,5 +1177,264 @@ class ExtensionTest extends BaseTestCase
             'Andaniel05\PyramidalTests\__Dynamic__\MyParentTestCase\MyChildTestCase::testTest1',
             $result
         );
+    }
+
+    public function testUseMacroThrowAnExceptionWhenItIsUsedOverATestCase()
+    {
+        $this->expectInvalidContextException();
+
+        useMacro('my macro');
+    }
+
+    public function testUseMacroThrowAnMacroNotFoundException()
+    {
+        $this->expectException(MacroNotFoundException::class);
+        $this->expectExceptionMessage("The macro 'my macro' not exists.");
+
+        testCase(function () {
+            useMacro('my macro');
+        });
+    }
+
+    public function testUseMacroThrowAnMacroNotFoundException2()
+    {
+        $this->expectException(MacroNotFoundException::class);
+        $this->expectExceptionMessage("The macro 'my macro' not exists.");
+
+        testCase('parent test case', function () {
+            testCase('child test case 1', function () {
+                createMacro('my macro', function () {
+                    test('test1', function () {
+                        $this->assertTrue(true);
+                    });
+
+                    test('test2', function () {
+                        $this->assertTrue(true);
+                    });
+                });
+            });
+
+            testCase('child test case 1', function () {
+                useMacro('my macro');
+            });
+        });
+    }
+
+    public function testUsageOfGlobalMacros()
+    {
+        createMacro('my macro', function () {
+            test('test1', function () {
+                $this->assertTrue(true);
+            });
+
+            test('test2', function () {
+                $this->assertTrue(true);
+            });
+        });
+
+        testCase('my test case', function () {
+            useMacro('my macro');
+        });
+
+        $result = Extension::run();
+
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1', $result);
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest2', $result);
+    }
+
+    public function testUsageOfMacrosWithTests1()
+    {
+        testCase('my test case', function () {
+            createMacro('my macro', function () {
+                test('test1', function () {
+                    $this->assertTrue(true);
+                });
+
+                test('test2', function () {
+                    $this->assertTrue(true);
+                });
+            });
+
+            useMacro('my macro');
+        });
+
+        $result = Extension::run();
+
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1', $result);
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest2', $result);
+    }
+
+    public function testUsageOfMacrosWithTests2()
+    {
+        testCase('parent test case', function () {
+            createMacro('my macro', function () {
+                test('test1', function () {
+                    $this->assertTrue(true);
+                });
+
+                test('test2', function () {
+                    $this->assertTrue(true);
+                });
+            });
+
+            testCase('child test case', function () {
+                useMacro('my macro');
+            });
+        });
+
+        $result = Extension::run();
+
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase::testTest1', $result);
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase::testTest2', $result);
+    }
+
+    public function testUsageOfMacrosWithTests3()
+    {
+        testCase('parent test case', function () {
+            createMacro('my macro', function () {
+                test('test1', function () {
+                    $this->assertTrue(true);
+                });
+
+                test('test2', function () {
+                    $this->assertTrue(true);
+                });
+            });
+
+            testCase('child test case 1', function () {
+                testCase('child test case 2', function () {
+                    testCase('child test case 3', function () {
+                        testCase('child test case 4', function () {
+                            useMacro('my macro');
+                        });
+                    });
+                });
+            });
+        });
+
+        $result = Extension::run();
+
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase1\ChildTestCase2\ChildTestCase3\ChildTestCase4::testTest1', $result);
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase1\ChildTestCase2\ChildTestCase3\ChildTestCase4::testTest2', $result);
+    }
+
+    public function testUsageOfMacrosWithTests4()
+    {
+        testCase('parent test case', function () {
+            createMacro('my macro', function () {
+                test('test1', function () {
+                    $this->assertTrue(true);
+                });
+
+                test('test2', function () {
+                    $this->assertTrue(true);
+                });
+            });
+
+            testCase('child test case 1', function () {
+                createMacro('my macro', function () {
+                    test('test3', function () {
+                        $this->assertTrue(true);
+                    });
+
+                    test('test4', function () {
+                        $this->assertTrue(true);
+                    });
+                });
+
+                testCase('child test case 2', function () {
+                    useMacro('my macro');
+                });
+            });
+        });
+
+        $result = Extension::run();
+
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase1\ChildTestCase2::testTest3', $result);
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase1\ChildTestCase2::testTest4', $result);
+    }
+
+    public function testUsageOfMacrosWithTests5()
+    {
+        createMacro('my macro', function () {
+            test('test1', function () {
+                $this->assertTrue(true);
+            });
+
+            test('test2', function () {
+                $this->assertTrue(true);
+            });
+        });
+
+        testCase('parent test case', function () {
+            createMacro('my macro', function () {
+                test('test3', function () {
+                    $this->assertTrue(true);
+                });
+
+                test('test4', function () {
+                    $this->assertTrue(true);
+                });
+            });
+
+            testCase('child test case', function () {
+                useMacro('my macro');
+            });
+        });
+
+        $result = Extension::run();
+
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase::testTest3', $result);
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase::testTest4', $result);
+    }
+
+    public function testUsageOfMacrosWithTestCases1()
+    {
+        createMacro('my macro', function () {
+            testCase('child test case', function () {
+                test('test1', function () {
+                    $this->assertTrue(true);
+                });
+
+                test('test2', function () {
+                    $this->assertTrue(true);
+                });
+            });
+        });
+
+        testCase('parent test case', function () {
+            useMacro('my macro');
+        });
+
+        $result = Extension::run();
+
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase::testTest1', $result);
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase::testTest2', $result);
+    }
+
+    public function testUsageOfMacrosWithTestCases2()
+    {
+        testCase('parent test case', function () {
+            createMacro('my macro', function () {
+                testCase('child test case 2', function () {
+                    test('test1', function () {
+                        $this->assertTrue(true);
+                    });
+
+                    test('test2', function () {
+                        $this->assertTrue(true);
+                    });
+                });
+            });
+
+            testCase('child test case 1', function () {
+                useMacro('my macro');
+            });
+        });
+
+        $result = Extension::run();
+
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase1\ChildTestCase2::testTest1', $result);
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase1\ChildTestCase2::testTest2', $result);
     }
 }
