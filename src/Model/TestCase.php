@@ -443,9 +443,11 @@ class TestCase extends Model
         }
 
         foreach ($macro->getTestCases() as $testCase) {
-            $this->addTestCase($testCase);
-            $testCase->setParent($this);
-            $testCase->setNamespace($this->getNamespace() . '\\' . $this->getName());
+            $newTestCase = clone $testCase;
+
+            $this->addTestCase($newTestCase);
+            $newTestCase->setParent($this);
+            $newTestCase->setNamespace($this->getNamespace() . '\\' . $this->getName());
         }
 
         if ($setUpBeforeClass = $macro->getSetUpBeforeClass()) {
