@@ -1437,4 +1437,114 @@ class ExtensionTest extends BaseTestCase
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase1\ChildTestCase2::testTest1', $result);
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase1\ChildTestCase2::testTest2', $result);
     }
+
+    public function testSetUpBeforeClassInsideAMacro()
+    {
+        createMacro('my macro', function () {
+            setUpBeforeClass(function () {
+                Registry::$data = uniqid();
+            });
+        });
+
+        testCase('my test case', function () {
+            useMacro('my macro');
+
+            test('test1', function () {
+                $this->assertNotEmpty(Registry::$data);
+            });
+        });
+
+        $result = Extension::run();
+
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1', $result);
+    }
+
+    public function testSetUpInsideAMacro()
+    {
+        createMacro('my macro', function () {
+            setUp(function () {
+                $this->secret = uniqid();
+            });
+        });
+
+        testCase('my test case', function () {
+            useMacro('my macro');
+
+            test('test1', function () {
+                $this->assertNotEmpty($this->secret);
+            });
+
+            test('test2', function () {
+                $this->assertNotEmpty($this->secret);
+            });
+        });
+
+        $result = Extension::run();
+
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1', $result);
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest2', $result);
+    }
+
+    public function testTearDownInsideAMacro()
+    {
+        createMacro('my macro', function () {
+            tearDown(function () {
+                if (! isset(Registry::$data['secret'])) {
+                    Registry::$data['secret'] = [];
+                }
+
+                Registry::$data['secret'][] = $this->secret;
+            });
+        });
+
+        testCase('my test case', function () {
+            useMacro('my macro');
+
+            test('test1', function () {
+                $this->secret = uniqid();
+                $this->assertTrue(true);
+            });
+
+            test('test2', function () {
+                $this->secret = uniqid();
+                $this->assertTrue(true);
+            });
+        });
+
+        $result = Extension::run();
+
+        $this->assertNotEquals(
+            Registry::$data['secret'][0],
+            Registry::$data['secret'][1]
+        );
+    }
+
+    public function testTearDownAfterClassInsideAMacro()
+    {
+        createMacro('my macro', function () {
+            tearDownAfterClass(function () {
+                Registry::$data['executedTearDownAfterClass'] = true;
+                static::assertNotEmpty(Registry::$data['secret1']);
+                static::assertNotEmpty(Registry::$data['secret2']);
+            });
+        });
+
+        testCase('my test case', function () {
+            useMacro('my macro');
+
+            test('test1', function () {
+                Registry::$data['secret1'] = uniqid();
+                $this->assertTrue(true);
+            });
+
+            test('test2', function () {
+                Registry::$data['secret2'] = uniqid();
+                $this->assertTrue(true);
+            });
+        });
+
+        $result = Extension::run();
+
+        $this->assertTrue(Registry::$data['executedTearDownAfterClass']);
+    }
 }

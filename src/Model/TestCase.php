@@ -447,5 +447,21 @@ class TestCase extends Model
             $testCase->setParent($this);
             $testCase->setNamespace($this->getNamespace() . '\\' . $this->getName());
         }
+
+        if ($setUpBeforeClass = $macro->getSetUpBeforeClass()) {
+            $this->setSetUpBeforeClass($setUpBeforeClass);
+        }
+
+        if ($setUp = $macro->getSetUp()) {
+            $this->setSetUp($setUp);
+        }
+
+        if ($tearDown = $macro->getTearDown()) {
+            $this->setTearDown($tearDown);
+        }
+
+        if ($tearDownAfterClass = $macro->getTearDownAfterClass()) {
+            $this->setTearDownAfterClass($tearDownAfterClass);
+        }
     }
 }
