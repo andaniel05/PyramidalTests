@@ -1462,6 +1462,32 @@ class ExtensionTest extends BaseTestCase
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\TestCase2\SharedTestCase::testTest1', $result);
     }
 
+    public function testUsageOfMacrosWithTestCases4()
+    {
+        createMacro('my macro', function () {
+            testCase('shared test case 1', function () {
+                testCase('shared test case 2', function () {
+                    test('test1', function () {
+                        $this->assertTrue(true);
+                    });
+                });
+            });
+        });
+
+        testCase('test case 1', function () {
+            useMacro('my macro');
+        });
+
+        testCase('test case 2', function () {
+            useMacro('my macro');
+        });
+
+        $result = Extension::run();
+
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\TestCase1\SharedTestCase1\SharedTestCase2::testTest1', $result);
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\TestCase2\SharedTestCase1\SharedTestCase2::testTest1', $result);
+    }
+
     public function testSetUpBeforeClassInsideAMacro()
     {
         createMacro('my macro', function () {
