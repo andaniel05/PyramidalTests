@@ -154,4 +154,3 @@ De esta forma [PHPUnit](https://phpunit.de/) solo ejecutará las pruebas de la e
 ## Aspectos pendientes.
 
 1. Traducir documentación al inglés.
-2. Crear un `ResultPrinter` personalizado.

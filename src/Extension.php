@@ -41,7 +41,7 @@ class Extension implements Hook
             static::$executed = true;
             static::run();
         } else {
-            return; // Prevent several executions of the extension.
+            return; // Prevent several executions of this extension.
         }
     }
 
@@ -85,6 +85,7 @@ class Extension implements Hook
             $exit = (bool) ($_ENV['PYRAMIDAL_ONLY'] ?? false);
 
             $testRunner = new TestRunner;
+            $testRunner->setPrinter(new PyramidalResultPrinter);
             $testRunner->doRun($testSuite, $arguments, $exit);
 
             static::printComments();
