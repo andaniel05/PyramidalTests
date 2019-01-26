@@ -25,4 +25,6 @@ namespace Andaniel05\PyramidalTests\Model;
  *
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-class Macro extends TestCase {};
+class Macro extends TestCase
+{
+};
