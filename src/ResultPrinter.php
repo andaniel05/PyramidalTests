@@ -32,12 +32,12 @@ use PHPUnit\Framework\TestSuite;
 use PHPUnit\Framework\Warning;
 use PHPUnit\Runner\PhptTestCase;
 use PHPUnit\Runner\TestSuiteSorter;
-use PHPUnit\TextUI\ResultPrinter;
+use PHPUnit\TextUI\ResultPrinter as PHPUnitResultPrinter;
 use SebastianBergmann\Timer\Timer;
 use PHPUnit\Util\TestDox\NamePrettifier;
 use Andaniel05\PyramidalTests\Model\Record;
 
-class PyramidalResultPrinter extends ResultPrinter
+class ResultPrinter extends PHPUnitResultPrinter
 {
     /**
      * @var int[]
@@ -153,7 +153,7 @@ class PyramidalResultPrinter extends ResultPrinter
             }
         }
 
-        $margin = $this->getMargin('  ');
+        $margin = $this->getMargin(str_repeat(' ', $this->getTotalOfSpaces()));
 
         $this->className  = $margin . $className;
         $this->testMethod = $testMethod;
@@ -183,9 +183,9 @@ class PyramidalResultPrinter extends ResultPrinter
             );
         }
 
-        $margin = $this->getMargin('  ');
+        $margin = $this->getMargin(str_repeat(' ', $this->getTotalOfSpaces()));
 
-        $resultMessage = $margin . ' ' . $resultMessage;
+        $resultMessage = $margin . $resultMessage;
 
         if ($this->bufferExecutionOrder) {
             $this->bufferTestResult($test, $resultMessage);
@@ -472,5 +472,14 @@ class PyramidalResultPrinter extends ResultPrinter
         }
 
         return $margin;
+    }
+
+    private function getTotalOfSpaces(): int
+    {
+        $result = isset($_ENV['PYRAMIDAL_MARGIN']) && is_numeric($_ENV['PYRAMIDAL_MARGIN']) ?
+            $_ENV['PYRAMIDAL_MARGIN'] : 4
+        ;
+
+        return intval($result);
     }
 }

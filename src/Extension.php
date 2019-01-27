@@ -85,7 +85,7 @@ class Extension implements Hook
             $exit = (bool) ($_ENV['PYRAMIDAL_ONLY'] ?? false);
 
             $testRunner = new TestRunner;
-            $testRunner->setPrinter(new PyramidalResultPrinter);
+            $testRunner->setPrinter(new ResultPrinter);
             $testRunner->doRun($testSuite, $arguments, $exit);
 
             static::printComments();
