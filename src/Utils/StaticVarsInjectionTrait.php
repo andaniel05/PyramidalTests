@@ -18,13 +18,46 @@ declare(strict_types=1);
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace Andaniel05\PyramidalTests\Tests\Utils;
+namespace Andaniel05\PyramidalTests\Utils;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
- * @abstract
  */
-abstract class Registry
+trait StaticVarsInjectionTrait
 {
-    public static $data = [];
+    protected static $vars = [];
+
+    public function injectVars(): void
+    {
+        foreach (static::$vars as $name => $value) {
+            $this->{$name} = $value;
+        }
+    }
+
+    public static function setVar(string $name, $value): void
+    {
+        static::$vars[$name] = $value;
+    }
+
+    public static function getVar(string $name)
+    {
+        return static::$vars[$name] ?? null;
+    }
+
+    public static function getAllVars(): array
+    {
+        return static::$vars;
+    }
+
+    public static function addVars(array $vars): void
+    {
+        foreach ($vars as $name => $value) {
+            static::setVar($name, $value);
+        }
+    }
+
+    public static function resetVars(): void
+    {
+        static::$vars = [];
+    }
 }

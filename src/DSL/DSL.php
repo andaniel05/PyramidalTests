@@ -208,4 +208,28 @@ abstract class DSL
 
         $testCase->useMacro($macro);
     }
+
+    public static function setUpBeforeClassOnce(Closure $closure, bool $invokeParent = true): void
+    {
+        $testCase = Record::getCurrentTestCase();
+
+        if (! $testCase instanceof TestCase) {
+            throw new InvalidContextException;
+        }
+
+        $testCase->setSetUpBeforeClass($closure, true);
+        $testCase->setInvokeParentInSetUpBeforeClass($invokeParent);
+    }
+
+    public static function tearDownAfterClassOnce(Closure $closure, bool $invokeParent = true): void
+    {
+        $testCase = Record::getCurrentTestCase();
+
+        if (! $testCase instanceof TestCase) {
+            throw new InvalidContextException;
+        }
+
+        $testCase->setTearDownAfterClass($closure, true);
+        $testCase->setInvokeParentInTearDownAfterClass($invokeParent);
+    }
 }

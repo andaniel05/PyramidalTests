@@ -27,7 +27,6 @@ use Andaniel05\PyramidalTests\Exception\InvalidContextException;
 use Andaniel05\PyramidalTests\Exception\InvalidMethodNameException;
 use Andaniel05\PyramidalTests\Exception\InvalidTestCaseClassException;
 use Andaniel05\PyramidalTests\Exception\MacroNotFoundException;
-use Andaniel05\PyramidalTests\Tests\Utils\Registry;
 use Andaniel05\PyramidalTests\Tests\Dummies\Observer;
 use Andaniel05\PyramidalTests\Tests\Dummies\SomeClass;
 use Andaniel05\PyramidalTests\Tests\Dummies\Subject;
@@ -1596,5 +1595,131 @@ class ExtensionTest extends BaseTestCase
         $result = Extension::run();
 
         $this->assertTrue(Registry::$data['executedTearDownAfterClass']);
+    }
+
+    public function testSetUpBeforeClassOnce()
+    {
+        Registry::$data['counter1'] = 0;
+        Registry::$data['counter2'] = 0;
+
+        $doIncrement1 = function () {
+            Registry::$data['counter1']++;
+        };
+
+        $doIncrement2 = function () {
+            Registry::$data['counter2']++;
+        };
+
+        createMacro('exists a test', function () {
+            test(function () {
+                $this->assertTrue();
+            });
+        });
+
+        // for counter1
+        testCase(function () use ($doIncrement1) {
+            setUpBeforeClass($doIncrement1); // counter = 1
+
+            useMacro('exists a test');
+
+            testCase(function () use ($doIncrement1) {
+                setUpBeforeClass($doIncrement1); // counter = 3
+
+                useMacro('exists a test');
+
+                testCase(function () use ($doIncrement1) {
+                    setUpBeforeClass($doIncrement1); // counter = 6
+
+                    useMacro('exists a test');
+                });
+            });
+        });
+
+        // for counter2
+        testCase(function () use ($doIncrement2) {
+            setUpBeforeClassOnce($doIncrement2); // counter = 1, this callback is called only once
+
+            useMacro('exists a test');
+
+            testCase(function () use ($doIncrement2) {
+                setUpBeforeClass($doIncrement2); // counter = 2
+
+                useMacro('exists a test');
+
+                testCase(function () use ($doIncrement2) {
+                    setUpBeforeClass($doIncrement2); // counter = 4
+
+                    useMacro('exists a test');
+                });
+            });
+        });
+
+        $result = Extension::run();
+
+        $this->assertEquals(6, Registry::$data['counter1']);
+        $this->assertEquals(4, Registry::$data['counter2']);
+    }
+
+    public function testTearDownAfterClassOnce()
+    {
+        Registry::$data['counter1'] = 0;
+        Registry::$data['counter2'] = 0;
+
+        $doIncrement1 = function () {
+            Registry::$data['counter1']++;
+        };
+
+        $doIncrement2 = function () {
+            Registry::$data['counter2']++;
+        };
+
+        createMacro('exists a test', function () {
+            test(function () {
+                $this->assertTrue();
+            });
+        });
+
+        // for counter1
+        testCase(function () use ($doIncrement1) {
+            tearDownAfterClass($doIncrement1); // counter = 1
+
+            useMacro('exists a test');
+
+            testCase(function () use ($doIncrement1) {
+                tearDownAfterClass($doIncrement1); // counter = 3
+
+                useMacro('exists a test');
+
+                testCase(function () use ($doIncrement1) {
+                    tearDownAfterClass($doIncrement1); // counter = 6
+
+                    useMacro('exists a test');
+                });
+            });
+        });
+
+        // for counter2
+        testCase(function () use ($doIncrement2) {
+            tearDownAfterClassOnce($doIncrement2); // counter = 1, this callback is called only once
+
+            useMacro('exists a test');
+
+            testCase(function () use ($doIncrement2) {
+                tearDownAfterClass($doIncrement2); // counter = 2
+
+                useMacro('exists a test');
+
+                testCase(function () use ($doIncrement2) {
+                    tearDownAfterClass($doIncrement2); // counter = 4
+
+                    useMacro('exists a test');
+                });
+            });
+        });
+
+        $result = Extension::run();
+
+        $this->assertEquals(6, Registry::$data['counter1']);
+        $this->assertEquals(4, Registry::$data['counter2']);
     }
 }

@@ -35,6 +35,7 @@ class TestCase extends Model
     protected $namespace;
     protected $testCases = [];
     protected $setUpBeforeClass;
+    protected $setUpBeforeClassOnlyOnce = false;
     protected $setUp;
     protected $tests = [];
     protected $methods = [];
@@ -42,6 +43,7 @@ class TestCase extends Model
     protected $staticMethods = [];
     protected $tearDown;
     protected $tearDownAfterClass;
+    protected $tearDownAfterClassOnlyOnce = false;
     protected $invokeParentInSetUpBeforeClass = true;
     protected $invokeParentInSetUp = true;
     protected $invokeParentInTearDown = true;
@@ -119,9 +121,10 @@ class TestCase extends Model
         return $this->setUp;
     }
 
-    public function setSetUpBeforeClass(Closure $setUpBeforeClass): void
+    public function setSetUpBeforeClass(Closure $setUpBeforeClass, bool $once = false): void
     {
         $this->setUpBeforeClass = $setUpBeforeClass;
+        $this->setUpBeforeClassOnlyOnce = $once;
     }
 
     public function getSetUpBeforeClass(): ?Closure
@@ -139,9 +142,10 @@ class TestCase extends Model
         return $this->tearDown;
     }
 
-    public function setTearDownAfterClass(Closure $tearDownAfterClass): void
+    public function setTearDownAfterClass(Closure $tearDownAfterClass, bool $once = false): void
     {
         $this->tearDownAfterClass = $tearDownAfterClass;
+        $this->tearDownAfterClassOnlyOnce = $once;
     }
 
     public function getTearDownAfterClass(): ?Closure
@@ -275,9 +279,35 @@ class TestCase extends Model
             ";
         }
 
+        $fragment1ForSetupBeforeClassOnce = null;
+        $fragment2ForSetupBeforeClassOnce = null;
+        $fragment3ForSetupBeforeClassOnce = null;
+
+        if ($this->setUpBeforeClassOnlyOnce) {
+            $fragment1ForSetupBeforeClassOnce = 'public static $setUpBeforeClassInvoked = false;';
+            $fragment2ForSetupBeforeClassOnce = 'if (self::$setUpBeforeClassInvoked) return;';
+            $fragment3ForSetupBeforeClassOnce = 'self::$setUpBeforeClassInvoked = true;';
+        }
+
+        $fragment1ForTearDownAfterClassOnce = null;
+        $fragment2ForTearDownAfterClassOnce = null;
+        $fragment3ForTearDownAfterClassOnce = null;
+
+        if ($this->tearDownAfterClassOnlyOnce) {
+            $fragment1ForTearDownAfterClassOnce = 'public static $tearDownAfterClassInvoked = false;';
+            $fragment2ForTearDownAfterClassOnce = 'if (self::$tearDownAfterClassInvoked) return;';
+            $fragment3ForTearDownAfterClassOnce = 'self::$tearDownAfterClassInvoked = true;';
+        }
+
         return compact(
             'parentClass',
             'getThisTestCase',
+            'fragment1ForSetupBeforeClassOnce',
+            'fragment2ForSetupBeforeClassOnce',
+            'fragment3ForSetupBeforeClassOnce',
+            'fragment1ForTearDownAfterClassOnce',
+            'fragment2ForTearDownAfterClassOnce',
+            'fragment3ForTearDownAfterClassOnce',
             'invokeParentInSetUpBeforeClass',
             'invokeParentInSetUp',
             'invokeParentInTearDown',
@@ -295,8 +325,13 @@ class TestCase extends Model
         return "
             class {$this->getName()}Base extends {$parentClass}
             {
+                {$fragment1ForSetupBeforeClassOnce}
+                {$fragment1ForTearDownAfterClassOnce}
+
                 public static function setUpBeforeClass()
                 {
+                    {$fragment2ForSetupBeforeClassOnce}
+
                     {$invokeParentInSetUpBeforeClass}
 
                     \$setUpBeforeClass = {$getThisTestCase}->getSetUpBeforeClass();
@@ -305,6 +340,8 @@ class TestCase extends Model
                             \\Closure::bind(\$setUpBeforeClass, null, self::class)
                         );
                     }
+
+                    {$fragment3ForSetupBeforeClassOnce}
                 }
 
                 public function setUp()
@@ -329,6 +366,8 @@ class TestCase extends Model
 
                 public static function tearDownAfterClass()
                 {
+                    {$fragment2ForTearDownAfterClassOnce}
+
                     {$invokeParentInTearDownAfterClass}
 
                     \$tearDownAfterClass = {$getThisTestCase}->getTearDownAfterClass();
@@ -337,6 +376,8 @@ class TestCase extends Model
                             \\Closure::bind(\$tearDownAfterClass, null, self::class)
                         );
                     }
+
+                    {$fragment3ForTearDownAfterClassOnce}
                 }
 
                 {$staticMethods}

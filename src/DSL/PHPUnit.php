@@ -79,3 +79,13 @@ function useMacro(string $description): void
 {
     DSL::useMacro($description);
 }
+
+function setUpBeforeClassOnce(Closure $closure, bool $invokeParent = true): void
+{
+    DSL::setUpBeforeClassOnce($closure, $invokeParent);
+}
+
+function tearDownAfterClassOnce(Closure $closure, bool $invokeParent = true): void
+{
+    DSL::tearDownAfterClassOnce($closure, $invokeParent);
+}
