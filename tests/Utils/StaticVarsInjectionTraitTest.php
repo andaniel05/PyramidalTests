@@ -27,7 +27,9 @@ class StaticVarsInjectionTraitTest extends PHPUnitTestCase
 {
     public function setUp()
     {
-        $this->entity = new class { use StaticVarsInjectionTrait; };
+        $this->entity = new class {
+            use StaticVarsInjectionTrait;
+        };
         $this->entityClass = get_class($this->entity);
         $this->entityClass::resetVars();
     }

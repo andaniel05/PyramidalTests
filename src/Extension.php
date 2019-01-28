@@ -79,7 +79,9 @@ class Extension implements Hook
             $commandClass = new ReflectionClass($command);
             $handleArgumentsMethod = $commandClass->getMethod('handleArguments');
             $handleArgumentsMethod->getClosure($command)->call($command, $_SERVER['argv']);
-            $arguments = (function () { return $this->arguments; })->call($command);
+            $arguments = (function () {
+                return $this->arguments;
+            })->call($command);
 
             $exit = (bool) ($_ENV['PYRAMIDAL_ONLY'] ?? false);
 
