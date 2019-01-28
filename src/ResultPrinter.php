@@ -147,7 +147,7 @@ class ResultPrinter extends PHPUnitResultPrinter
         foreach (Record::testCases() as $pyTestCase) {
             if ($pyTestCase->getClassName() == $testClass) {
                 $parents = $pyTestCase->getParents();
-                $this->levels = count($parents) >= 1 ? count($parents) - 1 : 0;
+                $this->levels = count($parents) >= 1 ? count($parents) : 0;
 
                 break;
             }
