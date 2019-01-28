@@ -26,6 +26,7 @@ use PHPUnit\Framework\TestSuite as PHPUnitTestSuite;
 use PHPUnit\TextUI\Command;
 use Andaniel05\PyramidalTests\Model\Record;
 use ReflectionClass;
+use PHPUnit\Util\TestDox\CliTestDoxPrinter;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -78,14 +79,16 @@ class Extension implements Hook
             $commandClass = new ReflectionClass($command);
             $handleArgumentsMethod = $commandClass->getMethod('handleArguments');
             $handleArgumentsMethod->getClosure($command)->call($command, $_SERVER['argv']);
-            $arguments = (function () {
-                return $this->arguments;
-            })->call($command);
+            $arguments = (function () { return $this->arguments; })->call($command);
 
             $exit = (bool) ($_ENV['PYRAMIDAL_ONLY'] ?? false);
 
             $testRunner = new TestRunner;
-            $testRunner->setPrinter(new ResultPrinter);
+
+            if (isset($arguments['printer']) && $arguments['printer'] == CliTestDoxPrinter::class) {
+                $testRunner->setPrinter(new ResultPrinter);
+            }
+
             $testRunner->doRun($testSuite, $arguments, $exit);
 
             static::printComments();
