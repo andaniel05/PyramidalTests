@@ -46,7 +46,6 @@ require_once __DIR__ . '/vendor/andaniel05/pyramidaltests/src/DSL/PHPUnit.php'; 
 El siguiente fragmento de código se corresponde con un archivo de pruebas donde se muestra la filosofía de desarrollo.
 
 ```php
-// tests/ProductTest.php
 
 setTestCaseNamespace('Andaniel05\PyramidalTests\Demo\Tests');
 setTestCaseClass('PHPUnit\Framework\TestCase');
