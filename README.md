@@ -1,16 +1,14 @@
 # PyramidalTests
 
-PyramidalTests es una extensión para [PHPUnit](https://phpunit.de/) que permite crear los casos de prueba así como sus partes mediante el empleo de funciones anónimas. Sus principales objetivos son el de simplificar la creación de casos de prueba complejos además de extender las aplicaciones de [PHPUnit](https://phpunit.de/) al campo [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development).
-
-Su filosofía de desarrollo está inspirada en proyectos como [mochajs][1], [jasmine][2], [peridotphp][3], etc.
+PyramidalTests es una extensión de [PHPUnit](https://phpunit.de/) que permite crear casos de prueba mediante el empleo de funciones anónimas. Su filosofía  está inspirada en proyectos como [mochajs][1], [jasmine][2], [peridotphp][3], etc.
 
 [1]: https://mochajs.org/
 [2]: https://jasmine.github.io/
 [3]: http://peridot-php.github.io/
 
->Para comprender el trabajo con esta extensión es necesario que usted tenga conocimientos sobre [PHPUnit](https://phpunit.de/) y de las pruebas de software en general.
+>Para comprender el trabajo con esta extensión es necesario que usted tenga conocimientos sobre [PHPUnit](https://phpunit.de/) y de pruebas de software en general, donde lo ideal sería que además tuviese conocimientos sobre alguno de los frameworks antes mencionados.
 
-Para una rápida toma de contacto usted puede clonar y modificar el proyecto [PyramidalTests-Demo](https://github.com/andaniel05/PyramidalTests-Demo). El mismo contiene ya implementado todas las funcionalidades que aquí se muestran.
+Su principal objetivo consiste en extender las aplicaciones de [PHPUnit](https://phpunit.de/) al campo [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development). Además de esto, otro de sus objetivos consiste en facilitar la creación de casos de prueba ofreciendo ciertas ventajas como la reutilización de pruebas.
 
 ## Instalación.
 
@@ -45,7 +43,7 @@ require_once __DIR__ . '/vendor/andaniel05/pyramidaltests/src/DSL/PHPUnit.php'; 
 
 ## Conociendo la filosofía.
 
-El siguiente código demostrativo se corresponde con un archivo de pruebas donde se muestra la filosofía de desarrollo.
+El siguiente fragmento de código se corresponde con un archivo de pruebas donde se muestra la filosofía de desarrollo.
 
 ```php
 // tests/ProductTest.php
@@ -70,13 +68,9 @@ testCase('create a product', function () {
     });
 
     testCase('the product adds a category', function () {
-        createMethod('addACategory', function () {
+        setUp(function () {
             $this->category = new Category;
             $this->product->addCategory($this->category);
-        });
-
-        setUp(function () {
-            $this->addACategory();
         });
 
         test('the product contains the category', function () {
@@ -94,9 +88,7 @@ De igual manera a como en el ejemplo se está usando la función `setUp()`, es p
 
 Para la creación de las pruebas se emplea la función `test()`, donde en este caso, al igual que la función `testCase()` también recibe como primer argumento una descripción y como segundo la función anónima con el código de la prueba.
 
-De esta misma manera es posible además definir métodos gracias a la función `createMethod()`. Si se desea definir un método estático entonces se puede emplear la función `createStaticMethod()`.
-
-Una de las características más importantes y potentes de la extensión es la anidación de casos de prueba al llamar a la función `testCase()` desde dentro de la declaración de otro. De esta forma lo que se hace es declarar que el más interno hereda todo el código de las funciones `setUpBeforeClass()`, `setUp()`, `tearDown()`, `tearDownAfterClass()`, y métodos desde el padre pero las pruebas no serán heredadas.
+Una de las características más importantes y potentes de la extensión es la anidación de casos de prueba al llamar a la función `testCase()` desde dentro de la declaración de otro. De esta forma lo que se hace es declarar que el más interno hereda toda la funcionalidad del más externo pero es muy importante mencionar que **las pruebas no se heredan**.
 
 Si no desea que alguna de las cuatro funciones de estado herede el comportamiento del padre entonces se debe especificar la palabra `false` como segundo argumento. Ejemplo:
 
@@ -135,11 +127,13 @@ Como puede ver existe un bloque de texto que indica que la sección superior se 
 
 >Queremos comentar que el motivo de existencia de esta división se debe a que no hemos encontrado ningún evento en la arquitectura de [PHPUnit](https://phpunit.de/) que permita agregar pruebas en el `TestRunner` por defecto.
 
-De esta manera, se cumple con el principal objetivo de la extensión que es el de ampliar las posibilidades del framework ya que las pruebas de la extensión pueden coexistir con las tradicionales.
+De esta manera, se cumple con el principal objetivo de la extensión que es el de ampliar las posibilidades del framework ya que las pruebas se escriben con un nuevo estilo y pueden coexistir con las tradicionales.
+
+## Conociendo las opciones de configuración.
 
 ### Ejecutando solo las pruebas de la extensión.
 
-Si en su proyecto pretende escribir TODAS las pruebas al estilo de la extensión entonces en su archivo de configuración usted puede agregar la siguiente variable de entorno:
+Si en su proyecto pretende escribir TODAS las pruebas al estilo de la extensión entonces en su archivo de configuración usted debe agregar la siguiente variable de entorno:
 
 ```xml
 <php>
@@ -147,9 +141,19 @@ Si en su proyecto pretende escribir TODAS las pruebas al estilo de la extensión
 </php>
 ```
 
-De esta forma [PHPUnit](https://phpunit.de/) solo ejecutará las pruebas de la extensión y en los resultados no se mostrará el bloque informativo.
+De esta forma [PHPUnit](https://phpunit.de/) cuando PHPUnit sea ejecutado el resultado se mostrará de la siguiente manera.
 
 ![](results.png)
+
+### Especificando los márgenes de los casos de pruebas anidados.
+
+Cuando PHPUnit es ejecutado con la opción `--testdox`, los casos de prueba anidados son mostrados con un márgen por defecto de 4 espacios. Si se desea especificar el valor de este márgen entonces se debe declarar la variable de entorno `PYRAMIDAL_MARGIN` cuyo valor se corresponderá con la cantidad de espacios deseados.
+
+```xml
+<php>
+    <env name="PYRAMIDAL_MARGIN" value="8"></env>
+</php>
+```
 
 ## Aspectos pendientes.
 
