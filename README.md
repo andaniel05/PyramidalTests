@@ -1,5 +1,7 @@
 # PyramidalTests
 
+[Ver en español](README.es.md)
+
 PyramidalTests is a [PHPUnit](https://phpunit.de/) extension that allows you to create test cases by using anonymous functions. His philosophy is inspired by projects such as [mochajs] [1], [jasmine] [2], [peridotphp] [3], etc.
 
 
