@@ -2,18 +2,18 @@
 
 [Ver en español](README.es.md)
 
-PyramidalTests is a [PHPUnit](https://phpunit.de/) extension that allows you to create test cases by using anonymous functions. His philosophy is inspired by projects such as [mochajs] [1], [jasmine] [2], [peridotphp] [3], etc.
+PyramidalTests is a [PHPUnit](https://phpunit.de/) extension that allows you to create test cases by using anonymous functions. His philosophy is inspired by projects such as [mochajs][1], [jasmine][2], [peridotphp][3], etc.
 
 
 [1]: https://mochajs.org/
 [2]: https://jasmine.github.io/
 [3]: http://peridot-php.github.io/
 
->To understand the work with this extension it is necessary that you have knowledge about [PHPUnit] (https://phpunit.de/) and software testing in general, where ideally you should also have knowledge of any of the frameworks mentioned above .
+>To understand the work with this extension it is necessary that you have knowledge about [PHPUnit](https://phpunit.de/) and software testing in general, where ideally you should also have knowledge of any of the frameworks mentioned above .
 
-Its main objective is to extend the applications of [PHPUnit] (https://phpunit.de/) to the [BDD] field (https://en.wikipedia.org/wiki/Behavior-driven_development). In addition to this, another of its objectives is to facilitate the creation of test cases offering certain advantages such as the reuse of tests.
+Its main objective is to extend the applications of [PHPUnit](https://phpunit.de/) to the [BDD] field (https://en.wikipedia.org/wiki/Behavior-driven_development). In addition to this, another of its objectives is to facilitate the creation of test cases offering certain advantages such as the reuse of tests.
 
->You can clone and modify the project [PyramidalTests-Demo] (https://github.com/andaniel05/PyramidalTests-Demo). It contains already implemented all the features shown here.
+>You can clone and modify the project [PyramidalTests-Demo](https://github.com/andaniel05/PyramidalTests-Demo). It contains already implemented all the features shown here.
 
 ## Setup.
 
@@ -129,7 +129,7 @@ Once [PHPUnit](https://phpunit.de/) is invoked all the defined tests will be exe
 
 There is a block of text indicating that the upper section corresponds to the result of the execution of the tests of the extension, while the lower one with the rest of the tests written in the traditional way of [PHPUnit](https://phpunit.de/).
 
->The reason of existence of this division is because we have not found any event in the architecture of [PHPUnit] (https://phpunit.de/) that allows to add tests in the `TestRunner` by default.
+>The reason of existence of this division is because we have not found any event in the architecture of [PHPUnit](https://phpunit.de/) that allows to add tests in the `TestRunner` by default.
 
 In this way, the main objective of the extension is fulfilled, which is to expand the possibilities of the framework since the tests are written with a new style and can coexist with the traditional ones.
 
