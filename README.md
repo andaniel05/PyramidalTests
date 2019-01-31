@@ -11,7 +11,7 @@ PyramidalTests is a [PHPUnit](https://phpunit.de/) extension that allows you to 
 
 >To understand the work with this extension it is necessary that you have knowledge about [PHPUnit](https://phpunit.de/) and software testing in general, where ideally you should also have knowledge of any of the frameworks mentioned above .
 
-Its main objective is to extend the applications of [PHPUnit](https://phpunit.de/) to the [BDD] field (https://en.wikipedia.org/wiki/Behavior-driven_development). In addition to this, another of its objectives is to facilitate the creation of test cases offering certain advantages such as the reuse of tests.
+Its main objective is to extend the applications of [PHPUnit](https://phpunit.de/) to the [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) field. In addition to this, another of its objectives is to facilitate the creation of test cases offering certain advantages such as the reuse of tests.
 
 >You can clone and modify the project [PyramidalTests-Demo](https://github.com/andaniel05/PyramidalTests-Demo). It contains already implemented all the features shown here.
 
@@ -158,5 +158,3 @@ When PHPUnit is executed with the `--testdox` option, the nested test cases are 
     <env name="PYRAMIDAL_MARGIN" value="8"></env>
 </php>
 ```
-
-Contact me @andaniel05 and let me know what you think.
