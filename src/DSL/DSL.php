@@ -55,13 +55,19 @@ abstract class DSL
         $newTestCase->setNamespace(Record::getTestCaseNamespace());
         $newTestCase->setTopTestCaseClass(Record::getTestCaseClass());
 
+        $newTestCaseName = $newTestCase->getName();
+
         $currentTestCase = Record::getCurrentTestCase();
         if ($currentTestCase instanceof TestCase) {
-            $currentTestCase->addTestCase($newTestCase);
-            $newTestCase->setParent($currentTestCase);
-            $newTestCase->setNamespace(
-                $currentTestCase->getNamespace() . '\\' . $currentTestCase->getName()
-            );
+            if ($oldTestCase = $currentTestCase->getTestCase($newTestCaseName)) {
+                $newTestCase = $oldTestCase;
+            } else {
+                $currentTestCase->addTestCase($newTestCase);
+                $newTestCase->setParent($currentTestCase);
+                $newTestCase->setNamespace(
+                    $currentTestCase->getNamespace() . '\\' . $currentTestCase->getName()
+                );
+            }
         } else {
             Record::addTestCase($newTestCase);
         }

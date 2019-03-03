@@ -1213,7 +1213,7 @@ class ExtensionTest extends BaseTestCase
                 });
             });
 
-            testCase('child test case 1', function () {
+            testCase('child test case 2', function () {
                 useMacro('my macro');
             });
         });
@@ -1721,5 +1721,36 @@ class ExtensionTest extends BaseTestCase
 
         $this->assertEquals(6, Registry::$data['counter1']);
         $this->assertEquals(4, Registry::$data['counter2']);
+    }
+
+    public function testExtendingTestCases1()
+    {
+        createMacro('my macro', function () {
+            testCase('test case 1', function () {
+                test('test1', function () {
+                    $this->assertTrue(true);
+                });
+            });
+        });
+
+        testCase('my test case', function () {
+            useMacro('my macro');
+
+            testCase('test case 1', function () {
+                test('test2', function () {
+                    $this->assertTrue(true);
+                });
+
+                test('test3', function () {
+                    $this->assertTrue(true);
+                });
+            });
+        });
+
+        $result = Extension::run();
+
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase\TestCase1::testTest1', $result);
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase\TestCase1::testTest2', $result);
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase\TestCase1::testTest3', $result);
     }
 }
