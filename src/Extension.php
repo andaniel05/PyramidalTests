@@ -53,6 +53,35 @@ class Extension implements Hook
 
     public static function run(array $arguments = [])
     {
+        if (isset($arguments['filter'])) {
+            $matches = [];
+            if (preg_match('/^desc:(.+)$/', $arguments['filter'], $matches)) {
+                $description = trim($matches[1]);
+
+                $found = false;
+                foreach (Record::testCases() as $testCase) {
+                    $className = str_replace('\\', '\\\\', $testCase->getClassName());
+
+                    if ($testCase->getDescription() == $description) {
+                        $arguments['filter'] = $className;
+                        break;
+                    } else {
+                        foreach ($testCase->getTests() as $test) {
+                            if ($test->getDescription() == $description) {
+                                $found = true;
+                                $arguments['filter'] = $className . '::' . $test->getMethodName();
+                                break;
+                            }
+                        }
+                    }
+
+                    if ($found) {
+                        break;
+                    }
+                }
+            }
+        }
+
         Record::buildClasses();
 
         $testSuite = new PHPUnitTestSuite;

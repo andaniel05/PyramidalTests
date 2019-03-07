@@ -196,6 +196,58 @@ class ExtensionTest extends BaseTestCase
         );
     }
 
+    public function testFilteringATestCaseByHisDescription()
+    {
+        testCase('my test case 1', function () {
+            test('test 1', function () {
+                $this->assertTrue(true);
+            });
+        });
+
+        testCase('my test case 2', function () {
+            test('test 2', function () {
+                $this->assertTrue(true);
+            });
+        });
+
+        $result = Extension::run(['filter' => "desc: my test case 2"]);
+
+        $this->assertTestWasNotExecuted(
+            "Andaniel05\\PyramidalTests\\__Dynamic__\\MyTestCase1::testTest1",
+            $result
+        );
+        $this->assertTestWasSuccessful(
+            "Andaniel05\\PyramidalTests\\__Dynamic__\\MyTestCase2::testTest2",
+            $result
+        );
+    }
+
+    public function testFilteringATestByHisDescription()
+    {
+        testCase('my test case 1', function () {
+            test('test 1', function () {
+                $this->assertTrue(true);
+            });
+        });
+
+        testCase('my test case 2', function () {
+            test('this is my test 2', function () {
+                $this->assertTrue(true);
+            });
+        });
+
+        $result = Extension::run(['filter' => "desc: this is my test 2"]);
+
+        $this->assertTestWasNotExecuted(
+            "Andaniel05\\PyramidalTests\\__Dynamic__\\MyTestCase1::testTest1",
+            $result
+        );
+        $this->assertTestWasSuccessful(
+            "Andaniel05\\PyramidalTests\\__Dynamic__\\MyTestCase2::testThisIsMyTest2",
+            $result
+        );
+    }
+
     public function testFilteringAnonymouses()
     {
         $registry = [];
