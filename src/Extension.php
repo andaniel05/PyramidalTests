@@ -53,6 +53,54 @@ class Extension implements Hook
 
     public static function run(array $arguments = [])
     {
+        Record::buildClasses();
+
+        $testSuite = new PHPUnitTestSuite;
+
+        $traverse = function (array $testCases) use ($testSuite, &$traverse) {
+            foreach ($testCases as $testCase) {
+                if (! empty($testCase->getTests())) {
+                    $testSuite->addTestSuite(
+                        new ReflectionClass($testCase->getClassName())
+                    );
+                }
+
+                $traverse($testCase->getTestCases());
+            }
+        };
+
+        $traverse(Record::getTestCases());
+
+        if (static::$testRunner instanceof TestRunner) {
+            static::editArguments($arguments);
+            return static::$testRunner->doRun($testSuite, $arguments, false);
+        } else {
+            // Hack to get the argument array for the test runner.
+            $command = new Command;
+            $commandClass = new ReflectionClass($command);
+            $handleArgumentsMethod = $commandClass->getMethod('handleArguments');
+            $handleArgumentsMethod->getClosure($command)->call($command, $_SERVER['argv']);
+            $arguments = (function () {
+                return $this->arguments;
+            })->call($command);
+
+            $exit = (bool) ($_ENV['PYRAMIDAL_ONLY'] ?? false);
+
+            $testRunner = new TestRunner;
+
+            if (isset($arguments['printer']) && $arguments['printer'] == CliTestDoxPrinter::class) {
+                $testRunner->setPrinter(new ResultPrinter);
+            }
+
+            static::editArguments($arguments);
+            $testRunner->doRun($testSuite, $arguments, $exit);
+
+            static::printComments();
+        }
+    }
+
+    public static function editArguments(array &$arguments): void
+    {
         if (isset($arguments['filter'])) {
             $matches = [];
             if (preg_match('/^desc:(.+)$/', $arguments['filter'], $matches)) {
@@ -80,49 +128,6 @@ class Extension implements Hook
                     }
                 }
             }
-        }
-
-        Record::buildClasses();
-
-        $testSuite = new PHPUnitTestSuite;
-
-        $traverse = function (array $testCases) use ($testSuite, &$traverse) {
-            foreach ($testCases as $testCase) {
-                if (! empty($testCase->getTests())) {
-                    $testSuite->addTestSuite(
-                        new ReflectionClass($testCase->getClassName())
-                    );
-                }
-
-                $traverse($testCase->getTestCases());
-            }
-        };
-
-        $traverse(Record::getTestCases());
-
-        if (static::$testRunner instanceof TestRunner) {
-            return static::$testRunner->doRun($testSuite, $arguments, false);
-        } else {
-            // Hack to get the argument array for the test runner.
-            $command = new Command;
-            $commandClass = new ReflectionClass($command);
-            $handleArgumentsMethod = $commandClass->getMethod('handleArguments');
-            $handleArgumentsMethod->getClosure($command)->call($command, $_SERVER['argv']);
-            $arguments = (function () {
-                return $this->arguments;
-            })->call($command);
-
-            $exit = (bool) ($_ENV['PYRAMIDAL_ONLY'] ?? false);
-
-            $testRunner = new TestRunner;
-
-            if (isset($arguments['printer']) && $arguments['printer'] == CliTestDoxPrinter::class) {
-                $testRunner->setPrinter(new ResultPrinter);
-            }
-
-            $testRunner->doRun($testSuite, $arguments, $exit);
-
-            static::printComments();
         }
     }
 
