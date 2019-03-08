@@ -62,12 +62,12 @@ class Extension implements Hook
                 foreach (Record::testCases() as $testCase) {
                     $className = str_replace('\\', '\\\\', $testCase->getClassName());
 
-                    if ($testCase->getDescription() == $description) {
+                    if (strpos($testCase->getDescription(), $description) !== false) {
                         $arguments['filter'] = $className;
                         break;
                     } else {
                         foreach ($testCase->getTests() as $test) {
-                            if ($test->getDescription() == $description) {
+                            if (strpos($test->getDescription(), $description) !== false) {
                                 $found = true;
                                 $arguments['filter'] = $className . '::' . $test->getMethodName();
                                 break;
