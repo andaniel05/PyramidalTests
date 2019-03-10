@@ -104,6 +104,8 @@ class ResultPrinter extends PHPUnitResultPrinter
      */
     private $levels = 0;
 
+    private static $printedMissedDescriptions = [];
+
     public function __construct(
         $out = null,
         bool $verbose = false,
@@ -142,6 +144,7 @@ class ResultPrinter extends PHPUnitResultPrinter
         }
 
         $this->levels = 0;
+        $missedDescriptions = '';
 
         $testClass = \get_class($test);
         foreach (Record::testCases() as $pyTestCase) {
@@ -149,13 +152,28 @@ class ResultPrinter extends PHPUnitResultPrinter
                 $parents = $pyTestCase->getParents();
                 $this->levels = count($parents) >= 1 ? count($parents) : 0;
 
+                $aux = 0;
+                foreach ($parents as $parent) {
+                    $aux++;
+                    $parentClass = $parent->getClassName();
+
+                    if (count($parent->getTests()) === 0 &&
+                        ! in_array($parentClass, self::$printedMissedDescriptions))
+                    {
+                        $missedDescriptions = $this->getMargin($this->levels - $aux) . $parent->getDescription() . PHP_EOL . $missedDescriptions;
+                        self::$printedMissedDescriptions[] = $parentClass;
+                    } else {
+                        break;
+                    }
+                }
+
                 break;
             }
         }
 
-        $margin = $this->getMargin(str_repeat(' ', $this->getTotalOfSpaces()));
+        $margin = $this->getMargin($this->levels);
 
-        $this->className  = $margin . $className;
+        $this->className  = $missedDescriptions . $margin . $className;
         $this->testMethod = $testMethod;
 
         parent::startTest($test);
@@ -183,7 +201,7 @@ class ResultPrinter extends PHPUnitResultPrinter
             );
         }
 
-        $margin = $this->getMargin(str_repeat(' ', $this->getTotalOfSpaces()));
+        $margin = $this->getMargin($this->levels);
 
         $resultMessage = $margin . $resultMessage;
 
@@ -463,11 +481,12 @@ class ResultPrinter extends PHPUnitResultPrinter
         ];
     }
 
-    private function getMargin(string $separator): string
+    private function getMargin(int $levels): string
     {
         $margin = '';
+        $separator = str_repeat(' ', $this->getTotalOfSpaces());
 
-        for ($i = 0; $i < $this->levels; $i++) {
+        for ($i = 0; $i < $levels; $i++) {
             $margin .= $separator;
         }
 
