@@ -173,7 +173,13 @@ class ResultPrinter extends PHPUnitResultPrinter
 
         $margin = $this->getMargin($this->levels);
 
-        $this->className  = $missedDescriptions . $margin . $className;
+        $testClass = \get_class($test);
+
+        if (! in_array($testClass, self::$printedMissedDescriptions)) {
+            $this->className  = $missedDescriptions . $margin . $className;
+            self::$printedMissedDescriptions[] = $testClass;
+        }
+
         $this->testMethod = $testMethod;
 
         parent::startTest($test);
