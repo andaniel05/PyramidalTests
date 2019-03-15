@@ -23,6 +23,7 @@ namespace Andaniel05\PyramidalTests\Model;
 use Andaniel05\PyramidalTests\Exception\DuplicatedTestException;
 use Andaniel05\PyramidalTests\Exception\InvalidMethodNameException;
 use Closure;
+use function DeepCopy\deep_copy;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -51,7 +52,15 @@ class TestCase extends Model
 
     public function addTestCase(TestCase $testCase): void
     {
-        $this->testCases[$testCase->getName()] = $testCase;
+        $name = $testCase->getName();
+
+        if (isset($this->testCases[$name])) {
+            $oldTestCase = $this->testCases[$name];
+            $oldTestCase->useMacro($testCase);
+        } else {
+            $this->testCases[$name] = $testCase;
+            $testCase->setParent($this);
+        }
     }
 
     public function getTestCases(): array
@@ -89,9 +98,17 @@ class TestCase extends Model
         return $this->parent;
     }
 
-    public function setParent(?TestCase $parent): void
+    public function setParent(?TestCase $parent, bool $updateNamespace = true): void
     {
         $this->parent = $parent;
+
+        if ($updateNamespace) {
+            $this->setNamespace($parent->getNamespace() . '\\' . $parent->getName());
+
+            foreach ($this->testCases as $childTestCase) {
+                $childTestCase->setParent($this);
+            }
+        }
     }
 
     public function getName(): string
@@ -477,26 +494,19 @@ class TestCase extends Model
         return $this->macros[$description] ?? null;
     }
 
-    public function useMacro(Macro $macro): void
+    public function useMacro(TestCase $macro): void
     {
+        if ($this->getClosure() == $macro->getClosure()) {
+            return;
+        }
+
         foreach ($macro->getTests() as $test) {
             $this->addTest($test);
         }
 
-        $update = function ($child, $parent) use (&$update) {
-            $child = clone $child;
-            $child->setParent($parent);
-            $child->setNamespace($parent->getNamespace() . '\\' . $parent->getName());
-
-            $parent->addTestCase($child);
-
-            foreach ($child->getTestCases() as $testCase) {
-                $update($testCase, $child);
-            }
-        };
-
         foreach ($macro->getTestCases() as $testCase) {
-            $update($testCase, $this);
+            $newTestCase = deep_copy($testCase);
+            $this->addTestCase($newTestCase);
         }
 
         if ($setUpBeforeClass = $macro->getSetUpBeforeClass()) {

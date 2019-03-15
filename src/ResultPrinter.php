@@ -158,8 +158,7 @@ class ResultPrinter extends PHPUnitResultPrinter
                     $parentClass = $parent->getClassName();
 
                     if (count($parent->getTests()) === 0 &&
-                        ! in_array($parentClass, self::$printedMissedDescriptions))
-                    {
+                        ! in_array($parentClass, self::$printedMissedDescriptions)) {
                         $missedDescriptions = $this->getMargin($this->levels - $aux) . $parent->getDescription() . PHP_EOL . $missedDescriptions;
                         self::$printedMissedDescriptions[] = $parentClass;
                     } else {
