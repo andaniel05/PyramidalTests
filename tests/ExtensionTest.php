@@ -49,6 +49,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\DefaultTestCase::testTheTest1",
             $result
@@ -64,6 +65,7 @@ class ExtensionTest extends BaseTestCase
         $result = Extension::run();
 
         $testName = Record::getTestNameByClosure($test);
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\DefaultTestCase::{$testName}",
             $result
@@ -83,6 +85,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\DefaultTestCase::testStubsSupport",
             $result
@@ -108,6 +111,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\DefaultTestCase::testMocksSupport",
             $result
@@ -130,6 +134,7 @@ class ExtensionTest extends BaseTestCase
 
         $anonymousTestName = Record::getTestNameByClosure($this->anonymousTest);
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\MyTestCase::testDesc1",
             $result
@@ -157,6 +162,7 @@ class ExtensionTest extends BaseTestCase
         $testCaseName = Record::getTestCaseNameByClosure($testCase);
         $anonymousTestName = Record::getTestNameByClosure($this->anonymousTest);
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\{$testCaseName}::testTest1",
             $result
@@ -186,6 +192,7 @@ class ExtensionTest extends BaseTestCase
         $testName1 = Record::getTestNameByClosure($this->test1);
         $testName2 = Record::getTestNameByClosure($this->test2);
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\TestCase1::{$testName1}",
             $result
@@ -212,6 +219,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run(['filter' => "desc: my test case 2"]);
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasNotExecuted(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\MyTestCase1::testTest1",
             $result
@@ -238,6 +246,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run(['filter' => "desc: test case 2"]);
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasNotExecuted(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\MyTestCase1::testTest1",
             $result
@@ -264,6 +273,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run(['filter' => "desc: this is my test 2"]);
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasNotExecuted(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\MyTestCase1::testTest1",
             $result
@@ -290,6 +300,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run(['filter' => "desc: is my test 2"]);
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasNotExecuted(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\MyTestCase1::testTest1",
             $result
@@ -324,6 +335,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run(['filter' => 'Anonymous']);
 
+        $this->assertCount(2, $result->passed());
         $this->assertContains('anonymous1', $registry);
         $this->assertContains('anonymous2', $registry);
     }
@@ -346,6 +358,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\MainTestCase\\TestCase1::testTheTest1",
             $result
@@ -376,6 +389,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertEmpty($result->warnings());
     }
 
@@ -393,6 +407,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\TestCase1\\TestCase2\\TestCase3::testMyTest",
             $result
@@ -415,6 +430,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run(['filter' => 'ChildTestCase']);
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasNotExecuted(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\ParentTestCase\\ChildTestCase::testTest1",
             $result
@@ -443,6 +459,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\MyTestCase::testTest1",
             $result
@@ -481,6 +498,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\MyTestCase\\Nested1\\Nested2::testMyTest",
             $result
@@ -508,6 +526,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run(['filter' => 'Nested1']);
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\MyTestCase\\Nested1::testMyTest",
             $result
@@ -532,6 +551,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\MyTestCase::testTest1",
             $result
@@ -570,6 +590,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\ParentTestCase\\NestedTestCase1\\NestedTestCase2::testMyTest",
             $result
@@ -597,6 +618,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             "Andaniel05\\PyramidalTests\\__Dynamic__\\ParentTestCase\\ChildTestCase::testMyTest",
             $result
@@ -627,6 +649,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertNotEquals(
             Registry::$data['secret'][0],
             Registry::$data['secret'][1]
@@ -655,6 +678,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTrue(Registry::$data['test1']);
         $this->assertTrue(Registry::$data['parentTearDown']);
         $this->assertTrue(Registry::$data['childTearDown']);
@@ -682,6 +706,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run(['filter' => 'Nested1']);
 
+        $this->assertCount(1, $result->passed());
         $this->assertTrue(Registry::$data['test1']);
         $this->assertFalse(isset(Registry::$data['parentTearDown']));
         $this->assertTrue(Registry::$data['childTearDown']);
@@ -709,6 +734,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTrue(Registry::$data['executedTearDownAfterClass']);
     }
 
@@ -733,6 +759,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTrue(Registry::$data['executedTearDownAfterClass1']);
         $this->assertTrue(Registry::$data['executedTearDownAfterClass2']);
     }
@@ -757,6 +784,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run(['filter' => 'MyTestCase']);
 
+        $this->assertCount(1, $result->passed());
         $this->assertFalse(isset(Registry::$data['executedTearDownAfterClass1']));
         $this->assertTrue(Registry::$data['executedTearDownAfterClass2']);
     }
@@ -823,6 +851,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(3, $result->passed());
         $this->assertTestWasSuccessful(
             'Andaniel05\PyramidalTests\__Dynamic__\MyTestCase1::testMyTest',
             $result
@@ -872,6 +901,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful(
             'Andaniel05\NewNamespace\MyTestCase1::testMyTest',
             $result
@@ -902,6 +932,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful('MyNamespace1\TestCase1::testTest1', $result);
         $this->assertTestWasSuccessful('MyNamespace2\TestCase2::testTest1', $result);
     }
@@ -938,6 +969,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\TestCase1\TestCase2\TestCase3\TestCase4\TestCase5::testTest1', $result);
     }
 
@@ -976,6 +1008,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful(
             'Andaniel05\PyramidalTests\__Dynamic__\TestCase1::testTest1',
             $result
@@ -1022,6 +1055,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             'Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1',
             $result
@@ -1042,6 +1076,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             'Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1',
             $result
@@ -1062,6 +1097,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             'Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1',
             $result
@@ -1088,6 +1124,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             'Andaniel05\PyramidalTests\__Dynamic__\MyParentTestCase\MyChildTestCase::testTest1',
             $result
@@ -1114,6 +1151,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             'Andaniel05\PyramidalTests\__Dynamic__\MyParentTestCase\MyChildTestCase::testTest1',
             $result
@@ -1158,6 +1196,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             'Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1',
             $result
@@ -1184,6 +1223,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             'Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1',
             $result
@@ -1204,6 +1244,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             'Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1',
             $result
@@ -1224,6 +1265,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             'Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1',
             $result
@@ -1250,6 +1292,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             'Andaniel05\PyramidalTests\__Dynamic__\MyParentTestCase\MyChildTestCase::testTest1',
             $result
@@ -1276,6 +1319,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful(
             'Andaniel05\PyramidalTests\__Dynamic__\MyParentTestCase\MyChildTestCase::testTest1',
             $result
@@ -1341,6 +1385,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1', $result);
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest2', $result);
     }
@@ -1363,6 +1408,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1', $result);
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest2', $result);
     }
@@ -1387,6 +1433,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase::testTest1', $result);
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase::testTest2', $result);
     }
@@ -1417,6 +1464,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase1\ChildTestCase2\ChildTestCase3\ChildTestCase4::testTest1', $result);
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase1\ChildTestCase2\ChildTestCase3\ChildTestCase4::testTest2', $result);
     }
@@ -1453,6 +1501,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase1\ChildTestCase2::testTest3', $result);
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase1\ChildTestCase2::testTest4', $result);
     }
@@ -1487,6 +1536,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase::testTest3', $result);
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase::testTest4', $result);
     }
@@ -1511,6 +1561,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase::testTest1', $result);
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase::testTest2', $result);
     }
@@ -1537,6 +1588,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase1\ChildTestCase2::testTest1', $result);
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\ChildTestCase1\ChildTestCase2::testTest2', $result);
     }
@@ -1561,6 +1613,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\TestCase1\SharedTestCase::testTest1', $result);
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\TestCase2\SharedTestCase::testTest1', $result);
     }
@@ -1587,6 +1640,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\TestCase1\SharedTestCase1\SharedTestCase2::testTest1', $result);
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\TestCase2\SharedTestCase1\SharedTestCase2::testTest1', $result);
     }
@@ -1609,6 +1663,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(1, $result->passed());
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1', $result);
     }
 
@@ -1634,6 +1689,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1', $result);
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest2', $result);
     }
@@ -1666,6 +1722,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertNotEquals(
             Registry::$data['secret'][0],
             Registry::$data['secret'][1]
@@ -1698,6 +1755,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTrue(Registry::$data['executedTearDownAfterClass']);
     }
 
@@ -1853,6 +1911,7 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(3, $result->passed());
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase\TestCase1::testTest1', $result);
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase\TestCase1::testTest2', $result);
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase\TestCase1::testTest3', $result);
@@ -1880,7 +1939,38 @@ class ExtensionTest extends BaseTestCase
 
         $result = Extension::run();
 
+        $this->assertCount(2, $result->passed());
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\TestCase1::testTest1', $result);
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\ParentTestCase\TestCase1::testTest2', $result);
+    }
+
+    public function testBugFix2()
+    {
+        createMacro('my macro', function () {
+            testCase('#getId()', function () {
+                test('test1', function () {
+                    $this->assertTrue(true);
+                });
+            });
+        });
+
+        testCase('parent test case', function () {
+            testCase('#getId()', function () {
+                test('test2', function () {
+                    $this->assertTrue(true);
+                });
+            });
+
+            useMacro('my macro');
+        });
+
+        $result = Extension::run();
+
+        $this->assertCount(2, $result->passed());
+
+        $testCases = Record::getTestCases();
+        $this->assertCount(1, $testCases);
+        $parentTestCase = array_pop($testCases);
+        $this->assertCount(1, $parentTestCase->getTestCases());
     }
 }

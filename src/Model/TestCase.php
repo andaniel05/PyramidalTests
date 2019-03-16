@@ -53,14 +53,26 @@ class TestCase extends Model
     public function addTestCase(TestCase $testCase): void
     {
         $name = $testCase->getName();
+        $oldTestCase = null;
 
         if (isset($this->testCases[$name])) {
             $oldTestCase = $this->testCases[$name];
-            $oldTestCase->useMacro($testCase);
         } else {
-            $this->testCases[$name] = $testCase;
-            $testCase->setParent($this);
+            foreach ($this->testCases as $child) {
+                if ($child->getDescription() == $testCase->getDescription()) {
+                    $oldTestCase = $child;
+                    break;
+                }
+            }
         }
+
+        if ($oldTestCase) {
+            $oldTestCase->useMacro($testCase);
+            return;
+        }
+
+        $this->testCases[$name] = $testCase;
+        $testCase->setParent($this);
     }
 
     public function getTestCases(): array
