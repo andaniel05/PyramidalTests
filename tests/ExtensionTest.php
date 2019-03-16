@@ -1917,6 +1917,35 @@ class ExtensionTest extends BaseTestCase
         $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase\TestCase1::testTest3', $result);
     }
 
+    public function testExtendingTestCases2()
+    {
+        createMacro('my macro', function () {
+            testCase('#test case 1', function () {
+                test('test1', function () {
+                    $this->assertTrue(true);
+                });
+            });
+        });
+
+        testCase('my test case', function () {
+            useMacro('my macro');
+
+            testCase('#test case 1', function () {
+                test('test2', function () {
+                    $this->assertTrue(true);
+                });
+
+                test('test3', function () {
+                    $this->assertTrue(true);
+                });
+            });
+        });
+
+        $result = Extension::run();
+
+        $this->assertCount(3, $result->passed());
+    }
+
     public function testBugFix1()
     {
         createMacro('my macro', function () {

@@ -537,4 +537,15 @@ class TestCase extends Model
             $this->setTearDownAfterClass($tearDownAfterClass);
         }
     }
+
+    public function getTestCaseByDescription(string $description): ?TestCase
+    {
+        foreach ($this->testCases as $child) {
+            if ($child->getDescription() == $description) {
+                return $child;
+            }
+        }
+
+        return null;
+    }
 }

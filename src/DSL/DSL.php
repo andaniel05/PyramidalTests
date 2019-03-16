@@ -59,7 +59,13 @@ abstract class DSL
 
         $currentTestCase = Record::getCurrentTestCase();
         if ($currentTestCase instanceof TestCase) {
-            if ($oldTestCase = $currentTestCase->getTestCase($newTestCaseName)) {
+            $oldTestCase = $currentTestCase->getTestCase($newTestCaseName);
+
+            if (! $oldTestCase) {
+                $oldTestCase = $currentTestCase->getTestCaseByDescription($description);
+            }
+
+            if ($oldTestCase) {
                 $newTestCase = $oldTestCase;
             } else {
                 $currentTestCase->addTestCase($newTestCase);
