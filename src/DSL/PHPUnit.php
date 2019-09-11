@@ -89,3 +89,8 @@ function tearDownAfterClassOnce(Closure $closure, bool $invokeParent = true): vo
 {
     DSL::tearDownAfterClassOnce($closure, $invokeParent);
 }
+
+function testIncomplete(string $description): void
+{
+    DSL::testIncomplete($description);
+}

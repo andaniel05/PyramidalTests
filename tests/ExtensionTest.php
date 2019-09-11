@@ -2002,4 +2002,16 @@ class ExtensionTest extends BaseTestCase
         $parentTestCase = array_pop($testCases);
         $this->assertCount(1, $parentTestCase->getTestCases());
     }
+
+    public function testTestIncomplete()
+    {
+        testCase('my test case', function () {
+            testIncomplete('my incomplete test');
+        });
+
+        $result = Extension::run();
+        $notImplemented = $result->notImplemented();
+
+        $this->assertCount(1, $notImplemented);
+    }
 }

@@ -34,6 +34,11 @@ use Closure;
  */
 abstract class DSL
 {
+    /**
+     * @var \Closure
+     */
+    protected static $incompleteClosure;
+
     public static function setTestCaseNamespace(string $namespace): void
     {
         Record::setTestCaseNamespace($namespace);
@@ -243,5 +248,25 @@ abstract class DSL
 
         $testCase->setTearDownAfterClass($closure, true);
         $testCase->setInvokeParentInTearDownAfterClass($invokeParent);
+    }
+
+    public static function testIncomplete(string $description): void
+    {
+        $currentTestCase = Record::getCurrentTestCase();
+        if (! $currentTestCase) {
+            $currentTestCase = new TestCase('DefaultTestCase');
+            Record::addTestCase($currentTestCase);
+            Record::setCurrentTestCase($currentTestCase);
+        }
+
+        if (! static::$incompleteClosure) {
+            static::$incompleteClosure = function () use ($description) {
+                $this->markTestIncomplete($description);
+            };
+        }
+        $closure = static::$incompleteClosure;
+
+        $test = new Test($description, $closure);
+        $currentTestCase->addTest($test);
     }
 }
