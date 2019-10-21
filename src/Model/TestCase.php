@@ -23,7 +23,6 @@ namespace Andaniel05\PyramidalTests\Model;
 use Andaniel05\PyramidalTests\Exception\DuplicatedTestException;
 use Andaniel05\PyramidalTests\Exception\InvalidMethodNameException;
 use Closure;
-use function DeepCopy\deep_copy;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -504,38 +503,6 @@ class TestCase extends Model
     public function getMacro(string $description): ?Macro
     {
         return $this->macros[$description] ?? null;
-    }
-
-    public function useMacro(TestCase $macro): void
-    {
-        if ($this->getClosure() == $macro->getClosure()) {
-            return;
-        }
-
-        foreach ($macro->getTests() as $test) {
-            $this->addTest($test);
-        }
-
-        foreach ($macro->getTestCases() as $testCase) {
-            $newTestCase = deep_copy($testCase);
-            $this->addTestCase($newTestCase);
-        }
-
-        if ($setUpBeforeClass = $macro->getSetUpBeforeClass()) {
-            $this->setSetUpBeforeClass($setUpBeforeClass);
-        }
-
-        if ($setUp = $macro->getSetUp()) {
-            $this->setSetUp($setUp);
-        }
-
-        if ($tearDown = $macro->getTearDown()) {
-            $this->setTearDown($tearDown);
-        }
-
-        if ($tearDownAfterClass = $macro->getTearDownAfterClass()) {
-            $this->setTearDownAfterClass($tearDownAfterClass);
-        }
     }
 
     public function getTestCaseByDescription(string $description): ?TestCase

@@ -75,9 +75,9 @@ function createMacro(string $description, Closure $closure): void
     DSL::createMacro($description, $closure);
 }
 
-function useMacro(string $description): void
+function useMacro(string $description, array $data = []): void
 {
-    DSL::useMacro($description);
+    DSL::useMacro($description, $data);
 }
 
 function setUpBeforeClassOnce(Closure $closure, bool $invokeParent = true): void

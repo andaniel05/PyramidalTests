@@ -189,15 +189,9 @@ abstract class DSL
         } else {
             $currentTestCase->addMacro($macro);
         }
-
-        Record::setCurrentTestCase($macro);
-
-        call_user_func($closure);
-
-        Record::setCurrentTestCase($currentTestCase);
     }
 
-    public static function useMacro(string $description): void
+    public static function useMacro(string $description, array $data): void
     {
         $testCase = Record::getCurrentTestCase();
 
@@ -223,7 +217,7 @@ abstract class DSL
             throw new MacroNotFoundException($description);
         }
 
-        $testCase->useMacro($macro);
+        call_user_func($macro->getClosure(), $data);
     }
 
     public static function setUpBeforeClassOnce(Closure $closure, bool $invokeParent = true): void
