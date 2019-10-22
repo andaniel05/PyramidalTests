@@ -2015,7 +2015,7 @@ class ExtensionTest extends BaseTestCase
         $this->assertCount(1, $notImplemented);
     }
 
-    public function testMacrosWithData()
+    public function testMacrosWithArguments1()
     {
         createMacro('my macro', function (array $args) {
             if ($args['test1'] === true) {
@@ -2043,6 +2043,39 @@ class ExtensionTest extends BaseTestCase
                 'test2' => false,
                 'test3' => true,
             ]);
+        });
+
+        $result = Extension::run();
+
+        $this->assertCount(2, $result->passed());
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest1', $result);
+        $this->assertTestWasSuccessful('Andaniel05\PyramidalTests\__Dynamic__\MyTestCase::testTest3', $result);
+    }
+
+    public function testMacrosWithArguments2()
+    {
+        createMacro('my macro', function (bool $test1, bool $test2, bool $test3) {
+            if ($test1 === true) {
+                test('test1', function () {
+                    $this->assertTrue(true);
+                });
+            }
+
+            if ($test2 === true) {
+                test('test2', function () {
+                    $this->assertTrue(true);
+                });
+            }
+
+            if ($test3 === true) {
+                test('test3', function () {
+                    $this->assertTrue(true);
+                });
+            }
+        });
+
+        testCase('my test case', function () {
+            useMacro('my macro', true, false, true);
         });
 
         $result = Extension::run();
