@@ -18,7 +18,7 @@ Su principal objetivo consiste en extender las aplicaciones de [PHPUnit](https:/
 
 ### 1. Instalando con Composer.
 
-    $ composer require andaniel05/pyramidaltests dev-master
+    $ composer require --dev andaniel05/pyramidaltests dev-master
 
 ### 2. Declarando la extensión en el archivo de configuración.
 

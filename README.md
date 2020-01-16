@@ -19,7 +19,7 @@ Its main objective is to extend the applications of [PHPUnit](https://phpunit.de
 
 ### 1. Installing with Composer.
 
-    $ composer require andaniel05/pyramidaltests dev-master
+    $ composer require --dev andaniel05/pyramidaltests dev-master
 
 ### 2. Declaring extension in configuration file.
 
