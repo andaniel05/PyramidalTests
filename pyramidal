@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+
+$autoloadFileName = __DIR__.'/../../autoload.php';
+
+if (! file_exists($autoloadFileName)) {
+    // autoload for development.
+    $autoloadFileName = __DIR__.'/vendor/autoload.php';
+}
+
+require_once $autoloadFileName;
+require_once __DIR__.'/src/default-dsl.php';
+
+\ThenLabs\PyramidalTests\Framework::main();
