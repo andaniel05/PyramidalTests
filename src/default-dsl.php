@@ -75,12 +75,12 @@ function useAndExtendMacro(string $title, Closure $closure): void
     DSL::useMacro($title, $closure);
 }
 
-function staticProperty(string $name, $value): Property
+function staticProperty(string $name, $value = null): Property
 {
     return DSL::staticProperty($name, $value);
 }
 
-function property(string $name, $value): Property
+function property(string $name, $value = null): Property
 {
     return DSL::property($name, $value);
 }

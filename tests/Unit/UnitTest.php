@@ -827,6 +827,24 @@ class UnitTest extends UnitTestCase
 
         $this->assertExpectedTotals(['success' => 1], $result);
     }
+
+    public function testMethodsAndPropertiesWithoutInitializationValue()
+    {
+        testCase('root test case 1', function () {
+            staticProperty('myStaticProperty');
+
+            property('myProperty');
+
+            test(function () {
+                $this->assertNull($this->myProperty);
+                $this->assertNull(static::$myStaticProperty);
+            });
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
 }
 
 class SomeClass
