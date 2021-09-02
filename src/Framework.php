@@ -6,10 +6,9 @@ namespace ThenLabs\PyramidalTests;
 use ReflectionFunction;
 use PHPUnit\TextUI\Command;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Util\Configuration;
 use PHPUnit\Framework\TestSuite;
+use PHPUnit\Runner\Version;
 use Symfony\Component\Yaml\Yaml;
-use PHPUnit\TextUI\ResultPrinter;
 use PHPUnit\Util\TestDox\CliTestDoxPrinter;
 use ThenLabs\PyramidalTests\Model\TestModel;
 use ThenLabs\PyramidalTests\Model\AbstractModel;
@@ -50,7 +49,13 @@ class Framework extends Command
 
         $this->handleArguments($argv);
 
-        $this->arguments['colors'] = ResultPrinter::COLOR_AUTO;
+        if (version_compare(Version::id(), '9', '>=')) {
+            //  Compatibility with PHPUnit 9.
+            $this->arguments['colors'] = \PHPUnit\TextUI\DefaultResultPrinter::COLOR_AUTO;
+        } else {
+            //  Compatibility with PHPUnit 8.
+            $this->arguments['colors'] = \PHPUnit\TextUI\ResultPrinter::COLOR_AUTO;
+        }
 
         printf(
             "\e[1;33mPyramidalTests %s\e[0m\n",
@@ -84,11 +89,10 @@ class Framework extends Command
         }
 
         $configurationFileName = $this->arguments['configuration'];
-        $configuration = Configuration::getInstance($configurationFileName);
-
         $directory = dirname($configurationFileName);
         $pyramidalYamlFileName = $directory.'/pyramidal.yaml';
 
+        // load config from pyramidal.yaml file if exists.
         if (file_exists($pyramidalYamlFileName)) {
             $options = array_merge(
                 $options,
@@ -96,22 +100,31 @@ class Framework extends Command
             );
         }
 
-        $xpath = (function () {
-            return $this->xpath;
-        })->call($configuration);
+        // load the test files.
+        if (version_compare(Version::id(), '9', '>=')) {
+            //  Compatibility with PHPUnit 9.
+            $loader = new \PHPUnit\TextUI\XmlConfiguration\Loader();
+            $configuration = $loader->load($configurationFileName);
 
-        $directoryNodes = $xpath->query('testsuites/testsuite/directory');
-        foreach ($directoryNodes as $directoryNode) {
-            $pattern = dirname($configurationFileName).'/'.strval($directoryNode->textContent).'/'.$options['file_pattern'];
-            $fileNames = glob($pattern);
+            foreach ($configuration->testSuite() as $testSuite) {
+                foreach ($testSuite->directories() as $directory) {
+                    $this->includeDirectory($directory->path(), $options['file_pattern']);
+                }
+            }
+        } else {
+            //  Compatibility with PHPUnit 8.
+            $configuration = \PHPUnit\Util\Configuration::getInstance($configurationFileName);
 
-            // include the test files.
-            foreach ($fileNames as $fileName) {
-                require_once $fileName;
+            $xpath = (function () {
+                return $this->xpath;
+            })->call($configuration);
 
-                // reset the base test case class per each file.
-                setTestCaseClass(TestCase::class);
-                Record::setCurrentTestCaseModel(null);
+            $directoryNodes = $xpath->query('testsuites/testsuite/directory');
+            foreach ($directoryNodes as $directoryNode) {
+                $this->includeDirectory(
+                    dirname($configurationFileName).'/'.strval($directoryNode->textContent),
+                    $options['file_pattern']
+                );
             }
         }
 
@@ -190,6 +203,21 @@ class Framework extends Command
             foreach ($model->children(false) as $child) {
                 $this->filterByClosure($child, $mainTestSuite, $fileName, $line);
             }
+        }
+    }
+
+    private function includeDirectory(string $directoryPath, string $filePattern): void
+    {
+        $pattern = $directoryPath.'/'.$filePattern;
+        $fileNames = glob($pattern);
+
+        // include the test files.
+        foreach ($fileNames as $fileName) {
+            require_once $fileName;
+
+            // reset the base test case class per each file.
+            setTestCaseClass(TestCase::class);
+            Record::setCurrentTestCaseModel(null);
         }
     }
 }

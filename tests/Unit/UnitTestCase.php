@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestResult;
 use PHPUnit\Framework\TestSuite;
 use PHPUnit\TextUI\TestRunner;
+use PHPUnit\Runner\Version;
 use Closure;
 
 /**
@@ -36,7 +37,15 @@ class UnitTestCase extends TestCase
             }
         }
 
-        $result = $runner->doRun($mainTestSuite, $arguments, $warnings, $exit);
+        if (version_compare(Version::id(), '9', '>=')) {
+            //  Compatibility with PHPUnit 9.
+            $arguments['extensions'] = [];
+
+            $result = $runner->run($mainTestSuite, $arguments, $warnings, $exit);
+        } else {
+            //  Compatibility with PHPUnit 8.
+            $result = $runner->doRun($mainTestSuite, $arguments, $warnings, $exit);
+        }
 
         if ($result->riskyCount() ||
             $result->errorCount() ||
