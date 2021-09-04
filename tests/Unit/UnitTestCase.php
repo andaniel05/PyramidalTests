@@ -18,6 +18,11 @@ use Closure;
  */
 class UnitTestCase extends TestCase
 {
+    public function setUp(): void
+    {
+        setTestCaseClass('PHPUnit\Framework\TestCase');
+    }
+
     public function tearDown(): void
     {
         Record::clear();

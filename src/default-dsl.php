@@ -94,3 +94,8 @@ function method(string $name, Closure $closure): Method
 {
     return DSL::method($name, $closure);
 }
+
+function useTrait(string $trait, array $definitions = []): void
+{
+    DSL::useTrait($trait, $definitions);
+}

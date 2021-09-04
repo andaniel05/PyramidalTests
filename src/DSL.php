@@ -190,4 +190,12 @@ abstract class DSL
 
         return $method;
     }
+
+    public static function useTrait(string $trait, array $definitions = []): void
+    {
+        $currentTestCaseModel = Record::getCurrentTestCaseModel();
+        $classBuilder = $currentTestCaseModel->getClassBuilder();
+
+        $classBuilder->use($trait, $definitions);
+    }
 }

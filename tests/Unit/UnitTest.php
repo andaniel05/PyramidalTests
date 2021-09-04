@@ -3,10 +3,14 @@ declare(strict_types=1);
 
 namespace ThenLabs\PyramidalTests\Tests\Unit;
 
+require_once __DIR__.'/symbols.php';
+
 use DateTime;
 use ReflectionClass;
 use PHPUnit\Framework\Assert;
+use ThenLabs\ClassBuilder\ClassBuilder;
 use ThenLabs\ClassBuilder\Model\Method;
+use ThenLabs\ClassBuilder\TraitBuilder;
 use ThenLabs\ClassBuilder\Model\Property;
 use ThenLabs\PyramidalTests\Exception\MacroNotFoundException;
 
@@ -325,6 +329,101 @@ class UnitTest extends UnitTestCase
         $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure1), $result);
     }
 
+    public function testSetUpInvokeParentMethodOfTheBaseClass()
+    {
+        $baseTestCaseClass = (new ClassBuilder)
+            ->extends('PHPUnit\Framework\TestCase')
+            ->addMethod('setUp')
+                ->setClosure(function (): void {
+                    $this->data = ['BaseTestCaseClass'];
+                })
+            ->end()
+        ;
+        $baseTestCaseClass->install();
+
+        setTestCaseClass($baseTestCaseClass->getFCQN());
+
+        testCase('my test case 1', function () {
+            setUp(function () {
+                $this->data[] = 'MyTestCase1';
+            });
+
+            test(function () {
+                $this->assertCount(2, $this->data);
+                $this->assertEquals('BaseTestCaseClass', $this->data[0]);
+                $this->assertEquals('MyTestCase1', $this->data[1]);
+            });
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testSetUpBeforeClassInvokeTheParentMethodOfTheTestCaseClass()
+    {
+        $baseTestCaseClass = (new ClassBuilder)
+            ->extends('PHPUnit\Framework\TestCase')
+            ->addMethod('setUpBeforeClass')
+                ->setStatic(true)
+                ->setClosure(function (): void {
+                    Registry::$data = ['MyParentTestCase' => true];
+                })
+            ->end()
+        ;
+        $baseTestCaseClass->install();
+
+        setTestCaseClass($baseTestCaseClass->getFCQN());
+
+        testCase('my test case 1', function () {
+            setUpBeforeClass(function () {
+                Registry::$data['MyTestCase1'] = true;
+            });
+
+            test('my test', $this->closure1 = function () {
+                $this->assertTrue(Registry::$data['MyParentTestCase']);
+                $this->assertTrue(Registry::$data['MyTestCase1']);
+            });
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+        $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure1), $result);
+    }
+
+    public function testSetUpBeforeClassInvokeTheParentMethodOfTheTestCaseClass1()
+    {
+        $baseTestCaseClass = (new ClassBuilder)
+            ->extends('PHPUnit\Framework\TestCase')
+            ->addMethod('setUpBeforeClass')
+                ->setStatic(true)
+                ->setClosure(function (): void {
+                    Registry::$data = ['MyParentTestCase' => true];
+                })
+            ->end()
+        ;
+        $baseTestCaseClass->install();
+
+        setTestCaseClass($baseTestCaseClass->getFCQN());
+
+        testCase('my test case 1', function () {
+            setUpBeforeClass(function () {
+                Registry::$data['MyTestCase1'] = true;
+            }, false);
+
+            test('my test', $this->closure1 = function () {
+                $this->assertArrayNotHasKey('MyParentTestCase', Registry::$data);
+                $this->assertTrue(Registry::$data['MyTestCase1']);
+            });
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+        $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure1), $result);
+    }
+
     public function testSetUp()
     {
         testCase(function () {
@@ -498,6 +597,38 @@ class UnitTest extends UnitTestCase
         $this->assertArrayNotHasKey('parentTearDown', Registry::$data);
     }
 
+    public function testTearDownInvokeParentMethodOfTheBaseClass()
+    {
+        $baseTestCaseClass = (new ClassBuilder)
+            ->extends('PHPUnit\Framework\TestCase')
+            ->addMethod('tearDown')
+                ->setClosure(function (): void {
+                    Registry::$data = ['BaseTestCaseClass'];
+                })
+            ->end()
+        ;
+        $baseTestCaseClass->install();
+
+        setTestCaseClass($baseTestCaseClass->getFCQN());
+
+        testCase('my test case 1', function () {
+            test(function () {
+                $this->assertTrue(true);
+            });
+
+            tearDown(function () {
+                Registry::$data[] = 'MyTestCase1';
+            });
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+        $this->assertCount(2, Registry::$data);
+        $this->assertEquals('BaseTestCaseClass', Registry::$data[0]);
+        $this->assertEquals('MyTestCase1', Registry::$data[1]);
+    }
+
     public function testTearDownAfterClass()
     {
         testCase('my test case', function () {
@@ -554,6 +685,70 @@ class UnitTest extends UnitTestCase
         $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure1), $result);
 
         $this->assertLessThan(Registry::$data['moment2'], Registry::$data['moment1']);
+    }
+
+    public function testTearDownAfterClassInvokeParentMethodOfTheBaseClass()
+    {
+        $baseTestCaseClass = (new ClassBuilder)
+            ->extends('PHPUnit\Framework\TestCase')
+            ->addMethod('tearDownAfterClass')
+                ->setStatic(true)
+                ->setClosure(function (): void {
+                    Registry::$data[] = 'MyParentClass';
+                })
+            ->end()
+        ;
+        $baseTestCaseClass->install();
+
+        setTestCaseClass($baseTestCaseClass->getFCQN());
+
+        testCase('my test case 1', function () {
+            test(function () {
+                $this->assertTrue(true);
+            });
+
+            tearDownAfterClass(function () {
+                Registry::$data[] = 'MyTestCase1';
+            });
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+        $this->assertEquals('MyParentClass', Registry::$data[0]);
+        $this->assertEquals('MyTestCase1', Registry::$data[1]);
+    }
+
+    public function testTearDownAfterClassInvokeParentMethodOfTheBaseClass1()
+    {
+        $baseTestCaseClass = (new ClassBuilder)
+            ->extends('PHPUnit\Framework\TestCase')
+            ->addMethod('tearDownAfterClass')
+                ->setStatic(true)
+                ->setClosure(function (): void {
+                    Registry::$data[] = 'MyParentClass';
+                })
+            ->end()
+        ;
+        $baseTestCaseClass->install();
+
+        setTestCaseClass($baseTestCaseClass->getFCQN());
+
+        testCase('my test case 1', function () {
+            test(function () {
+                $this->assertTrue(true);
+            });
+
+            tearDownAfterClass(function () {
+                Registry::$data[] = 'MyTestCase1';
+            }, false);
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+        $this->assertCount(1, Registry::$data);
+        $this->assertEquals('MyTestCase1', Registry::$data[0]);
     }
 
     public function testTearDownAfterClassInsideNestedTestCasesWithoutMethodInheritance()
@@ -845,76 +1040,32 @@ class UnitTest extends UnitTestCase
 
         $this->assertExpectedTotals(['success' => 1], $result);
     }
-}
 
-class SomeClass
-{
-    public function doSomething()
+    public function testUseTrait()
     {
+        $trait = (new TraitBuilder)
+            ->addMethod('method1', function () {
+                return 'method1';
+            })->end()
+            ->addMethod('method2', function () {
+                return 'method2';
+            })->end()
+        ;
+        $trait->install();
+
+        testCase('root test case 1', function () use ($trait) {
+            useTrait($trait->getFCQN(), ['method2 as method10']);
+
+            test($this->closure1 = function () {
+                $this->assertEquals('method1', $this->method1());
+                $this->assertEquals('method2', $this->method2());
+                $this->assertEquals('method2', $this->method10());
+            });
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+        $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure1), $result);
     }
-}
-
-class Observer
-{
-    public function update($argument)
-    {
-        // Do something.
-    }
-
-    public function reportError($errorCode, $errorMessage, Subject $subject)
-    {
-        // Do something
-    }
-
-    // Other methods.
-}
-
-class Subject
-{
-    protected $observers = [];
-    protected $name;
-
-    public function __construct($name)
-    {
-        $this->name = $name;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function attach(Observer $observer)
-    {
-        $this->observers[] = $observer;
-    }
-
-    public function doSomething()
-    {
-        // Do something.
-        // ...
-
-        // Notify observers that we did something.
-        $this->notify('something');
-    }
-
-    public function doSomethingBad()
-    {
-        foreach ($this->observers as $observer) {
-            $observer->reportError(42, 'Something bad happened', $this);
-        }
-    }
-
-    protected function notify($argument)
-    {
-        foreach ($this->observers as $observer) {
-            $observer->update($argument);
-        }
-    }
-
-    // Other methods.
-}
-
-class MyCustomTestCase extends \PHPUnit\Framework\TestCase
-{
 }

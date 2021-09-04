@@ -85,6 +85,8 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 
     public function buildClass(): void
     {
+        $thisTestCaseModel = $this;
+
         if ($this->title) {
             $this->classBuilder->addComment("@testdox {$this->title}");
         }
@@ -105,6 +107,19 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
                         break;
                     }
                 }
+
+                $topSetUpBeforeClassClosure = function () use ($thisTestCaseModel) {
+                    $closure = Closure::bind(
+                        function () {
+                            parent::setUpBeforeClass();
+                        },
+                        null,
+                        $thisTestCaseModel->getClassBuilder()->getFCQN()
+                    );
+                    $closure();
+                };
+
+                $listOfParentsSetUpBeforeClassClosures[] = $topSetUpBeforeClassClosure;
 
                 if (count($listOfParentsSetUpBeforeClassClosures)) {
                     $setUpBeforeClassClosure = function () use ($listOfParentsSetUpBeforeClassClosures, $setUpBeforeClassClosure) {
@@ -140,6 +155,12 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
                         break;
                     }
                 }
+
+                $topSetUpClosure = function () {
+                    parent::setUp();
+                };
+
+                $listOfParentsSetUpClosures[] = $topSetUpClosure;
 
                 if (count($listOfParentsSetUpClosures)) {
                     $setUpClosure = function () use ($listOfParentsSetUpClosures, $setUpClosure) {
@@ -188,6 +209,12 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
                     }
                 }
 
+                $topTearDownClosure = function () {
+                    parent::tearDown();
+                };
+
+                $listOfParentsTearDownClosures[] = $topTearDownClosure;
+
                 if (count($listOfParentsTearDownClosures)) {
                     $tearDownClosure = function () use ($listOfParentsTearDownClosures, $tearDownClosure) {
                         /**
@@ -225,6 +252,19 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
                         break;
                     }
                 }
+
+                $topTearDownAfterClassClosure = function () use ($thisTestCaseModel) {
+                    $closure = Closure::bind(
+                        function () {
+                            parent::tearDownAfterClass();
+                        },
+                        null,
+                        $thisTestCaseModel->getClassBuilder()->getFCQN()
+                    );
+                    $closure();
+                };
+
+                $listOfParentsTearDownAfterClassClosures[] = $topTearDownAfterClassClosure;
 
                 if (count($listOfParentsTearDownAfterClassClosures)) {
                     $tearDownAfterClassClosure = function () use ($listOfParentsTearDownAfterClassClosures, $tearDownAfterClassClosure) {
