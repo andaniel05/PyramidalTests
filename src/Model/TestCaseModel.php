@@ -121,15 +121,18 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 
                 $listOfParentsSetUpBeforeClassClosures[] = $topSetUpBeforeClassClosure;
 
-                if (count($listOfParentsSetUpBeforeClassClosures)) {
-                    $setUpBeforeClassClosure = function () use ($listOfParentsSetUpBeforeClassClosures, $setUpBeforeClassClosure) {
-                        foreach (array_reverse($listOfParentsSetUpBeforeClassClosures) as $parentSetUpBeforeClassClosure) {
-                            call_user_func($parentSetUpBeforeClassClosure);
-                        }
+                $setUpBeforeClassClosure = function () use ($listOfParentsSetUpBeforeClassClosures, $setUpBeforeClassClosure, $thisTestCaseModel) {
+                    foreach (array_reverse($listOfParentsSetUpBeforeClassClosures) as $parentSetUpBeforeClassClosure) {
+                        call_user_func($parentSetUpBeforeClassClosure);
+                    }
 
-                        call_user_func($setUpBeforeClassClosure);
-                    };
-                }
+                    $closure = Closure::bind(
+                        $setUpBeforeClassClosure,
+                        null,
+                        $thisTestCaseModel->getClassBuilder()->getFCQN()
+                    );
+                    $closure();
+                };
             }
 
             $this->classBuilder->addMethod('setUpBeforeClass')
@@ -162,19 +165,17 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 
                 $listOfParentsSetUpClosures[] = $topSetUpClosure;
 
-                if (count($listOfParentsSetUpClosures)) {
-                    $setUpClosure = function () use ($listOfParentsSetUpClosures, $setUpClosure) {
-                        /**
-                         * In this context '$this' is the final test case instance.
-                         */
+                $setUpClosure = function () use ($listOfParentsSetUpClosures, $setUpClosure) {
+                    /**
+                     * In this context '$this' is the final test case instance.
+                     */
 
-                        foreach (array_reverse($listOfParentsSetUpClosures) as $parentSetUpClosure) {
-                            $parentSetUpClosure->call($this);
-                        }
+                    foreach (array_reverse($listOfParentsSetUpClosures) as $parentSetUpClosure) {
+                        $parentSetUpClosure->call($this);
+                    }
 
-                        $setUpClosure->call($this);
-                    };
-                }
+                    $setUpClosure->call($this);
+                };
             }
 
             $this->classBuilder->addMethod('setUp')
@@ -215,19 +216,17 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 
                 $listOfParentsTearDownClosures[] = $topTearDownClosure;
 
-                if (count($listOfParentsTearDownClosures)) {
-                    $tearDownClosure = function () use ($listOfParentsTearDownClosures, $tearDownClosure) {
-                        /**
-                         * In this context '$this' is the final test case instance.
-                         */
+                $tearDownClosure = function () use ($listOfParentsTearDownClosures, $tearDownClosure) {
+                    /**
+                     * In this context '$this' is the final test case instance.
+                     */
 
-                        foreach (array_reverse($listOfParentsTearDownClosures) as $parentTearDownClosure) {
-                            $parentTearDownClosure->call($this);
-                        }
+                    foreach (array_reverse($listOfParentsTearDownClosures) as $parentTearDownClosure) {
+                        $parentTearDownClosure->call($this);
+                    }
 
-                        $tearDownClosure->call($this);
-                    };
-                }
+                    $tearDownClosure->call($this);
+                };
             }
 
             $this->classBuilder->addMethod('tearDown')
@@ -266,15 +265,18 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 
                 $listOfParentsTearDownAfterClassClosures[] = $topTearDownAfterClassClosure;
 
-                if (count($listOfParentsTearDownAfterClassClosures)) {
-                    $tearDownAfterClassClosure = function () use ($listOfParentsTearDownAfterClassClosures, $tearDownAfterClassClosure) {
-                        foreach (array_reverse($listOfParentsTearDownAfterClassClosures) as $parentTearDownAfterClassClosure) {
-                            call_user_func($parentTearDownAfterClassClosure);
-                        }
+                $tearDownAfterClassClosure = function () use ($listOfParentsTearDownAfterClassClosures, $tearDownAfterClassClosure, $thisTestCaseModel) {
+                    foreach (array_reverse($listOfParentsTearDownAfterClassClosures) as $parentTearDownAfterClassClosure) {
+                        call_user_func($parentTearDownAfterClassClosure);
+                    }
 
-                        call_user_func($tearDownAfterClassClosure);
-                    };
-                }
+                    $closure = Closure::bind(
+                        $tearDownAfterClassClosure,
+                        null,
+                        $thisTestCaseModel->getClassBuilder()->getFCQN()
+                    );
+                    $closure();
+                };
             }
 
             $this->classBuilder->addMethod('tearDownAfterClass')
