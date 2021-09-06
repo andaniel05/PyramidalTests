@@ -56,6 +56,52 @@ testCase(function () {
     tearDownAfterClass(function () {
         static::auxTearDownAfterClass();
     });
+
+    testCase(function () {
+        setUpBeforeClass(function () {
+            static::auxSetUpBeforeClass();
+        });
+
+        setUp(function () {
+            $this->auxSetUp();
+        });
+
+        test(function () {
+            $this->auxTest();
+            $this->assertTrue(true);
+        });
+
+        tearDown(function () {
+            $this->auxTearDown();
+        });
+
+        tearDownAfterClass(function () {
+            static::auxTearDownAfterClass();
+        });
+
+        testCase(function () {
+            setUpBeforeClass(function () {
+                static::auxSetUpBeforeClass();
+            });
+
+            setUp(function () {
+                $this->auxSetUp();
+            });
+
+            test(function () {
+                $this->auxTest();
+                $this->assertTrue(true);
+            });
+
+            tearDown(function () {
+                $this->auxTearDown();
+            });
+
+            tearDownAfterClass(function () {
+                static::auxTearDownAfterClass();
+            });
+        });
+    });
 });
 
 test(function () {

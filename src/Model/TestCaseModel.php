@@ -123,7 +123,12 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 
                 $setUpBeforeClassClosure = function () use ($listOfParentsSetUpBeforeClassClosures, $setUpBeforeClassClosure, $thisTestCaseModel) {
                     foreach (array_reverse($listOfParentsSetUpBeforeClassClosures) as $parentSetUpBeforeClassClosure) {
-                        call_user_func($parentSetUpBeforeClassClosure);
+                        $closure = Closure::bind(
+                            $parentSetUpBeforeClassClosure,
+                            null,
+                            $thisTestCaseModel->getClassBuilder()->getFCQN()
+                        );
+                        $closure();
                     }
 
                     $closure = Closure::bind(
@@ -267,7 +272,12 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 
                 $tearDownAfterClassClosure = function () use ($listOfParentsTearDownAfterClassClosures, $tearDownAfterClassClosure, $thisTestCaseModel) {
                     foreach (array_reverse($listOfParentsTearDownAfterClassClosures) as $parentTearDownAfterClassClosure) {
-                        call_user_func($parentTearDownAfterClassClosure);
+                        $closure = Closure::bind(
+                            $parentTearDownAfterClassClosure,
+                            null,
+                            $thisTestCaseModel->getClassBuilder()->getFCQN()
+                        );
+                        $closure();
                     }
 
                     $closure = Closure::bind(
