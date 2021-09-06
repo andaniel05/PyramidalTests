@@ -16,6 +16,8 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 {
     use CompositeComponentTrait;
 
+    public const KEY_METHODS = ['setUp', 'setUpBeforeClass', 'tearDown', 'tearDownAfterClass'];
+
     /**
      * @var string
      */
@@ -89,6 +91,23 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 
         if ($this->title) {
             $this->classBuilder->addComment("@testdox {$this->title}");
+        }
+
+        // the class should include the members of the parent class.
+        foreach ($this->parents() as $parentTestCaseModel) {
+            foreach ($parentTestCaseModel->getClassBuilder()->getMembers() as $member) {
+                if ($member instanceof Method &&
+                    in_array($member->getName(), self::KEY_METHODS) ||
+                    0 === strpos($member->getName(), 'test')
+                ) {
+                    continue;
+                }
+
+                // prevent that a member it's added more than once.
+                if (! in_array($member, $this->classBuilder->getMembers())) {
+                    $this->classBuilder->addMember($member);
+                }
+            }
         }
 
         // setUpBeforeClass

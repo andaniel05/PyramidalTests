@@ -36,12 +36,17 @@ class MyTestCase extends \PHPUnit\Framework\TestCase
 setTestCaseClass('MyTestCase');
 
 testCase(function () {
+    staticProperty('myStaticProperty');
+    property('myProperty');
+
     setUpBeforeClass(function () {
         static::auxSetUpBeforeClass();
+        static::$myStaticProperty = uniqid('myStaticProperty');
     });
 
     setUp(function () {
         $this->auxSetUp();
+        $this->myProperty = uniqid('myProperty');
     });
 
     test(function () {
