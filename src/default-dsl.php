@@ -60,6 +60,11 @@ function tearDownAfterClass(Closure $closure, bool $invokeParents = true): void
     DSL::tearDownAfterClass($closure, $invokeParents);
 }
 
+function tearDownAfterClassOnce(Closure $closure, bool $invokeParents = true): void
+{
+    DSL::tearDownAfterClassOnce($closure, $invokeParents);
+}
+
 function setTestCaseClass(string $testCaseClass): void
 {
     DSL::setTestCaseClass($testCaseClass);

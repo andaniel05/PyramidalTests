@@ -39,6 +39,11 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
     protected $invokeParentsInSetUpBeforeClass;
 
     /**
+     * @var bool
+     */
+    protected $invokedSetUpBeforeClass = false;
+
+    /**
      * @Closure
      */
     protected $setUpClosure;
@@ -67,6 +72,11 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
      * @var bool
      */
     protected $invokeParentsInTearDownAfterClass;
+
+    /**
+     * @var bool
+     */
+    protected $invokedTearDownAfterClass = false;
 
     /**
      * @var array
@@ -403,5 +413,25 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
     public function getMacro(string $title): ?Closure
     {
         return $this->macros[$title] ?? null;
+    }
+
+    public function setInvokedSetUpBeforeClass(bool $invokedSetUpBeforeClass): void
+    {
+        $this->invokedSetUpBeforeClass = $invokedSetUpBeforeClass;
+    }
+
+    public function getInvokedSetUpBeforeClass(): bool
+    {
+        return $this->invokedSetUpBeforeClass;
+    }
+
+    public function setInvokedTearDownAfterClass(bool $invokedTearDownAfterClass): void
+    {
+        $this->invokedTearDownAfterClass = $invokedTearDownAfterClass;
+    }
+
+    public function getInvokedTearDownAfterClass(): bool
+    {
+        return $this->invokedTearDownAfterClass;
     }
 }

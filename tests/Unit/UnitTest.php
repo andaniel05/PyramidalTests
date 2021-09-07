@@ -424,53 +424,53 @@ class UnitTest extends UnitTestCase
         $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure1), $result);
     }
 
-    // public function testSetUpBeforeClassOnce()
-    // {
-    //     Registry::$data = [];
+    public function testSetUpBeforeClassOnce()
+    {
+        Registry::$data = [];
 
-    //     testCase('parent test case', function () {
-    //         setUpBeforeClassOnce(function () {
-    //             Registry::$data[] = 'ParentTestCase';
-    //         });
+        testCase('parent test case', function () {
+            setUpBeforeClassOnce(function () {
+                Registry::$data[] = 'ParentTestCase';
+            });
 
-    //         test($this->closure1 = function () {
-    //             $this->assertCount(1, Registry::$data);
-    //             $this->assertEquals(Registry::$data[0], 'ParentTestCase');
-    //         });
+            test($this->closure1 = function () {
+                $this->assertCount(1, Registry::$data);
+                $this->assertEquals(Registry::$data[0], 'ParentTestCase');
+            });
 
-    //         testCase('child test case 1', function () {
-    //             setUpBeforeClassOnce(function () {
-    //                 Registry::$data[] = 'ChildTestCase1';
-    //             });
+            testCase('child test case 1', function () {
+                setUpBeforeClassOnce(function () {
+                    Registry::$data[] = 'ChildTestCase1';
+                });
 
-    //             test($this->closure2 = function () {
-    //                 $this->assertCount(2, Registry::$data);
-    //                 $this->assertEquals(Registry::$data[0], 'ParentTestCase');
-    //                 $this->assertEquals(Registry::$data[1], 'ChildTestCase1');
-    //             });
+                test($this->closure2 = function () {
+                    $this->assertCount(2, Registry::$data);
+                    $this->assertEquals(Registry::$data[0], 'ParentTestCase');
+                    $this->assertEquals(Registry::$data[1], 'ChildTestCase1');
+                });
 
-    //             testCase('child test case 2', function () {
-    //                 setUpBeforeClassOnce(function () {
-    //                     Registry::$data[] = 'ChildTestCase2';
-    //                 });
+                testCase('child test case 2', function () {
+                    setUpBeforeClassOnce(function () {
+                        Registry::$data[] = 'ChildTestCase2';
+                    });
 
-    //                 test($this->closure3 = function () {
-    //                     $this->assertCount(3, Registry::$data);
-    //                     $this->assertEquals(Registry::$data[0], 'ParentTestCase');
-    //                     $this->assertEquals(Registry::$data[1], 'ChildTestCase1');
-    //                     $this->assertEquals(Registry::$data[2], 'ChildTestCase2');
-    //                 });
-    //             });
-    //         });
-    //     });
+                    test($this->closure3 = function () {
+                        $this->assertCount(3, Registry::$data);
+                        $this->assertEquals(Registry::$data[0], 'ParentTestCase');
+                        $this->assertEquals(Registry::$data[1], 'ChildTestCase1');
+                        $this->assertEquals(Registry::$data[2], 'ChildTestCase2');
+                    });
+                });
+            });
+        });
 
-    //     $result = $this->runTests();
+        $result = $this->runTests();
 
-    //     $this->assertExpectedTotals(['success' => 3], $result);
-    //     $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure1), $result);
-    //     $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure2), $result);
-    //     $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure3), $result);
-    // }
+        $this->assertExpectedTotals(['success' => 3], $result);
+        $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure1), $result);
+        $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure2), $result);
+        $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure3), $result);
+    }
 
     public function testSetUp()
     {
@@ -824,6 +824,48 @@ class UnitTest extends UnitTestCase
 
         $this->assertFalse(isset(Registry::$data['executedTearDownAfterClass1']));
         $this->assertTrue(Registry::$data['executedTearDownAfterClass2']);
+    }
+
+    public function testTearDownAfterClassOnce()
+    {
+        Registry::$data = [];
+
+        testCase('parent test case', function () {
+            test(function () {
+                $this->assertTrue(true);
+            });
+
+            tearDownAfterClassOnce(function () {
+                Registry::$data[] = 'ParentTestCase';
+            });
+
+            testCase('child test case 1', function () {
+                test(function () {
+                    $this->assertCount(1, Registry::$data);
+                    $this->assertEquals(Registry::$data[0], 'ParentTestCase');
+                });
+
+                tearDownAfterClassOnce(function () {
+                    Registry::$data[] = 'ChildTestCase1';
+                });
+
+                testCase('child test case 2', function () {
+                    test(function () {
+                        $this->assertCount(2, Registry::$data);
+                        $this->assertEquals(Registry::$data[0], 'ParentTestCase');
+                        $this->assertEquals(Registry::$data[1], 'ChildTestCase1');
+                    });
+
+                    tearDownAfterClassOnce(function () {
+                        Registry::$data[] = 'ChildTestCase2';
+                    });
+                });
+            });
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 3], $result);
     }
 
     public function testSetTestCaseClass()

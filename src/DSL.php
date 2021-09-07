@@ -54,15 +54,13 @@ abstract class DSL
     {
         $currentTestCaseModel = Record::getCurrentTestCaseModel();
 
-        $wrapperClosure = function () use ($closure) {
-            static $invoked = false;
-
-            if ($invoked) {
+        $wrapperClosure = function () use ($closure, $currentTestCaseModel) {
+            if ($currentTestCaseModel->getInvokedSetUpBeforeClass()) {
                 return;
             }
 
             $closure();
-            $invoked = true;
+            $currentTestCaseModel->setInvokedSetUpBeforeClass(true);
         };
 
         $currentTestCaseModel->setSetUpBeforeClassClosure($wrapperClosure, $invokeParents);
@@ -101,6 +99,22 @@ abstract class DSL
     {
         $currentTestCaseModel = Record::getCurrentTestCaseModel();
         $currentTestCaseModel->setTearDownAfterClassClosure($closure, $invokeParents);
+    }
+
+    public static function tearDownAfterClassOnce(Closure $closure, bool $invokeParents): void
+    {
+        $currentTestCaseModel = Record::getCurrentTestCaseModel();
+
+        $wrapperClosure = function () use ($closure, $currentTestCaseModel) {
+            if ($currentTestCaseModel->getInvokedTearDownAfterClass()) {
+                return;
+            }
+
+            $closure();
+            $currentTestCaseModel->setInvokedTearDownAfterClass(true);
+        };
+
+        $currentTestCaseModel->setTearDownAfterClassClosure($wrapperClosure, $invokeParents);
     }
 
     public static function setTestCaseClass(string $testCaseClass): void
