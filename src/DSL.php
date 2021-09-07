@@ -50,6 +50,24 @@ abstract class DSL
         $currentTestCaseModel->setSetUpBeforeClassClosure($closure, $invokeParents);
     }
 
+    public static function setUpBeforeClassOnce(Closure $closure, bool $invokeParents): void
+    {
+        $currentTestCaseModel = Record::getCurrentTestCaseModel();
+
+        $wrapperClosure = function () use ($closure) {
+            static $invoked = false;
+
+            if ($invoked) {
+                return;
+            }
+
+            $closure();
+            $invoked = true;
+        };
+
+        $currentTestCaseModel->setSetUpBeforeClassClosure($wrapperClosure, $invokeParents);
+    }
+
     public static function setUp(Closure $closure, bool $invokeParents): void
     {
         $currentTestCaseModel = Record::getCurrentTestCaseModel();

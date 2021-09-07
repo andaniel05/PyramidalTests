@@ -26,6 +26,11 @@ function setUpBeforeClass(Closure $closure, bool $invokeParents = true): void
     DSL::setUpBeforeClass($closure, $invokeParents);
 }
 
+function setUpBeforeClassOnce(Closure $closure, bool $invokeParents = true): void
+{
+    DSL::setUpBeforeClassOnce($closure, $invokeParents);
+}
+
 function setUp(Closure $closure, bool $invokeParents = true): void
 {
     DSL::setUp($closure, $invokeParents);

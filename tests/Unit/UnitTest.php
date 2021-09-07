@@ -424,6 +424,54 @@ class UnitTest extends UnitTestCase
         $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure1), $result);
     }
 
+    // public function testSetUpBeforeClassOnce()
+    // {
+    //     Registry::$data = [];
+
+    //     testCase('parent test case', function () {
+    //         setUpBeforeClassOnce(function () {
+    //             Registry::$data[] = 'ParentTestCase';
+    //         });
+
+    //         test($this->closure1 = function () {
+    //             $this->assertCount(1, Registry::$data);
+    //             $this->assertEquals(Registry::$data[0], 'ParentTestCase');
+    //         });
+
+    //         testCase('child test case 1', function () {
+    //             setUpBeforeClassOnce(function () {
+    //                 Registry::$data[] = 'ChildTestCase1';
+    //             });
+
+    //             test($this->closure2 = function () {
+    //                 $this->assertCount(2, Registry::$data);
+    //                 $this->assertEquals(Registry::$data[0], 'ParentTestCase');
+    //                 $this->assertEquals(Registry::$data[1], 'ChildTestCase1');
+    //             });
+
+    //             testCase('child test case 2', function () {
+    //                 setUpBeforeClassOnce(function () {
+    //                     Registry::$data[] = 'ChildTestCase2';
+    //                 });
+
+    //                 test($this->closure3 = function () {
+    //                     $this->assertCount(3, Registry::$data);
+    //                     $this->assertEquals(Registry::$data[0], 'ParentTestCase');
+    //                     $this->assertEquals(Registry::$data[1], 'ChildTestCase1');
+    //                     $this->assertEquals(Registry::$data[2], 'ChildTestCase2');
+    //                 });
+    //             });
+    //         });
+    //     });
+
+    //     $result = $this->runTests();
+
+    //     $this->assertExpectedTotals(['success' => 3], $result);
+    //     $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure1), $result);
+    //     $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure2), $result);
+    //     $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure3), $result);
+    // }
+
     public function testSetUp()
     {
         testCase(function () {

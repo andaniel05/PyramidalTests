@@ -141,21 +141,20 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
                 $listOfParentsSetUpBeforeClassClosures[] = $topSetUpBeforeClassClosure;
 
                 $setUpBeforeClassClosure = function () use ($listOfParentsSetUpBeforeClassClosures, $setUpBeforeClassClosure, $thisTestCaseModel) {
-                    foreach (array_reverse($listOfParentsSetUpBeforeClassClosures) as $parentSetUpBeforeClassClosure) {
-                        $closure = Closure::bind(
-                            $parentSetUpBeforeClassClosure,
+                    $invokeClosure = function (Closure $closure) use ($thisTestCaseModel) {
+                        $newClosure = Closure::bind(
+                            $closure,
                             null,
                             $thisTestCaseModel->getClassBuilder()->getFCQN()
                         );
-                        $closure();
+                        $newClosure();
+                    };
+
+                    foreach (array_reverse($listOfParentsSetUpBeforeClassClosures) as $parentSetUpBeforeClassClosure) {
+                        $invokeClosure($parentSetUpBeforeClassClosure);
                     }
 
-                    $closure = Closure::bind(
-                        $setUpBeforeClassClosure,
-                        null,
-                        $thisTestCaseModel->getClassBuilder()->getFCQN()
-                    );
-                    $closure();
+                    $invokeClosure($setUpBeforeClassClosure);
                 };
             }
 
@@ -290,21 +289,20 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
                 $listOfParentsTearDownAfterClassClosures[] = $topTearDownAfterClassClosure;
 
                 $tearDownAfterClassClosure = function () use ($listOfParentsTearDownAfterClassClosures, $tearDownAfterClassClosure, $thisTestCaseModel) {
-                    foreach (array_reverse($listOfParentsTearDownAfterClassClosures) as $parentTearDownAfterClassClosure) {
-                        $closure = Closure::bind(
-                            $parentTearDownAfterClassClosure,
+                    $invokeClosure = function (Closure $closure) use ($thisTestCaseModel) {
+                        $newClosure = Closure::bind(
+                            $closure,
                             null,
                             $thisTestCaseModel->getClassBuilder()->getFCQN()
                         );
-                        $closure();
+                        $newClosure();
+                    };
+
+                    foreach (array_reverse($listOfParentsTearDownAfterClassClosures) as $parentTearDownAfterClassClosure) {
+                        $invokeClosure($parentTearDownAfterClassClosure);
                     }
 
-                    $closure = Closure::bind(
-                        $tearDownAfterClassClosure,
-                        null,
-                        $thisTestCaseModel->getClassBuilder()->getFCQN()
-                    );
-                    $closure();
+                    $invokeClosure($tearDownAfterClassClosure);
                 };
             }
 
