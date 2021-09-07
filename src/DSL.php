@@ -59,6 +59,12 @@ abstract class DSL
                 return;
             }
 
+            $closure = Closure::bind(
+                $closure,
+                null,
+                $currentTestCaseModel->getClassBuilder()->getFCQN()
+            );
+
             $closure();
             $currentTestCaseModel->setInvokedSetUpBeforeClass(true);
         };
@@ -109,6 +115,12 @@ abstract class DSL
             if ($currentTestCaseModel->getInvokedTearDownAfterClass()) {
                 return;
             }
+
+            $closure = Closure::bind(
+                $closure,
+                null,
+                $currentTestCaseModel->getClassBuilder()->getFCQN()
+            );
 
             $closure();
             $currentTestCaseModel->setInvokedTearDownAfterClass(true);

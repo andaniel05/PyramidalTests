@@ -429,11 +429,25 @@ class UnitTest extends UnitTestCase
         Registry::$data = [];
 
         testCase('parent test case', function () {
+            staticProperty('myStaticProperty', 'myStaticPropertyValue');
+            property('myProperty', 'myPropertyValue');
+
+            staticMethod('getMyStaticProperty', function () {
+                return static::$myStaticProperty;
+            });
+
+            method('getMyProperty', function () {
+                return $this->myProperty;
+            });
+
             setUpBeforeClassOnce(function () {
                 Registry::$data[] = 'ParentTestCase';
             });
 
             test($this->closure1 = function () {
+                $this->assertEquals('myStaticPropertyValue', static::getMyStaticProperty());
+                $this->assertEquals('myPropertyValue', $this->getMyProperty());
+
                 $this->assertCount(1, Registry::$data);
                 $this->assertEquals(Registry::$data[0], 'ParentTestCase');
             });
@@ -444,6 +458,9 @@ class UnitTest extends UnitTestCase
                 });
 
                 test($this->closure2 = function () {
+                    $this->assertEquals('myStaticPropertyValue', static::getMyStaticProperty());
+                    $this->assertEquals('myPropertyValue', $this->getMyProperty());
+
                     $this->assertCount(2, Registry::$data);
                     $this->assertEquals(Registry::$data[0], 'ParentTestCase');
                     $this->assertEquals(Registry::$data[1], 'ChildTestCase1');
@@ -455,6 +472,9 @@ class UnitTest extends UnitTestCase
                     });
 
                     test($this->closure3 = function () {
+                        $this->assertEquals('myStaticPropertyValue', static::getMyStaticProperty());
+                        $this->assertEquals('myPropertyValue', $this->getMyProperty());
+
                         $this->assertCount(3, Registry::$data);
                         $this->assertEquals(Registry::$data[0], 'ParentTestCase');
                         $this->assertEquals(Registry::$data[1], 'ChildTestCase1');
