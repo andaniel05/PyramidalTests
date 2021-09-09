@@ -213,11 +213,11 @@ class Framework extends Command
 
         // include the test files.
         foreach ($fileNames as $fileName) {
-            require_once $fileName;
-
             // reset the base test case class per each file.
             setTestCaseClass(TestCase::class);
             Record::setCurrentTestCaseModel(null);
+
+            require_once $fileName;
         }
     }
 }

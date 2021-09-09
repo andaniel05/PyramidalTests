@@ -1,8 +1,9 @@
 <?php
 
 test(function () {
-    $reflectionClass = new ReflectionClass($this);
-    $parentClass = $reflectionClass->getParentClass();
+    $thisClass = new ReflectionClass($this);
+    $baseClass = $thisClass->getParentClass();
+    $testCaseClass = $baseClass->getParentClass();
 
-    $this->assertEquals('PHPUnit\Framework\TestCase', $parentClass->getName());
+    $this->assertEquals('PHPUnit\Framework\TestCase', $testCaseClass->getName());
 });

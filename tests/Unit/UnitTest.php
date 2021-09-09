@@ -947,47 +947,6 @@ class UnitTest extends UnitTestCase
         $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure1), $result);
     }
 
-    public function testTestCasesInheritMethodsFromParents()
-    {
-        testCase(function () {
-            test(function () {
-                $value = uniqid();
-
-                $this->assertEquals($value, $this->echo($value));
-            });
-
-            testCase(function () {
-                test(function () {
-                    $value = uniqid();
-
-                    $this->assertEquals($value, $this->echo($value));
-                    $this->assertEquals($value, $this->echo1($value));
-                });
-
-                testCase(function () {
-                    test(function () {
-                        $value = uniqid();
-
-                        $this->assertEquals($value, $this->echo($value));
-                        $this->assertEquals($value, $this->echo1($value));
-                    });
-                });
-            })->getClassBuilder()
-                ->addMethod('echo1', function (string $value): string {
-                    return $value;
-                })
-            ;
-        })->getClassBuilder()
-            ->addMethod('echo', function (string $value): string {
-                return $value;
-            })
-        ;
-
-        $result = $this->runTests();
-
-        $this->assertExpectedTotals(['success' => 3], $result);
-    }
-
     public function testUseMacroThrownsMacroNotFoundException()
     {
         $title = uniqid();

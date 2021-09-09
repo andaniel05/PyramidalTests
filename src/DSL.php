@@ -21,9 +21,7 @@ abstract class DSL
         }
 
         $newTestCaseModel = new TestCaseModel($title, $closure);
-
-        $parentClass = Record::getTestCaseClass();
-        $newTestCaseModel->getClassBuilder()->extends($parentClass);
+        $newTestCaseModel->getBaseClassBuilder()->extends(Record::getTestCaseClass());
 
         $currentTestCaseModel = Record::getCurrentTestCaseModel();
 
@@ -62,7 +60,7 @@ abstract class DSL
             $closure = Closure::bind(
                 $closure,
                 null,
-                $currentTestCaseModel->getClassBuilder()->getFCQN()
+                $currentTestCaseModel->getBaseClassBuilder()->getParentClass()
             );
 
             $closure();
@@ -119,7 +117,7 @@ abstract class DSL
             $closure = Closure::bind(
                 $closure,
                 null,
-                $currentTestCaseModel->getClassBuilder()->getFCQN()
+                $currentTestCaseModel->getBaseClassBuilder()->getParentClass()
             );
 
             $closure();
@@ -188,9 +186,9 @@ abstract class DSL
     public static function staticProperty(string $name, $value): Property
     {
         $currentTestCaseModel = Record::getCurrentTestCaseModel();
-        $classBuilder = $currentTestCaseModel->getClassBuilder();
+        $baseClassBuilder = $currentTestCaseModel->getBaseClassBuilder();
 
-        $propery = $classBuilder->addProperty($name)
+        $propery = $baseClassBuilder->addProperty($name)
             ->setStatic(true)
             ->setValue($value)
         ;
@@ -201,9 +199,9 @@ abstract class DSL
     public static function property(string $name, $value): Property
     {
         $currentTestCaseModel = Record::getCurrentTestCaseModel();
-        $classBuilder = $currentTestCaseModel->getClassBuilder();
+        $baseClassBuilder = $currentTestCaseModel->getBaseClassBuilder();
 
-        $propery = $classBuilder->addProperty($name)
+        $propery = $baseClassBuilder->addProperty($name)
             ->setValue($value)
         ;
 
@@ -213,9 +211,9 @@ abstract class DSL
     public static function staticMethod(string $name, Closure $closure): Method
     {
         $currentTestCaseModel = Record::getCurrentTestCaseModel();
-        $classBuilder = $currentTestCaseModel->getClassBuilder();
+        $baseClassBuilder = $currentTestCaseModel->getBaseClassBuilder();
 
-        $method = $classBuilder->addMethod($name)
+        $method = $baseClassBuilder->addMethod($name)
             ->setStatic(true)
             ->setClosure($closure)
         ;
@@ -226,9 +224,9 @@ abstract class DSL
     public static function method(string $name, Closure $closure): Method
     {
         $currentTestCaseModel = Record::getCurrentTestCaseModel();
-        $classBuilder = $currentTestCaseModel->getClassBuilder();
+        $baseClassBuilder = $currentTestCaseModel->getBaseClassBuilder();
 
-        $method = $classBuilder->addMethod($name)
+        $method = $baseClassBuilder->addMethod($name)
             ->setClosure($closure)
         ;
 
@@ -238,8 +236,8 @@ abstract class DSL
     public static function useTrait(string $trait, array $definitions = []): void
     {
         $currentTestCaseModel = Record::getCurrentTestCaseModel();
-        $classBuilder = $currentTestCaseModel->getClassBuilder();
+        $baseClassBuilder = $currentTestCaseModel->getBaseClassBuilder();
 
-        $classBuilder->use($trait, $definitions);
+        $baseClassBuilder->use($trait, $definitions);
     }
 }
