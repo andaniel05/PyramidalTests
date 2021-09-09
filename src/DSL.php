@@ -60,7 +60,7 @@ abstract class DSL
             $closure = Closure::bind(
                 $closure,
                 null,
-                $currentTestCaseModel->getBaseClassBuilder()->getParentClass()
+                $currentTestCaseModel->getBaseClassBuilder()->getFCQN()
             );
 
             $closure();
@@ -117,7 +117,7 @@ abstract class DSL
             $closure = Closure::bind(
                 $closure,
                 null,
-                $currentTestCaseModel->getBaseClassBuilder()->getParentClass()
+                $currentTestCaseModel->getBaseClassBuilder()->getFCQN()
             );
 
             $closure();

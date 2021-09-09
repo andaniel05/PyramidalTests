@@ -7,7 +7,6 @@ use Closure;
 use ThenLabs\ClassBuilder\ClassBuilder;
 use ThenLabs\Components\CompositeComponentTrait;
 use ThenLabs\Components\CompositeComponentInterface;
-use ThenLabs\PyramidalTests\Record;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -107,6 +106,14 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
     public function buildClass(): void
     {
         $thisTestCaseModel = $this;
+
+        foreach ($this->parents() as $parentTestCaseModel) {
+            $parentBaseClassBuilder = $parentTestCaseModel->getBaseClassBuilder();
+
+            if (! class_exists($parentBaseClassBuilder->getFCQN())) {
+                $parentTestCaseModel->buildClass();
+            }
+        }
 
         if ($this->title) {
             $this->classBuilder->addComment("@testdox {$this->title}");
@@ -219,10 +226,6 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
             $parents[0]->getBaseClassBuilder()->getFCQN() :
             $this->baseClassBuilder->getParentClass()
         ;
-
-        if (count($parents) && ! class_exists($parentClass)) {
-            $parents[0]->getBaseClassBuilder()->install();
-        }
 
         $this->baseClassBuilder->extends($parentClass);
         $this->baseClassBuilder->install();
