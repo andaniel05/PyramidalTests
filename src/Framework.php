@@ -22,7 +22,7 @@ class Framework extends Command
     public const VERSION = '2.0.0';
 
     public const DEFAULT_OPTIONS = [
-        'file_pattern' => '*-test.php',
+        'file_pattern' => 'test-*.php',
     ];
 
     /**

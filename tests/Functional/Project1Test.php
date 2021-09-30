@@ -137,7 +137,7 @@ class Project1Test extends TestCase
             'php %s -c %s --testdox --filter="%s"',
             ROOT_DIR.'/pyramidal',
             ROOT_DIR.'/tests/Functional/projects/project1/phpunit.xml',
-            ROOT_DIR.'/tests/Functional/projects/project1/tests/my-test.php:3',
+            ROOT_DIR.'/tests/Functional/projects/project1/tests/test-1.php:3',
         );
 
         $outputString = exec($command, $outputArray, $returnValue);
@@ -156,7 +156,7 @@ class Project1Test extends TestCase
             'php %s -c %s --testdox --filter="%s"',
             ROOT_DIR.'/pyramidal',
             ROOT_DIR.'/tests/Functional/projects/project1/phpunit.xml',
-            ROOT_DIR.'/tests/Functional/projects/project1/tests/my-test.php:25',
+            ROOT_DIR.'/tests/Functional/projects/project1/tests/test-1.php:25',
         );
 
         $outputString = exec($command, $outputArray, $returnValue);
@@ -173,7 +173,7 @@ class Project1Test extends TestCase
             'php %s -c %s --testdox --filter="%s"',
             ROOT_DIR.'/pyramidal',
             ROOT_DIR.'/tests/Functional/projects/project1/phpunit.xml',
-            ROOT_DIR.'/tests/Functional/projects/project1/tests/my-test.php:26',
+            ROOT_DIR.'/tests/Functional/projects/project1/tests/test-1.php:26',
         );
 
         $outputString = exec($command, $outputArray, $returnValue);
@@ -190,7 +190,7 @@ class Project1Test extends TestCase
             'php %s -c %s --testdox --filter="%s"',
             ROOT_DIR.'/pyramidal',
             ROOT_DIR.'/tests/Functional/projects/project1/phpunit.xml',
-            ROOT_DIR.'/tests/Functional/projects/project1/tests/my-test.php:12',
+            ROOT_DIR.'/tests/Functional/projects/project1/tests/test-1.php:12',
         );
 
         $outputString = exec($command, $outputArray, $returnValue);
