@@ -3,7 +3,13 @@
 
 Extends the PHPUnit possibilities to the BDD field.
 
+## Installation.
+
+    $ composer require thenlabs/pyramidal-tests 2.0.x-dev
+
 >Require PHPUnit >= 8.5
+
+## Example:
 
 ```php
 <?php
@@ -41,6 +47,8 @@ testCase('it is created a product', function () {
     });
 });
 ```
+
+## Executing.
 
     $ ./vendor/bin/pyramidal --testdox
 
