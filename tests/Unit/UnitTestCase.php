@@ -3,15 +3,15 @@ declare(strict_types=1);
 
 namespace ThenLabs\PyramidalTests\Tests\Unit;
 
-use ThenLabs\PyramidalTests\Record;
-use ThenLabs\PyramidalTests\Model\TestCaseModel;
-use ThenLabs\PyramidalTests\Model\TestModel;
+use Closure;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestResult;
 use PHPUnit\Framework\TestSuite;
-use PHPUnit\TextUI\TestRunner;
 use PHPUnit\Runner\Version;
-use Closure;
+use PHPUnit\TextUI\TestRunner;
+use ThenLabs\PyramidalTests\Model\TestCaseModel;
+use ThenLabs\PyramidalTests\Model\TestModel;
+use ThenLabs\PyramidalTests\Record;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>

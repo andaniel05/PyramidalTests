@@ -5,8 +5,8 @@ namespace ThenLabs\PyramidalTests\Model;
 
 use Closure;
 use ThenLabs\ClassBuilder\Model\Method;
-use ThenLabs\Components\ComponentTrait;
 use ThenLabs\Components\ComponentInterface;
+use ThenLabs\Components\ComponentTrait;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>

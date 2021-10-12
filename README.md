@@ -20,13 +20,13 @@ use ThenLabs\PyramidalTests\Demo\Category;
 
 testCase('it is created a product', function () {
     setUp(function () {
-        this->product = new Product;
+        $this->product = new Product;
     });
 
     test('the product has a #CODE#', function () {
         $code = $this->product->getCode();
 
-        $this->assertRegExp('/#\d+#/', $code);
+        $this->assertMatchesRegularExpression('/#\d+#/', $code);
         $this->assertSame($code, $this->product->getCode());
     });
 
@@ -50,9 +50,11 @@ testCase('it is created a product', function () {
 
 ## Executing.
 
-    $ ./vendor/bin/pyramidal --testdox
+    $ ./vendor/bin/pyramidal
 
-![](1.png)
+Demo:
+
+![](demo.gif)
 
 ## Development.
 

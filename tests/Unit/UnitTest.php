@@ -6,12 +6,12 @@ namespace ThenLabs\PyramidalTests\Tests\Unit;
 require_once __DIR__.'/symbols.php';
 
 use DateTime;
-use ReflectionClass;
 use PHPUnit\Framework\Assert;
+use ReflectionClass;
 use ThenLabs\ClassBuilder\ClassBuilder;
 use ThenLabs\ClassBuilder\Model\Method;
-use ThenLabs\ClassBuilder\TraitBuilder;
 use ThenLabs\ClassBuilder\Model\Property;
+use ThenLabs\ClassBuilder\TraitBuilder;
 use ThenLabs\PyramidalTests\Exception\MacroNotFoundException;
 
 /**

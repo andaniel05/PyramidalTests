@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace ThenLabs\PyramidalTests;
 
-use ThenLabs\PyramidalTests\Model\TestCaseModel;
 use Closure;
+use ThenLabs\PyramidalTests\Model\TestCaseModel;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>

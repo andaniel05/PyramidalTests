@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-use ThenLabs\PyramidalTests\DSL;
 use ThenLabs\ClassBuilder\Model\Method;
 use ThenLabs\ClassBuilder\Model\Property;
-use ThenLabs\PyramidalTests\Model\TestModel;
+use ThenLabs\PyramidalTests\DSL;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
+use ThenLabs\PyramidalTests\Model\TestModel;
 
 /**
  * @param  string|Closure

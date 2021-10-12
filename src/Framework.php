@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace ThenLabs\PyramidalTests;
 
-use ReflectionFunction;
-use PHPUnit\TextUI\Command;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestSuite;
 use PHPUnit\Runner\Version;
-use Symfony\Component\Yaml\Yaml;
+use PHPUnit\TextUI\Command;
 use PHPUnit\Util\TestDox\CliTestDoxPrinter;
-use ThenLabs\PyramidalTests\Model\TestModel;
+use ReflectionFunction;
+use Symfony\Component\Yaml\Yaml;
 use ThenLabs\PyramidalTests\Model\AbstractModel;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
+use ThenLabs\PyramidalTests\Model\TestModel;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
