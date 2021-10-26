@@ -14,7 +14,7 @@ class Project2Test extends TestCase
     {
         $command = sprintf(
             "php %s -c %s",
-            ROOT_DIR.'/pyramidal',
+            ROOT_DIR.'/bin/pyramidal',
             ROOT_DIR.'/tests/Functional/projects/project2/phpunit.xml',
         );
 

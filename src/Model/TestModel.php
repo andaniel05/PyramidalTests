@@ -49,4 +49,11 @@ class TestModel extends AbstractModel implements ComponentInterface
     {
         return $this->method;
     }
+
+    public function __call($methodName, $arguments)
+    {
+        $testCaseModel = $this->parent;
+
+        return call_user_func_array([$testCaseModel, $methodName], $arguments);
+    }
 }

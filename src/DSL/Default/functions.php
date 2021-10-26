@@ -1,24 +1,14 @@
 <?php
 declare(strict_types=1);
 
-use ThenLabs\ClassBuilder\Model\Method;
-use ThenLabs\ClassBuilder\Model\Property;
-use ThenLabs\PyramidalTests\DSL;
+use ThenLabs\PyramidalTests\DSL\DSL;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
 use ThenLabs\PyramidalTests\Model\TestModel;
+use ThenLabs\PyramidalTests\Utils\Proxy;
 
-/**
- * @param  string|Closure
- * @param  Closure|null
- */
-function testCase($title, Closure $closure = null): TestCaseModel
+function testCase($firstArgument = '', Closure $secondArgument = null): TestCaseModel
 {
-    if ($title instanceof Closure) {
-        $closure = $title;
-        $title = '';
-    }
-
-    return DSL::testCase($title, $closure);
+    return DSL::testCase($firstArgument, $secondArgument);
 }
 
 function setUpBeforeClass(Closure $closure, bool $invokeParents = true): void
@@ -37,17 +27,12 @@ function setUp(Closure $closure, bool $invokeParents = true): void
 }
 
 /**
- * @param  string|Closure
- * @param  Closure|null
+ * @param string|Closure
+ * @param Closure|null
  */
-function test($title, Closure $closure = null): TestModel
+function test($firstArgument, Closure $secondArgument = null): TestModel
 {
-    if ($title instanceof Closure) {
-        $closure = $title;
-        $title = '';
-    }
-
-    return DSL::test($title, $closure);
+    return DSL::test($firstArgument, $secondArgument);
 }
 
 function tearDown(Closure $closure, bool $invokeParents = true): void
@@ -85,22 +70,22 @@ function useAndExtendMacro(string $title, Closure $closure): void
     DSL::useMacro($title, $closure);
 }
 
-function staticProperty(string $name, $value = null): Property
+function staticProperty(string $name, $value = null): Proxy
 {
     return DSL::staticProperty($name, $value);
 }
 
-function property(string $name, $value = null): Property
+function property(string $name, $value = null): Proxy
 {
     return DSL::property($name, $value);
 }
 
-function staticMethod(string $name, Closure $closure): Method
+function staticMethod(string $name, Closure $closure): Proxy
 {
     return DSL::staticMethod($name, $closure);
 }
 
-function method(string $name, Closure $closure): Method
+function method(string $name, Closure $closure): Proxy
 {
     return DSL::method($name, $closure);
 }

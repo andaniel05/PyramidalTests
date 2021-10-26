@@ -3,97 +3,17 @@ declare(strict_types=1);
 
 namespace ThenLabs\PyramidalTests\Tests\Unit;
 
-require_once __DIR__.'/symbols.php';
-
 use DateTime;
-use PHPUnit\Framework\Assert;
 use ReflectionClass;
 use ThenLabs\ClassBuilder\ClassBuilder;
-use ThenLabs\ClassBuilder\Model\Method;
-use ThenLabs\ClassBuilder\Model\Property;
 use ThenLabs\ClassBuilder\TraitBuilder;
 use ThenLabs\PyramidalTests\Exception\MacroNotFoundException;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-class UnitTest extends UnitTestCase
+class NestedStyleTest extends UnitTestCase
 {
-    public function testCreatingATestWithoutAParentTestCase()
-    {
-        test($testTitle = uniqid('my title'), $closure = function () {
-            $this->assertTrue(true);
-        });
-
-        $result = $this->runTests();
-
-        $this->assertExpectedTotals(['success' => 1], $result);
-        $this->assertTestWasExecuted($this->getTestNameFromClosure($closure), $result);
-
-        $testModel = $this->getTestModelFromClosure($closure);
-        $testCaseModel = $testModel->getParent();
-
-        $class = new ReflectionClass($testCaseModel->getClassBuilder()->getFCQN());
-        $method = $class->getMethod($testModel->getMethodName());
-
-        $this->assertStringContainsString("@testdox {$testTitle}", $method->getDocComment());
-    }
-
-    public function testCreatingAnUntitledTestWithoutAParentTestCase()
-    {
-        test($closure = function () {
-            $this->assertTrue(true);
-        });
-
-        $result = $this->runTests();
-
-        $this->assertExpectedTotals(['success' => 1], $result);
-        $this->assertTestWasExecuted($this->getTestNameFromClosure($closure), $result);
-    }
-
-    public function testStubsSupport()
-    {
-        test('stubs support', $closure = function () {
-            $stub = $this->createMock(SomeClass::class);
-
-            $stub->method('doSomething')
-                 ->willReturn('foo')
-            ;
-
-            $this->assertSame('foo', $stub->doSomething());
-        });
-
-        $result = $this->runTests();
-
-        $this->assertExpectedTotals(['success' => 1], $result);
-        $this->assertTestWasExecuted($this->getTestNameFromClosure($closure), $result);
-    }
-
-    public function testMocksSupport()
-    {
-        test('mocks support', $closure = function () {
-            $observer = $this->getMockBuilder(Observer::class)
-                             ->setMethods(['update'])
-                             ->getMock()
-            ;
-
-            $observer->expects($this->once())
-                     ->method('update')
-                     ->with($this->equalTo('something'))
-            ;
-
-            $subject = new Subject('My subject');
-            $subject->attach($observer);
-
-            $subject->doSomething();
-        });
-
-        $result = $this->runTests();
-
-        $this->assertExpectedTotals(['success' => 1], $result);
-        $this->assertTestWasExecuted($this->getTestNameFromClosure($closure), $result);
-    }
-
     public function testCreatingTestsInsideATestCase()
     {
         testCase($testCaseTitle = uniqid('my test case'), $closure = function () {
@@ -1058,28 +978,23 @@ class UnitTest extends UnitTestCase
     public function testMethodsAndProperties()
     {
         testCase('root test case 1', function () {
-            $myStaticProperty = staticProperty(
+            staticProperty(
                 'myStaticProperty',
                 uniqid('myStaticProperty')
             );
 
-            $myProperty = property(
+            property(
                 'myProperty',
                 uniqid('myProperty')
             );
 
-            $myStaticMethod = staticMethod('myStaticMethod', function () {
+            staticMethod('myStaticMethod', function () {
                 return static::$myStaticProperty;
             });
 
-            $myMethod = method('myMethod', function () {
+            method('myMethod', function () {
                 return $this->myProperty;
             });
-
-            Assert::assertInstanceOf(Property::class, $myStaticProperty);
-            Assert::assertInstanceOf(Property::class, $myProperty);
-            Assert::assertInstanceOf(Method::class, $myStaticMethod);
-            Assert::assertInstanceOf(Method::class, $myMethod);
 
             test(function () {
                 $this->assertStringStartsWith('myProperty', $this->myMethod());

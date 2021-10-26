@@ -18,7 +18,7 @@ class Project1Test extends TestCase
         );
 
         $process = proc_open(
-            ROOT_DIR.'/pyramidal --testdox',
+            ROOT_DIR.'/bin/pyramidal --testdox',
             $descriptorspec,
             $pipes,
             __DIR__.'/projects/project1'
@@ -44,7 +44,7 @@ class Project1Test extends TestCase
     {
         $command = sprintf(
             "php %s -c %s",
-            ROOT_DIR.'/pyramidal',
+            ROOT_DIR.'/bin/pyramidal',
             ROOT_DIR.'/tests/Functional/projects/project1/phpunit.xml',
         );
 
@@ -69,7 +69,7 @@ class Project1Test extends TestCase
     {
         $command = sprintf(
             "php %s -c %s --filter %s",
-            ROOT_DIR.'/pyramidal',
+            ROOT_DIR.'/bin/pyramidal',
             ROOT_DIR.'/tests/Functional/projects/project1/phpunit.xml',
             $arg
         );
@@ -87,7 +87,7 @@ class Project1Test extends TestCase
     {
         $command = sprintf(
             "php %s -c %s --filter=%s",
-            ROOT_DIR.'/pyramidal',
+            ROOT_DIR.'/bin/pyramidal',
             ROOT_DIR.'/tests/Functional/projects/project1/phpunit.xml',
             $arg
         );
@@ -102,7 +102,7 @@ class Project1Test extends TestCase
     {
         $command = sprintf(
             "php %s -c %s --filter 'my parent test case' --testdox",
-            ROOT_DIR.'/pyramidal',
+            ROOT_DIR.'/bin/pyramidal',
             ROOT_DIR.'/tests/Functional/projects/project1/phpunit.xml'
         );
 
@@ -120,7 +120,7 @@ class Project1Test extends TestCase
     {
         $command = sprintf(
             'php %s -c %s --filter="my child test case"',
-            ROOT_DIR.'/pyramidal',
+            ROOT_DIR.'/bin/pyramidal',
             ROOT_DIR.'/tests/Functional/projects/project1/phpunit.xml'
         );
 
@@ -135,7 +135,7 @@ class Project1Test extends TestCase
     {
         $command = sprintf(
             'php %s -c %s --testdox --filter="%s"',
-            ROOT_DIR.'/pyramidal',
+            ROOT_DIR.'/bin/pyramidal',
             ROOT_DIR.'/tests/Functional/projects/project1/phpunit.xml',
             ROOT_DIR.'/tests/Functional/projects/project1/tests/test-1.php:3',
         );
@@ -154,7 +154,7 @@ class Project1Test extends TestCase
     {
         $command = sprintf(
             'php %s -c %s --testdox --filter="%s"',
-            ROOT_DIR.'/pyramidal',
+            ROOT_DIR.'/bin/pyramidal',
             ROOT_DIR.'/tests/Functional/projects/project1/phpunit.xml',
             ROOT_DIR.'/tests/Functional/projects/project1/tests/test-1.php:25',
         );
@@ -171,7 +171,7 @@ class Project1Test extends TestCase
     {
         $command = sprintf(
             'php %s -c %s --testdox --filter="%s"',
-            ROOT_DIR.'/pyramidal',
+            ROOT_DIR.'/bin/pyramidal',
             ROOT_DIR.'/tests/Functional/projects/project1/phpunit.xml',
             ROOT_DIR.'/tests/Functional/projects/project1/tests/test-1.php:26',
         );
@@ -188,7 +188,7 @@ class Project1Test extends TestCase
     {
         $command = sprintf(
             'php %s -c %s --testdox --filter="%s"',
-            ROOT_DIR.'/pyramidal',
+            ROOT_DIR.'/bin/pyramidal',
             ROOT_DIR.'/tests/Functional/projects/project1/phpunit.xml',
             ROOT_DIR.'/tests/Functional/projects/project1/tests/test-1.php:12',
         );

@@ -1,10 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\PyramidalTests;
+namespace ThenLabs\PyramidalTests\Model;
 
 use Closure;
-use ThenLabs\PyramidalTests\Model\TestCaseModel;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>

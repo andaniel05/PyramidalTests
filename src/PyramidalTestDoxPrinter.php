@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ThenLabs\PyramidalTests;
 
+use ThenLabs\PyramidalTests\Model\Record;
 use PHPUnit\Util\TestDox\CliTestDoxPrinter;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
 

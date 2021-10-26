@@ -27,6 +27,6 @@
         }
     },
     "bin": [
-        "pyramidal"
+        "bin/pyramidal"
     ]
 }

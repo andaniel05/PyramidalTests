@@ -9,9 +9,11 @@ use PHPUnit\Framework\TestResult;
 use PHPUnit\Framework\TestSuite;
 use PHPUnit\Runner\Version;
 use PHPUnit\TextUI\TestRunner;
+use ThenLabs\PyramidalTests\Model\Record;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
 use ThenLabs\PyramidalTests\Model\TestModel;
-use ThenLabs\PyramidalTests\Record;
+
+require_once __DIR__.'/symbols.php';
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>

@@ -4,9 +4,11 @@ declare(strict_types=1);
 namespace ThenLabs\PyramidalTests\Model;
 
 use Closure;
+use Exception;
 use ThenLabs\ClassBuilder\ClassBuilder;
 use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\CompositeComponentTrait;
+use ThenLabs\PyramidalTests\Model\Decorator\DecoratorsRegistry;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -324,5 +326,16 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
     public function getInvokedTearDownAfterClass(): bool
     {
         return $this->invokedTearDownAfterClass;
+    }
+
+    public function __call($name, $arguments)
+    {
+        $decorator = DecoratorsRegistry::getGlobal($name);
+
+        if (! $decorator) {
+            throw new Exception("Decorator '{$name}' is missing.");
+        }
+
+        return $decorator->decorate($this, $arguments);
     }
 }
