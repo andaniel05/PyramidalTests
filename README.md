@@ -3,6 +3,13 @@
 
 Extends the PHPUnit possibilities to the BDD field.
 
+>If you like this project gift us a ⭐.
+
+## Documentation.
+
+- [🇬🇧 English](https://thenlabs.org/en/doc/pyramidal-tests/2.0/index.html)
+- [🇪🇸 Español](https://thenlabs.org/es/doc/pyramidal-tests/2.0/index.html)
+
 ## Installation.
 
     $ composer require thenlabs/pyramidal-tests 2.0.x-dev
