@@ -4,11 +4,19 @@ declare(strict_types=1);
 namespace ThenLabs\PyramidalTests\Model;
 
 use Closure;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Exception;
+use PHPUnit\Framework\Assert;
+use ReflectionClass;
 use ThenLabs\ClassBuilder\ClassBuilder;
 use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\CompositeComponentTrait;
+use ThenLabs\PyramidalTests\Annotation\Decorator;
+use ThenLabs\PyramidalTests\DSL\DSL;
 use ThenLabs\PyramidalTests\Model\Decorator\DecoratorsRegistry;
+
+AnnotationRegistry::registerFile(__DIR__.'/../Annotation/Decorator.php');
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -16,11 +24,6 @@ use ThenLabs\PyramidalTests\Model\Decorator\DecoratorsRegistry;
 class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 {
     use CompositeComponentTrait;
-
-    /**
-     * @var string
-     */
-    protected $className;
 
     /**
      * @var ClassBuilder
@@ -328,14 +331,83 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
         return $this->invokedTearDownAfterClass;
     }
 
-    public function __call($name, $arguments)
+    public function __call($decoratorName, $arguments)
     {
-        $decorator = DecoratorsRegistry::getGlobal($name);
+        $decorator = DecoratorsRegistry::getGlobal($decoratorName);
 
-        if (! $decorator) {
-            throw new Exception("Decorator '{$name}' is missing.");
+        if (null === $decorator) {
+            $baseClass = new ReflectionClass($this->baseClassBuilder->getParentClass());
+            $decorator = DecoratorsRegistry::getForClass($baseClass->getName(), $decoratorName);
+
+            while (null === $decorator) {
+                $parentClass = isset($parentClass) ?
+                    $parentClass->getParentClass() :
+                    $baseClass->getParentClass()
+                ;
+
+                if ($parentClass) {
+                    $decorator = DecoratorsRegistry::getForClass($parentClass->getName(), $decoratorName);
+                } else {
+                    break;
+                }
+            }
         }
 
-        return $decorator->decorate($this, $arguments);
+        if (null === $decorator) {
+            $baseClass = new ReflectionClass($this->baseClassBuilder->getParentClass());
+            $reader = new AnnotationReader();
+
+            foreach ($baseClass->getMethods() as $method) {
+                try {
+                    $decoratorAnnotation = $reader->getMethodAnnotation($method, Decorator::class);
+
+                    if ($decoratorAnnotation &&
+                        $decoratorName == $decoratorAnnotation->name
+                    ) {
+                        $dummy = $baseClass->newInstanceWithoutConstructor();
+                        $decorator = $method->invoke($dummy);
+                        break;
+                    }
+                } catch (Exception $exception) {
+                }
+            }
+        }
+
+        if (! $decorator) {
+            throw new Exception("Decorator '{$decoratorName}' for class '{$this->baseClassBuilder->getParentClass()}' is missing.");
+        }
+
+        $setUpBeforeClassDecorator = $decorator->getClosure();
+
+        if ($setUpBeforeClassDecorator instanceof Closure) {
+            $thisFCQN = $this->classBuilder->getFCQN();
+
+            $setUpBeforeClassDecoratorWrapper = function () use ($setUpBeforeClassDecorator, $thisFCQN) {
+                $setUpBeforeClassDecorator = Closure::bind(
+                    $setUpBeforeClassDecorator,
+                    null,
+                    $thisFCQN
+                );
+
+                $setUpBeforeClassDecorator();
+
+                Assert::assertTrue(true);
+            };
+
+            $argumentsList = [];
+            foreach ($arguments as $value) {
+                $argumentsList[] = var_export($value, true);
+            }
+
+            DSL::test(
+                $decoratorName.'('.implode(',', $argumentsList).')',
+                $setUpBeforeClassDecoratorWrapper,
+                $this
+            );
+        }
+
+        $result = $decorator->applyTo($this, $arguments);
+
+        return $result ? $result : $this;
     }
 }

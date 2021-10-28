@@ -11,7 +11,8 @@
         "phpunit/phpunit": ">=8.5",
         "thenlabs/components": "^1.1",
         "thenlabs/class-builder": "^1.0.8",
-        "symfony/yaml": "^5.3"
+        "symfony/yaml": "^5.3",
+        "doctrine/annotations": "^1.13"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.2"

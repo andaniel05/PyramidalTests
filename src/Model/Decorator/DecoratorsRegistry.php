@@ -14,6 +14,11 @@ abstract class DecoratorsRegistry
      */
     protected static $globals = [];
 
+    /**
+     * @var array<string, AbstractDecorator[]>
+     */
+    protected static $registry = [];
+
     public static function getGlobal(string $name): ?AbstractDecorator
     {
         return self::$globals[$name] ?? null;
@@ -27,5 +32,19 @@ abstract class DecoratorsRegistry
     public static function registerGlobal(string $name, AbstractDecorator $decorator): void
     {
         self::$globals[$name] = $decorator;
+    }
+
+    public static function register(string $class, string $name, AbstractDecorator $decorator): void
+    {
+        if (! array_key_exists($class, self::$registry)) {
+            self::$registry[$class] = [];
+        }
+
+        self::$registry[$class][$name] = $decorator;
+    }
+
+    public static function getForClass(string $class, string $name): ?AbstractDecorator
+    {
+        return self::$registry[$class][$name] ?? null;
     }
 }

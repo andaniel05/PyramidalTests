@@ -5,11 +5,18 @@ namespace ThenLabs\PyramidalTests\Tests\Unit;
 
 require_once __DIR__.'/symbols.php';
 
+use Closure;
 use DateTime;
+use Exception;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ThenLabs\ClassBuilder\ClassBuilder;
 use ThenLabs\ClassBuilder\TraitBuilder;
+use ThenLabs\PyramidalTests\Annotation\Decorator;
 use ThenLabs\PyramidalTests\Exception\MacroNotFoundException;
+use ThenLabs\PyramidalTests\Model\Decorator\AbstractDecorator;
+use ThenLabs\PyramidalTests\Model\Decorator\DecoratorsRegistry;
+use ThenLabs\PyramidalTests\Model\TestCaseModel;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -1031,5 +1038,162 @@ class FluentStyleTest extends UnitTestCase
 
         $this->assertExpectedTotals(['success' => 1], $result);
         $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure1), $result);
+    }
+
+    public function testExceptionWhenMissingDecorator()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Decorator 'decorator1' for class 'PHPUnit\Framework\TestCase' is missing.");
+
+        testCase()->decorator1();
+    }
+
+    public function testDecoratorForClass()
+    {
+        $classBuilder = (new ClassBuilder())->extends(TestCase::class);
+        $classBuilder->install();
+
+        DecoratorsRegistry::register(
+            $classBuilder->getFCQN(),
+            'myDecorator',
+            new class extends AbstractDecorator {
+                public function applyTo(TestCaseModel $testCaseModel, array $arguments)
+                {
+                    $name = $arguments[0];
+                    $value = $arguments[1];
+
+                    $baseClassBuilder = $testCaseModel->getBaseClassBuilder();
+
+                    $baseClassBuilder->addProperty($name)->setValue($value);
+                }
+            }
+        );
+
+        setTestCaseClass($classBuilder->getFCQN());
+
+        testCase()
+            ->myDecorator('myProperty', true)
+
+            ->test(function () {
+                // myProperty is created from the decorator.
+                $this->assertTrue($this->myProperty);
+            })
+        ;
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testDecoratorForClass1()
+    {
+        DecoratorsRegistry::register(
+            uniqid('UnexistentClass'),
+            'myDecorator',
+            new class extends AbstractDecorator {
+                public function applyTo(TestCaseModel $testCaseModel, array $arguments)
+                {
+                }
+            }
+        );
+
+        $classBuilder = (new ClassBuilder())->extends(TestCase::class);
+        $classBuilder->install();
+
+        DecoratorsRegistry::register(
+            $classBuilder->getFCQN(),
+            'myDecorator',
+            new class extends AbstractDecorator {
+                public function applyTo(TestCaseModel $testCaseModel, array $arguments)
+                {
+                    $name = $arguments[0];
+                    $value = $arguments[1];
+
+                    $baseClassBuilder = $testCaseModel->getBaseClassBuilder();
+
+                    $baseClassBuilder->addProperty($name)->setValue($value);
+                }
+            }
+        );
+
+        setTestCaseClass($classBuilder->getFCQN());
+
+        testCase()
+            ->myDecorator('myProperty', true)
+
+            ->test(function () {
+                // myProperty is created from the decorator.
+                $this->assertTrue($this->myProperty);
+            })
+        ;
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testDecoratorWhichReturnsSetUpBeforeClassDecorator()
+    {
+        $classBuilder = (new ClassBuilder())->extends(TestCase::class);
+        $classBuilder->install();
+
+        DecoratorsRegistry::register(
+            $classBuilder->getFCQN(),
+            'customDecorator',
+            new class extends AbstractDecorator {
+                public function getClosure(): ?Closure
+                {
+                    return function () {
+                        static::$myProperty = 10;
+                    };
+                }
+
+                public function applyTo(TestCaseModel $testCaseModel, array $arguments)
+                {
+                    $classBuilder = $testCaseModel->getClassBuilder();
+                    $classBuilder->addProperty($arguments[0])->setStatic(true);
+                }
+            }
+        );
+
+        setTestCaseClass($classBuilder->getFCQN());
+
+        $testCaseModel = testCase()
+            ->customDecorator('myProperty')
+
+            ->test(function () {
+                // the property value is assigned by the decorator.
+                $this->assertEquals(10, static::$myProperty);
+            })->getParent()
+        ;
+
+        $testModels = $testCaseModel->getRootTestModels();
+
+        $this->assertStringContainsString(
+            "customDecorator('myProperty')",
+            $testModels[0]->getTitle()
+        );
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 2], $result);
+    }
+
+    public function testDecoratorsFromMethodsWithDecoratorAnnotation()
+    {
+        setTestCaseClass(MyDecoratorTestCase::class);
+
+        testCase()
+            ->customDecorator('myProperty')
+
+            ->test(function () {
+                // the property value is assigned by the decorator.
+                $this->assertEquals(10, static::$myProperty);
+            })
+        ;
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 2], $result);
     }
 }
