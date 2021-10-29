@@ -13,9 +13,9 @@ use ReflectionClass;
 use ThenLabs\ClassBuilder\ClassBuilder;
 use ThenLabs\ClassBuilder\TraitBuilder;
 use ThenLabs\PyramidalTests\Annotation\Decorator;
+use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
+use ThenLabs\PyramidalTests\Decorator\DecoratorsRegistry;
 use ThenLabs\PyramidalTests\Exception\MacroNotFoundException;
-use ThenLabs\PyramidalTests\Model\Decorator\AbstractDecorator;
-use ThenLabs\PyramidalTests\Model\Decorator\DecoratorsRegistry;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
 
 /**
@@ -1141,7 +1141,7 @@ class FluentStyleTest extends UnitTestCase
             $classBuilder->getFCQN(),
             'customDecorator',
             new class extends AbstractDecorator {
-                public function getClosure(): ?Closure
+                public function getClosure(array $arguments): ?Closure
                 {
                     return function () {
                         static::$myProperty = 10;
@@ -1205,7 +1205,7 @@ class FluentStyleTest extends UnitTestCase
                 ->setStatic(true)
                 ->setClosure(function () {
                     return new class extends AbstractDecorator {
-                        public function getClosure(): ?Closure
+                        public function getClosure(array $arguments): ?Closure
                         {
                             return function () {
                                 static::$myProperty = 50;

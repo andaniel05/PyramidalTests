@@ -1,8 +1,8 @@
 <?php
 
+use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
+use ThenLabs\PyramidalTests\Decorator\DecoratorsRegistry;
 use ThenLabs\PyramidalTests\DSL\DSL;
-use ThenLabs\PyramidalTests\Model\Decorator\AbstractDecorator;
-use ThenLabs\PyramidalTests\Model\Decorator\DecoratorsRegistry;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
 
 DecoratorsRegistry::registerGlobal('testCase', new class extends AbstractDecorator {

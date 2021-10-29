@@ -5,7 +5,7 @@ namespace ThenLabs\PyramidalTests\Tests\Unit;
 
 use Closure;
 use ThenLabs\PyramidalTests\Annotation\Decorator;
-use ThenLabs\PyramidalTests\Model\Decorator\AbstractDecorator;
+use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
 
 class SomeClass
@@ -88,7 +88,7 @@ class MyDecoratorTestCase extends \PHPUnit\Framework\TestCase
     public function myDecoratorMethod(): AbstractDecorator
     {
         return new class extends AbstractDecorator {
-            public function getClosure(): ?Closure
+            public function getClosure(array $arguments): ?Closure
             {
                 return function () {
                     static::$myProperty = 10;

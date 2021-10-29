@@ -13,10 +13,13 @@ use ThenLabs\ClassBuilder\ClassBuilder;
 use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\Components\CompositeComponentTrait;
 use ThenLabs\PyramidalTests\Annotation\Decorator;
+use ThenLabs\PyramidalTests\Annotation\ImportDecorators;
+use ThenLabs\PyramidalTests\Decorator\DecoratorsRegistry;
+use ThenLabs\PyramidalTests\Decorator\Package\PackageInterface as DecoratorPackageInterface;
 use ThenLabs\PyramidalTests\DSL\DSL;
-use ThenLabs\PyramidalTests\Model\Decorator\DecoratorsRegistry;
 
 AnnotationRegistry::registerFile(__DIR__.'/../Annotation/Decorator.php');
+AnnotationRegistry::registerFile(__DIR__.'/../Annotation/ImportDecorators.php');
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -333,8 +336,10 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 
     public function __call($decoratorName, $arguments)
     {
+        // check if exists a global decorator.
         $decorator = DecoratorsRegistry::getGlobal($decoratorName);
 
+        // check if exists for the final test case class.
         if (null === $decorator) {
             $decorator = DecoratorsRegistry::getForClass(
                 $this->classBuilder->getFCQN(),
@@ -342,6 +347,7 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
             );
         }
 
+        // check if exists for the base test case class and the rest of the parents.
         if (null === $decorator) {
             $baseClass = new ReflectionClass($this->baseClassBuilder->getParentClass());
             $decorator = DecoratorsRegistry::getForClass($baseClass->getName(), $decoratorName);
@@ -360,6 +366,7 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
             }
         }
 
+        // check if exists as an annotated method.
         if (null === $decorator) {
             $baseClass = new ReflectionClass($this->baseClassBuilder->getParentClass());
             $reader = new AnnotationReader();
@@ -380,11 +387,41 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
             }
         }
 
+        // load decorators from the ImportDecorators annotation.
+        if (null === $decorator) {
+            $importDecoratorsAnnotation = $reader->getClassAnnotation(
+                $baseClass,
+                ImportDecorators::class
+            );
+
+            if ($importDecoratorsAnnotation) {
+                foreach ($importDecoratorsAnnotation->decorators as $decoratorsPackageClass) {
+                    $callback = [$decoratorsPackageClass, 'getDecorators'];
+
+                    if (is_callable($callback)) {
+                        $decorators = call_user_func($callback);
+
+                        foreach ($decorators as $name => $decoratorInstance) {
+                            DecoratorsRegistry::register(
+                                $baseClass->getName(),
+                                $name,
+                                $decoratorInstance
+                            );
+
+                            if ($name == $decoratorName) {
+                                $decorator = $decoratorInstance;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         if (! $decorator) {
             throw new Exception("Decorator '{$decoratorName}' for class '{$this->baseClassBuilder->getParentClass()}' is missing.");
         }
 
-        $setUpBeforeClassDecorator = $decorator->getClosure();
+        $setUpBeforeClassDecorator = $decorator->getClosure($arguments);
 
         if ($setUpBeforeClassDecorator instanceof Closure) {
             $thisFCQN = $this->classBuilder->getFCQN();
@@ -421,22 +458,35 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
     public function importDecorators(string $className): self
     {
         $class = new ReflectionClass($className);
-        $reader = new AnnotationReader();
 
-        foreach ($class->getMethods() as $method) {
-            try {
-                $decoratorAnnotation = $reader->getMethodAnnotation($method, Decorator::class);
+        if ($class->implementsInterface(DecoratorPackageInterface::class)) {
+            $decorators = call_user_func([$className, 'getDecorators']);
 
-                if ($decoratorAnnotation) {
-                    $decorator = call_user_func([$className, $method->getName()]);
+            foreach ($decorators as $name => $decorator) {
+                DecoratorsRegistry::register(
+                    $this->classBuilder->getFCQN(),
+                    $name,
+                    $decorator
+                );
+            }
+        } else {
+            $reader = new AnnotationReader();
 
-                    DecoratorsRegistry::register(
-                        $this->classBuilder->getFCQN(),
-                        $decoratorAnnotation->name,
-                        $decorator
-                    );
+            foreach ($class->getMethods() as $method) {
+                try {
+                    $decoratorAnnotation = $reader->getMethodAnnotation($method, Decorator::class);
+
+                    if ($decoratorAnnotation) {
+                        $decorator = call_user_func([$className, $method->getName()]);
+
+                        DecoratorsRegistry::register(
+                            $this->classBuilder->getFCQN(),
+                            $decoratorAnnotation->name,
+                            $decorator
+                        );
+                    }
+                } catch (Exception $exception) {
                 }
-            } catch (Exception $exception) {
             }
         }
 

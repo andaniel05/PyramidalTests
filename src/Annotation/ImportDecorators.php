@@ -7,10 +7,10 @@ namespace ThenLabs\PyramidalTests\Annotation;
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  * @Annotation
  */
-class Decorator
+class ImportDecorators
 {
     /**
-     * @var string
+     * @var array
      */
-    public $name;
+    public $decorators;
 }

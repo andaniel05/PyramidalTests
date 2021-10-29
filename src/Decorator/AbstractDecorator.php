@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\PyramidalTests\Model\Decorator;
+namespace ThenLabs\PyramidalTests\Decorator;
 
 use Closure;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
@@ -12,12 +12,12 @@ use ThenLabs\PyramidalTests\Model\TestCaseModel;
  */
 abstract class AbstractDecorator
 {
-    public function getClosure(): ?Closure
-    {
-        return null;
-    }
-
     public function applyTo(TestCaseModel $testCaseModel, array $arguments)
     {
+    }
+
+    public function getClosure(array $arguments): ?Closure
+    {
+        return null;
     }
 }
