@@ -1196,4 +1196,43 @@ class FluentStyleTest extends UnitTestCase
 
         $this->assertExpectedTotals(['success' => 2], $result);
     }
+
+    public function testDecoratorsFromTheDeclaredTraitsByTheClassBuilder()
+    {
+        $trait = (new TraitBuilder)
+            ->addMethod('method1')
+                ->addComment('@ThenLabs\PyramidalTests\Annotation\Decorator(name="customDecorator")')
+                ->setStatic(true)
+                ->setClosure(function () {
+                    return new class extends AbstractDecorator {
+                        public function getClosure(): ?Closure
+                        {
+                            return function () {
+                                static::$myProperty = 50;
+                            };
+                        }
+
+                        public function applyTo(TestCaseModel $testCaseModel, array $arguments)
+                        {
+                            $classBuilder = $testCaseModel->getClassBuilder();
+                            $classBuilder->addProperty($arguments[0])->setStatic(true);
+                        }
+                    };
+                })
+                ->end()
+        ->install();
+
+        testCase()
+            ->importDecorators($trait->getFCQN())
+            ->customDecorator('myProperty')
+            ->test(function () {
+                // the property value is assigned by the decorator.
+                $this->assertEquals(50, static::$myProperty);
+            })
+        ;
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 2], $result);
+    }
 }

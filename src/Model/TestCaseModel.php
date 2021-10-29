@@ -336,6 +336,13 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
         $decorator = DecoratorsRegistry::getGlobal($decoratorName);
 
         if (null === $decorator) {
+            $decorator = DecoratorsRegistry::getForClass(
+                $this->classBuilder->getFCQN(),
+                $decoratorName
+            );
+        }
+
+        if (null === $decorator) {
             $baseClass = new ReflectionClass($this->baseClassBuilder->getParentClass());
             $decorator = DecoratorsRegistry::getForClass($baseClass->getName(), $decoratorName);
 
@@ -409,5 +416,30 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
         $result = $decorator->applyTo($this, $arguments);
 
         return $result ? $result : $this;
+    }
+
+    public function importDecorators(string $className): self
+    {
+        $class = new ReflectionClass($className);
+        $reader = new AnnotationReader();
+
+        foreach ($class->getMethods() as $method) {
+            try {
+                $decoratorAnnotation = $reader->getMethodAnnotation($method, Decorator::class);
+
+                if ($decoratorAnnotation) {
+                    $decorator = call_user_func([$className, $method->getName()]);
+
+                    DecoratorsRegistry::register(
+                        $this->classBuilder->getFCQN(),
+                        $decoratorAnnotation->name,
+                        $decorator
+                    );
+                }
+            } catch (Exception $exception) {
+            }
+        }
+
+        return $this;
     }
 }
