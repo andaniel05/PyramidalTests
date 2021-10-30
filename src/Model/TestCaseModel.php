@@ -39,9 +39,14 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
     protected $baseClassBuilder;
 
     /**
-     * @Closure
+     * @var Closure
      */
     protected $setUpBeforeClassClosure;
+
+    /**
+     * @var array<string, Closure>
+     */
+    protected $setUpBeforeClassDecorators = [];
 
     /**
      * @var bool
@@ -54,7 +59,7 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
     protected $invokedSetUpBeforeClass = false;
 
     /**
-     * @Closure
+     * @var Closure
      */
     protected $setUpClosure;
 
@@ -64,7 +69,7 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
     protected $invokeParentInSetUp;
 
     /**
-     * @Closure
+     * @var Closure
      */
     protected $tearDownClosure;
 
@@ -74,7 +79,7 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
     protected $invokeParentInTearDown;
 
     /**
-     * @Closure
+     * @var Closure
      */
     protected $tearDownAfterClassClosure;
 
@@ -128,6 +133,21 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
         }
 
         // setUpBeforeClass
+        $setUpBeforeClassDecorators = $this->setUpBeforeClassDecorators;
+        $currentSetUpBeforeClassClosure = $this->setUpBeforeClassClosure;
+
+        if (count($setUpBeforeClassDecorators)) {
+            $this->setUpBeforeClassClosure = function () use ($setUpBeforeClassDecorators, $currentSetUpBeforeClassClosure) {
+                foreach ($setUpBeforeClassDecorators as $title => $setUpBeforeClassDecorator) {
+                    $setUpBeforeClassDecorator();
+                }
+
+                if ($currentSetUpBeforeClassClosure instanceof Closure) {
+                    $currentSetUpBeforeClassClosure();
+                }
+            };
+        }
+
         if ($this->setUpBeforeClassClosure instanceof Closure) {
             $setUpBeforeClassClosure = $this->setUpBeforeClassClosure;
 
@@ -426,7 +446,7 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
         if ($setUpBeforeClassDecorator instanceof Closure) {
             $thisFCQN = $this->classBuilder->getFCQN();
 
-            $setUpBeforeClassDecoratorWrapper = function () use ($setUpBeforeClassDecorator, $thisFCQN) {
+            $setUpBeforeClassDecorator = function () use ($setUpBeforeClassDecorator, $thisFCQN) {
                 $setUpBeforeClassDecorator = Closure::bind(
                     $setUpBeforeClassDecorator,
                     null,
@@ -435,7 +455,7 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 
                 $setUpBeforeClassDecorator();
 
-                Assert::assertTrue(true);
+                // Assert::assertTrue(true);
             };
 
             $argumentsList = [];
@@ -443,11 +463,14 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
                 $argumentsList[] = var_export($value, true);
             }
 
-            DSL::test(
-                $decoratorName.'('.implode(',', $argumentsList).')',
-                $setUpBeforeClassDecoratorWrapper,
-                $this
-            );
+            $setUpBeforeClassDecoratorTitle = $decoratorName.'('.implode(',', $argumentsList).')';
+
+            // DSL::test(
+            //     $decoratorName.'('.implode(',', $argumentsList).')',
+            //     $setUpBeforeClassDecoratorWrapper,
+            //     $this
+            // );
+            $this->setUpBeforeClassDecorators[$setUpBeforeClassDecoratorTitle] = $setUpBeforeClassDecorator;
         }
 
         $result = $decorator->applyTo($this, $arguments);

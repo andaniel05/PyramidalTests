@@ -1158,7 +1158,7 @@ class FluentStyleTest extends UnitTestCase
 
         setTestCaseClass($classBuilder->getFCQN());
 
-        $testCaseModel = testCase()
+        testCase()
             ->customDecorator('myProperty')
 
             ->test(function () {
@@ -1167,16 +1167,9 @@ class FluentStyleTest extends UnitTestCase
             })->getParent()
         ;
 
-        $testModels = $testCaseModel->getRootTestModels();
-
-        $this->assertStringContainsString(
-            "customDecorator('myProperty')",
-            $testModels[0]->getTitle()
-        );
-
         $result = $this->runTests();
 
-        $this->assertExpectedTotals(['success' => 2], $result);
+        $this->assertExpectedTotals(['success' => 1], $result);
     }
 
     public function testDecoratorsFromMethodsWithDecoratorAnnotation()
@@ -1194,7 +1187,7 @@ class FluentStyleTest extends UnitTestCase
 
         $result = $this->runTests();
 
-        $this->assertExpectedTotals(['success' => 2], $result);
+        $this->assertExpectedTotals(['success' => 1], $result);
     }
 
     public function testDecoratorsFromTheDeclaredTraitsByTheClassBuilder()
@@ -1233,6 +1226,6 @@ class FluentStyleTest extends UnitTestCase
 
         $result = $this->runTests();
 
-        $this->assertExpectedTotals(['success' => 2], $result);
+        $this->assertExpectedTotals(['success' => 1], $result);
     }
 }

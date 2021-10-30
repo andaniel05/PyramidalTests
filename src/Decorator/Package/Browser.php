@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace ThenLabs\PyramidalTests\Decorator\Package;
 
 use Closure;
-use PHPUnit\Framework\Assert;
-use Facebook\WebDriver\WebDriverBy;
-use ThenLabs\PyramidalTests\DSL\DSL;
-use Facebook\WebDriver\Remote\RemoteWebDriver;
-use ThenLabs\PyramidalTests\Model\TestCaseModel;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
+use PHPUnit\Framework\Assert;
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
+use ThenLabs\PyramidalTests\DSL\DSL;
+use ThenLabs\PyramidalTests\Model\TestCaseModel;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -23,8 +23,7 @@ class Browser implements PackageInterface
      */
     public static function getDecorators(): array
     {
-        $navigate = new class extends AbstractDecorator
-        {
+        $navigate = new class extends AbstractDecorator {
             public function applyTo(TestCaseModel $testCaseModel, array $arguments)
             {
                 DSL::staticProperty('driver', null, $testCaseModel);
@@ -47,8 +46,7 @@ class Browser implements PackageInterface
             }
         };
 
-        $type = new class extends AbstractDecorator
-        {
+        $type = new class extends AbstractDecorator {
             public function getClosure(array $arguments): ?Closure
             {
                 $text = $arguments[0];
@@ -61,8 +59,7 @@ class Browser implements PackageInterface
             }
         };
 
-        $click = new class extends AbstractDecorator
-        {
+        $click = new class extends AbstractDecorator {
             public function getClosure(array $arguments): ?Closure
             {
                 $cssSelector = $arguments[0];
@@ -74,8 +71,7 @@ class Browser implements PackageInterface
             }
         };
 
-        $waitForAlert = new class extends AbstractDecorator
-        {
+        $waitForAlert = new class extends AbstractDecorator {
             public function getClosure(array $arguments): ?Closure
             {
                 $text = $arguments[0] ?? null;
@@ -92,8 +88,7 @@ class Browser implements PackageInterface
             }
         };
 
-        $acceptAlert = new class extends AbstractDecorator
-        {
+        $acceptAlert = new class extends AbstractDecorator {
             public function getClosure(array $arguments): ?Closure
             {
                 return function () {
@@ -102,8 +97,7 @@ class Browser implements PackageInterface
             }
         };
 
-        $clear = new class extends AbstractDecorator
-        {
+        $clear = new class extends AbstractDecorator {
             public function getClosure(array $arguments): ?Closure
             {
                 $cssSelector = $arguments[0];

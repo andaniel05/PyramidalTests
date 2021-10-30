@@ -25,6 +25,9 @@ testCase('show an alert')
     ->waitForAlert($text)
     ->sleep(1)
     ->acceptAlert()
+    ->test(function () {
+        $this->assertTrue(true);
+    })
 
     ->testCase('show other alert')
         ->clear('#input')

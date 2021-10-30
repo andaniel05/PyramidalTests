@@ -16,8 +16,7 @@ class Sleep implements PackageInterface
      */
     public static function getDecorators(): array
     {
-        $sleep = new class extends AbstractDecorator
-        {
+        $sleep = new class extends AbstractDecorator {
             public function getClosure(array $arguments): ?Closure
             {
                 $seconds = $arguments[0];
@@ -28,8 +27,7 @@ class Sleep implements PackageInterface
             }
         };
 
-        $usleep = new class extends AbstractDecorator
-        {
+        $usleep = new class extends AbstractDecorator {
             public function getClosure(array $arguments): ?Closure
             {
                 $value = $arguments[0];
