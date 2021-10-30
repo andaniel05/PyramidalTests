@@ -16,7 +16,7 @@ use ThenLabs\PyramidalTests\Model\TestCaseModel;
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-class Browser implements PackageInterface
+class WebDriver implements PackageInterface
 {
     /**
      * @return array<string, AbstractDecorator>

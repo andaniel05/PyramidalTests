@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\PyramidalTests\Tests\Functional\Browser;
+namespace ThenLabs\PyramidalTests\Tests\Functional\WebDriver;
 
 use PHPUnit\Framework\TestCase;
 
@@ -15,7 +15,7 @@ class Project1Test extends TestCase
         $command = sprintf(
             "php %s -c %s",
             ROOT_DIR.'/bin/pyramidal',
-            ROOT_DIR.'/tests/Functional/Browser/projects/project1/phpunit.xml',
+            ROOT_DIR.'/tests/Functional/WebDriver/projects/project1/phpunit.xml',
         );
 
         $outputString = exec($command, $outputArray, $returnValue);

@@ -7,7 +7,6 @@ use Closure;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Exception;
-use PHPUnit\Framework\Assert;
 use ReflectionClass;
 use ThenLabs\ClassBuilder\ClassBuilder;
 use ThenLabs\Components\CompositeComponentInterface;
@@ -16,7 +15,6 @@ use ThenLabs\PyramidalTests\Annotation\Decorator;
 use ThenLabs\PyramidalTests\Annotation\ImportDecorators;
 use ThenLabs\PyramidalTests\Decorator\DecoratorsRegistry;
 use ThenLabs\PyramidalTests\Decorator\Package\PackageInterface as DecoratorPackageInterface;
-use ThenLabs\PyramidalTests\DSL\DSL;
 
 AnnotationRegistry::registerFile(__DIR__.'/../Annotation/Decorator.php');
 AnnotationRegistry::registerFile(__DIR__.'/../Annotation/ImportDecorators.php');
@@ -47,6 +45,11 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
      * @var array<string, Closure>
      */
     protected $setUpBeforeClassDecorators = [];
+
+    /**
+     * @var string[]
+     */
+    protected $executedDecorators = [];
 
     /**
      * @var bool
@@ -356,6 +359,8 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 
     public function __call($decoratorName, $arguments)
     {
+        $thisTestCaseModel = $this;
+
         // check if exists a global decorator.
         $decorator = DecoratorsRegistry::getGlobal($decoratorName);
 
@@ -446,7 +451,14 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
         if ($setUpBeforeClassDecorator instanceof Closure) {
             $thisFCQN = $this->classBuilder->getFCQN();
 
-            $setUpBeforeClassDecorator = function () use ($setUpBeforeClassDecorator, $thisFCQN) {
+            $argumentsList = [];
+            foreach ($arguments as $value) {
+                $argumentsList[] = var_export($value, true);
+            }
+
+            $setUpBeforeClassDecoratorTitle = $decoratorName.'('.implode(',', $argumentsList).')';
+
+            $setUpBeforeClassDecorator = function () use ($setUpBeforeClassDecorator, $thisFCQN, $thisTestCaseModel, $setUpBeforeClassDecoratorTitle) {
                 $setUpBeforeClassDecorator = Closure::bind(
                     $setUpBeforeClassDecorator,
                     null,
@@ -455,21 +467,9 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 
                 $setUpBeforeClassDecorator();
 
-                // Assert::assertTrue(true);
+                $thisTestCaseModel->addExecutedDecorator($setUpBeforeClassDecoratorTitle);
             };
 
-            $argumentsList = [];
-            foreach ($arguments as $value) {
-                $argumentsList[] = var_export($value, true);
-            }
-
-            $setUpBeforeClassDecoratorTitle = $decoratorName.'('.implode(',', $argumentsList).')';
-
-            // DSL::test(
-            //     $decoratorName.'('.implode(',', $argumentsList).')',
-            //     $setUpBeforeClassDecoratorWrapper,
-            //     $this
-            // );
             $this->setUpBeforeClassDecorators[$setUpBeforeClassDecoratorTitle] = $setUpBeforeClassDecorator;
         }
 
@@ -514,5 +514,15 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
         }
 
         return $this;
+    }
+
+    public function getExecutedDecorators(): array
+    {
+        return $this->executedDecorators;
+    }
+
+    public function addExecutedDecorator(string $title): void
+    {
+        $this->executedDecorators[] = $title;
     }
 }

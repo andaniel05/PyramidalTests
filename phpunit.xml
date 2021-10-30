@@ -12,8 +12,8 @@
             <directory>tests/Functional/Cli</directory>
         </testsuite>
 
-        <testsuite name="Browser">
-            <directory>tests/Functional/Browser</directory>
+        <testsuite name="WebDriver">
+            <directory>tests/Functional/WebDriver</directory>
         </testsuite>
     </testsuites>
 </phpunit>
