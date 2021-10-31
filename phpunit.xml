@@ -15,5 +15,9 @@
         <testsuite name="WebDriver">
             <directory>tests/Functional/WebDriver</directory>
         </testsuite>
+
+        <testsuite name="SystemSnapshot">
+            <directory>tests/Functional/SystemSnapshot</directory>
+        </testsuite>
     </testsuites>
 </phpunit>

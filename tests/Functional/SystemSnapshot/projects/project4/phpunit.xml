@@ -1,0 +1,11 @@
+<phpunit bootstrap="bootstrap.php">
+    <testsuites>
+        <testsuite name="Main">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <extensions>
+        <extension class="ThenLabs\PyramidalTests\Extension\SystemSnapshot"/>
+    </extensions>
+</phpunit>
