@@ -11,7 +11,7 @@
         "phpunit/phpunit": ">=8.5",
         "thenlabs/components": "^1.1",
         "thenlabs/class-builder": "^1.0.8",
-        "symfony/yaml": "^5.3",
+        "symfony/yaml": ">=4.4",
         "doctrine/annotations": "^1.13",
         "andaniel05/test-utils": "^1.0"
     },
