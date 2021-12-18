@@ -59,7 +59,7 @@ class Framework extends Command
         }
 
         printf(
-            "\e[1;33mPyramidalTests %s\e[0m\n",
+            "\e[1;33mPyramidalTests %s\e[0m by Andy Daniel Navarro Taño and contributors.\n",
             self::VERSION
         );
 

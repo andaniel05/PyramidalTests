@@ -31,5 +31,8 @@
     },
     "bin": [
         "bin/pyramidal"
-    ]
+    ],
+    "scripts": {
+        "test": "./vendor/bin/phpunit"
+    }
 }
