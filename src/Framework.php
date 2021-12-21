@@ -3,17 +3,18 @@ declare(strict_types=1);
 
 namespace ThenLabs\PyramidalTests;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\TestSuite;
+use DirectoryIterator;
+use ReflectionFunction;
 use PHPUnit\Runner\Version;
 use PHPUnit\TextUI\Command;
-use PHPUnit\Util\TestDox\CliTestDoxPrinter;
-use ReflectionFunction;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestSuite;
 use Symfony\Component\Yaml\Yaml;
-use ThenLabs\PyramidalTests\Model\AbstractModel;
 use ThenLabs\PyramidalTests\Model\Record;
-use ThenLabs\PyramidalTests\Model\TestCaseModel;
+use PHPUnit\Util\TestDox\CliTestDoxPrinter;
 use ThenLabs\PyramidalTests\Model\TestModel;
+use ThenLabs\PyramidalTests\Model\AbstractModel;
+use ThenLabs\PyramidalTests\Model\TestCaseModel;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -23,7 +24,7 @@ class Framework extends Command
     public const VERSION = '2.0.0';
 
     public const DEFAULT_OPTIONS = [
-        'file_pattern' => 'test-*.php',
+        'file_pattern' => '/^test.*\.php$/',
     ];
 
     /**
@@ -209,16 +210,19 @@ class Framework extends Command
 
     private function includeDirectory(string $directoryPath, string $filePattern): void
     {
-        $pattern = $directoryPath.'/'.$filePattern;
-        $fileNames = glob($pattern);
+        foreach (new DirectoryIterator($directoryPath) as $fileInfo) {
+            $pathName = $fileInfo->getPathname();
+            $fileName = $fileInfo->getFilename();
 
-        // include the test files.
-        foreach ($fileNames as $fileName) {
-            // reset the base test case class per each file.
-            setTestCaseClass(TestCase::class);
-            Record::setCurrentTestCaseModel(null);
+            if (! $fileInfo->isDot() && $fileInfo->isDir()) {
+                $this->includeDirectory($pathName, $filePattern);
+            } elseif (preg_match($filePattern, $fileName)) {
+                // reset the base test case class per each file.
+                setTestCaseClass(TestCase::class);
+                Record::setCurrentTestCaseModel(null);
 
-            require_once $fileName;
+                require_once $pathName;
+            }
         }
     }
 }

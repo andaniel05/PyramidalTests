@@ -1,2 +1,2 @@
 pyramidal:
-    file_pattern: '*-spec.php'
+    file_pattern: '/^.*\.php$/'
