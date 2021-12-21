@@ -4,17 +4,17 @@ declare(strict_types=1);
 namespace ThenLabs\PyramidalTests;
 
 use DirectoryIterator;
-use ReflectionFunction;
-use PHPUnit\Runner\Version;
-use PHPUnit\TextUI\Command;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestSuite;
-use Symfony\Component\Yaml\Yaml;
-use ThenLabs\PyramidalTests\Model\Record;
+use PHPUnit\Runner\Version;
+use PHPUnit\TextUI\Command;
 use PHPUnit\Util\TestDox\CliTestDoxPrinter;
-use ThenLabs\PyramidalTests\Model\TestModel;
+use ReflectionFunction;
+use Symfony\Component\Yaml\Yaml;
 use ThenLabs\PyramidalTests\Model\AbstractModel;
+use ThenLabs\PyramidalTests\Model\Record;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
+use ThenLabs\PyramidalTests\Model\TestModel;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>

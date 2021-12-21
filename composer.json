@@ -33,6 +33,7 @@
         "bin/pyramidal"
     ],
     "scripts": {
+        "fix": "./vendor/bin/php-cs-fixer fix",
         "test": "./vendor/bin/phpunit"
     }
 }

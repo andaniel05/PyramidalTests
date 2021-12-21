@@ -254,7 +254,8 @@ abstract class DSL
                 $extendClosure();
             })($closure, $extendClosure);
         } else {
-            $closure($extendClosure ?? function () {});
+            $closure($extendClosure ?? function () {
+            });
         }
 
         return $currentTestCaseModel;
