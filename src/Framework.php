@@ -109,6 +109,12 @@ class Framework extends Command
             $configuration = $loader->load($configurationFileName);
 
             foreach ($configuration->testSuite() as $testSuite) {
+                if (isset($this->arguments['testsuite']) &&
+                    $this->arguments['testsuite'] != $testSuite->name()
+                ) {
+                    continue;
+                }
+
                 foreach ($testSuite->directories() as $directory) {
                     $this->includeDirectory($directory->path(), $options['file_pattern']);
                 }
