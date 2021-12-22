@@ -1,21 +1,22 @@
 <?php
 
+use ThenLabs\PyramidalTests\DSL\DSL;
+use ThenLabs\PyramidalTests\Model\TestCaseModel;
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
 use ThenLabs\PyramidalTests\Decorator\DecoratorsRegistry;
-use ThenLabs\PyramidalTests\DSL\DSL;
-use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\EndTestCaseDecorator;
-use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\PropertyDecorator;
-use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\SetUpBeforeClassDecorator;
-use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\SetUpBeforeClassOnceDecorator;
+use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\TestDecorator;
 use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\SetUpDecorator;
-use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\StaticMethodDecorator;
-use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\StaticPropertyDecorator;
-use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\TearDownAfterClassDecorator;
-use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\TearDownAfterClassOnceDecorator;
+use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\MethodDecorator;
+use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\PropertyDecorator;
 use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\TearDownDecorator;
 use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\TestCaseDecorator;
-use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\TestDecorator;
-use ThenLabs\PyramidalTests\Model\TestCaseModel;
+use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\EndTestCaseDecorator;
+use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\StaticMethodDecorator;
+use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\StaticPropertyDecorator;
+use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\SetUpBeforeClassDecorator;
+use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\TearDownAfterClassDecorator;
+use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\SetUpBeforeClassOnceDecorator;
+use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\TearDownAfterClassOnceDecorator;
 
 DecoratorsRegistry::registerGlobal('testCase', new TestCaseDecorator());
 DecoratorsRegistry::registerGlobal('endTestCase', new EndTestCaseDecorator());
@@ -29,13 +30,7 @@ DecoratorsRegistry::registerGlobal('tearDownAfterClassOnce', new TearDownAfterCl
 DecoratorsRegistry::registerGlobal('staticProperty', new StaticPropertyDecorator());
 DecoratorsRegistry::registerGlobal('property', new PropertyDecorator());
 DecoratorsRegistry::registerGlobal('staticMethod', new StaticMethodDecorator());
-
-DecoratorsRegistry::registerGlobal('method', new class extends AbstractDecorator {
-    public function applyTo(TestCaseModel $testCaseModel, array $arguments)
-    {
-        return DSL::method($arguments[0], $arguments[1], $testCaseModel);
-    }
-});
+DecoratorsRegistry::registerGlobal('method', new MethodDecorator());
 
 DecoratorsRegistry::registerGlobal('useMacro', new class extends AbstractDecorator {
     public function applyTo(TestCaseModel $testCaseModel, array $arguments)
