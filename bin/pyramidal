@@ -9,6 +9,6 @@ if (! file_exists($autoloadFileName)) {
 }
 
 require_once $autoloadFileName;
-require_once __DIR__.'/../src/DSL/Default/dsl.php';
+require_once __DIR__.'/../src/DSL/PHPUnit/PHPUnitDSL.php';
 
 \ThenLabs\PyramidalTests\Framework::main();

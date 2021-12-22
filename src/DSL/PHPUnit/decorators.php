@@ -3,14 +3,10 @@
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
 use ThenLabs\PyramidalTests\Decorator\DecoratorsRegistry;
 use ThenLabs\PyramidalTests\DSL\DSL;
+use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\TestCaseDecorator;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
 
-DecoratorsRegistry::registerGlobal('testCase', new class extends AbstractDecorator {
-    public function applyTo(TestCaseModel $testCaseModel, array $arguments)
-    {
-        return DSL::testCase($arguments[0] ?? '', $arguments[1] ?? null, true, $testCaseModel);
-    }
-});
+DecoratorsRegistry::registerGlobal('testCase', new TestCaseDecorator());
 
 DecoratorsRegistry::registerGlobal('endTestCase', new class extends AbstractDecorator {
     public function applyTo(TestCaseModel $testCaseModel, array $arguments)
