@@ -7,6 +7,7 @@ use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\EndTestCaseDecorator;
 use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\SetUpBeforeClassDecorator;
 use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\SetUpBeforeClassOnceDecorator;
 use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\SetUpDecorator;
+use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\TearDownDecorator;
 use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\TestCaseDecorator;
 use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\TestDecorator;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
@@ -17,13 +18,7 @@ DecoratorsRegistry::registerGlobal('setUpBeforeClass', new SetUpBeforeClassDecor
 DecoratorsRegistry::registerGlobal('setUpBeforeClassOnce', new SetUpBeforeClassOnceDecorator());
 DecoratorsRegistry::registerGlobal('setUp', new SetUpDecorator());
 DecoratorsRegistry::registerGlobal('test', new TestDecorator());
-
-DecoratorsRegistry::registerGlobal('tearDown', new class extends AbstractDecorator {
-    public function applyTo(TestCaseModel $testCaseModel, array $arguments)
-    {
-        return DSL::tearDown($arguments[0], $arguments[1] ?? true, $testCaseModel);
-    }
-});
+DecoratorsRegistry::registerGlobal('tearDown', new TearDownDecorator());
 
 DecoratorsRegistry::registerGlobal('tearDownAfterClass', new class extends AbstractDecorator {
     public function applyTo(TestCaseModel $testCaseModel, array $arguments)
