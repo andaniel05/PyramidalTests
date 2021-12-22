@@ -5,6 +5,7 @@ namespace ThenLabs\PyramidalTests\Decorator\Package;
 
 use Closure;
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
+use ThenLabs\PyramidalTests\Decorator\PackageInterface;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>

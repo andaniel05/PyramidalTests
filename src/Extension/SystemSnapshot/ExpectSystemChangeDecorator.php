@@ -5,7 +5,7 @@ namespace ThenLabs\PyramidalTests\Extension\SystemSnapshot;
 
 use Closure;
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
-use ThenLabs\PyramidalTests\Decorator\Package\PackageInterface;
+use ThenLabs\PyramidalTests\Decorator\PackageInterface;
 use ThenLabs\PyramidalTests\DSL\DSL;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
 

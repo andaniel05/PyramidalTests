@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\PyramidalTests\Decorator\Package;
+namespace ThenLabs\PyramidalTests\Decorator;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>

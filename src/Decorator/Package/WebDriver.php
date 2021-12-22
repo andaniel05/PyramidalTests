@@ -10,6 +10,7 @@ use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use PHPUnit\Framework\Assert;
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
+use ThenLabs\PyramidalTests\Decorator\PackageInterface;
 use ThenLabs\PyramidalTests\DSL\DSL;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
 

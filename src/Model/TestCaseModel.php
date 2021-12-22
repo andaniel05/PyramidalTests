@@ -14,7 +14,7 @@ use ThenLabs\Components\CompositeComponentTrait;
 use ThenLabs\PyramidalTests\Annotation\Decorator;
 use ThenLabs\PyramidalTests\Annotation\ImportDecorators;
 use ThenLabs\PyramidalTests\Decorator\DecoratorsRegistry;
-use ThenLabs\PyramidalTests\Decorator\Package\PackageInterface as DecoratorPackageInterface;
+use ThenLabs\PyramidalTests\Decorator\PackageInterface as DecoratorPackageInterface;
 
 AnnotationRegistry::registerFile(__DIR__.'/../Annotation/Decorator.php');
 AnnotationRegistry::registerFile(__DIR__.'/../Annotation/ImportDecorators.php');
