@@ -17,6 +17,7 @@ use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\SetUpBeforeClassDecorator;
 use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\TearDownAfterClassDecorator;
 use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\SetUpBeforeClassOnceDecorator;
 use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\TearDownAfterClassOnceDecorator;
+use ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator\UseMacroDecorator;
 
 DecoratorsRegistry::registerGlobal('testCase', new TestCaseDecorator());
 DecoratorsRegistry::registerGlobal('endTestCase', new EndTestCaseDecorator());
@@ -31,13 +32,7 @@ DecoratorsRegistry::registerGlobal('staticProperty', new StaticPropertyDecorator
 DecoratorsRegistry::registerGlobal('property', new PropertyDecorator());
 DecoratorsRegistry::registerGlobal('staticMethod', new StaticMethodDecorator());
 DecoratorsRegistry::registerGlobal('method', new MethodDecorator());
-
-DecoratorsRegistry::registerGlobal('useMacro', new class extends AbstractDecorator {
-    public function applyTo(TestCaseModel $testCaseModel, array $arguments)
-    {
-        return DSL::useMacro($arguments[0], $arguments[1] ?? null, $testCaseModel);
-    }
-});
+DecoratorsRegistry::registerGlobal('useMacro', new UseMacroDecorator());
 
 DecoratorsRegistry::registerGlobal('useTrait', new class extends AbstractDecorator {
     public function applyTo(TestCaseModel $testCaseModel, array $arguments)
