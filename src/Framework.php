@@ -21,6 +21,7 @@ use ThenLabs\PyramidalTests\Model\TestModel;
  */
 class Framework extends Command
 {
+    public const CREDITS = "\e[1;33mPyramidalTests %s\e[0m by Andy Daniel Navarro Taño and contributors.\n";
     public const VERSION = '2.0.0';
 
     public const DEFAULT_OPTIONS = [
@@ -59,10 +60,7 @@ class Framework extends Command
             $this->arguments['colors'] = \PHPUnit\TextUI\ResultPrinter::COLOR_AUTO;
         }
 
-        printf(
-            "\e[1;33mPyramidalTests %s\e[0m by Andy Daniel Navarro Taño and contributors.\n",
-            self::VERSION
-        );
+        printf(self::CREDITS, self::VERSION);
 
         if (isset($this->arguments['printer']) &&
             $this->arguments['printer'] == CliTestDoxPrinter::class
