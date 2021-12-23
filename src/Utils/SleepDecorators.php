@@ -1,32 +1,24 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\PyramidalTests\Decorator\Package;
+namespace ThenLabs\PyramidalTests\Utils;
 
 use Closure;
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
 use ThenLabs\PyramidalTests\Decorator\PackageInterface;
+use ThenLabs\PyramidalTests\Utils\Decorator\SleepDecorator;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-class Sleep implements PackageInterface
+class SleepDecorators implements PackageInterface
 {
     /**
      * @return array<string, AbstractDecorator>
      */
     public static function getDecorators(): array
     {
-        $sleep = new class extends AbstractDecorator {
-            public function getClosure(array $arguments): ?Closure
-            {
-                $seconds = $arguments[0];
-
-                return function () use ($seconds) {
-                    sleep($seconds);
-                };
-            }
-        };
+        $sleep = new SleepDecorator();
 
         $usleep = new class extends AbstractDecorator {
             public function getClosure(array $arguments): ?Closure
