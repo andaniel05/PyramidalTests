@@ -5,8 +5,8 @@ namespace ThenLabs\PyramidalTests\Utils;
 
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
 use ThenLabs\PyramidalTests\Decorator\PackageInterface;
-use ThenLabs\PyramidalTests\Utils\Decorator\SleepDecorator;
-use ThenLabs\PyramidalTests\Utils\Decorator\USleepDecorator;
+use ThenLabs\PyramidalTests\Utils\Decorator\Sleep\SleepDecorator;
+use ThenLabs\PyramidalTests\Utils\Decorator\Sleep\USleepDecorator;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>

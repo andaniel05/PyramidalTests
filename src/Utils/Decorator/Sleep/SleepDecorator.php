@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\PyramidalTests\Utils\Decorator;
+namespace ThenLabs\PyramidalTests\Utils\Decorator\Sleep;
 
 use Closure;
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
