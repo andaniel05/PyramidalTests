@@ -7,6 +7,7 @@ use Closure;
 use Facebook\WebDriver\WebDriverBy;
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
 use ThenLabs\PyramidalTests\Decorator\PackageInterface;
+use ThenLabs\PyramidalTests\Utils\Decorator\WebDriver\AcceptAlertDecorator;
 use ThenLabs\PyramidalTests\Utils\Decorator\WebDriver\ClickDecorator;
 use ThenLabs\PyramidalTests\Utils\Decorator\WebDriver\NavigateDecorator;
 use ThenLabs\PyramidalTests\Utils\Decorator\WebDriver\TypeDecorator;
@@ -26,15 +27,7 @@ class WebDriverDecorators implements PackageInterface
         $type = new TypeDecorator();
         $click = new ClickDecorator();
         $waitForAlert = new WaitForAlertDecorator();
-
-        $acceptAlert = new class extends AbstractDecorator {
-            public function getClosure(array $arguments): ?Closure
-            {
-                return function () {
-                    static::$driver->switchTo()->alert()->accept();
-                };
-            }
-        };
+        $acceptAlert = new AcceptAlertDecorator();
 
         $clear = new class extends AbstractDecorator {
             public function getClosure(array $arguments): ?Closure
