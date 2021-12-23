@@ -5,7 +5,7 @@ use ThenLabs\PyramidalTests\Annotation\ImportDecorators;
 
 /**
  * @ImportDecorators({
- *     "ThenLabs\PyramidalTests\Decorator\Package\WebDriver",
+ *     "ThenLabs\PyramidalTests\Utils\WebDriverDecorators",
  *     "ThenLabs\PyramidalTests\Utils\SleepDecorators",
  * })
  */

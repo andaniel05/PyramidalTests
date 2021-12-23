@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\PyramidalTests\Decorator\Package;
+namespace ThenLabs\PyramidalTests\Utils;
 
 use Closure;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
@@ -17,7 +17,7 @@ use ThenLabs\PyramidalTests\Model\TestCaseModel;
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-class WebDriver implements PackageInterface
+class WebDriverDecorators implements PackageInterface
 {
     /**
      * @return array<string, AbstractDecorator>
