@@ -4,16 +4,13 @@ declare(strict_types=1);
 namespace ThenLabs\PyramidalTests\Utils;
 
 use Closure;
-use Facebook\WebDriver\Remote\DesiredCapabilities;
-use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use PHPUnit\Framework\Assert;
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
 use ThenLabs\PyramidalTests\Decorator\PackageInterface;
-use ThenLabs\PyramidalTests\DSL\DSL;
-use ThenLabs\PyramidalTests\Model\TestCaseModel;
 use ThenLabs\PyramidalTests\Utils\Decorator\WebDriver\NavigateDecorator;
+use ThenLabs\PyramidalTests\Utils\Decorator\WebDriver\TypeDecorator;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -26,19 +23,7 @@ class WebDriverDecorators implements PackageInterface
     public static function getDecorators(): array
     {
         $navigate = new NavigateDecorator();
-
-        $type = new class extends AbstractDecorator {
-            public function getClosure(array $arguments): ?Closure
-            {
-                $text = $arguments[0];
-                $cssSelector = $arguments[1];
-
-                return function () use ($text, $cssSelector) {
-                    $element = static::$driver->findElement(WebDriverBy::cssSelector($cssSelector));
-                    $element->sendKeys($text);
-                };
-            }
-        };
+        $type = new TypeDecorator();
 
         $click = new class extends AbstractDecorator {
             public function getClosure(array $arguments): ?Closure
