@@ -9,6 +9,7 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
 use PHPUnit\Framework\Assert;
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
 use ThenLabs\PyramidalTests\Decorator\PackageInterface;
+use ThenLabs\PyramidalTests\Utils\Decorator\WebDriver\ClickDecorator;
 use ThenLabs\PyramidalTests\Utils\Decorator\WebDriver\NavigateDecorator;
 use ThenLabs\PyramidalTests\Utils\Decorator\WebDriver\TypeDecorator;
 
@@ -24,18 +25,7 @@ class WebDriverDecorators implements PackageInterface
     {
         $navigate = new NavigateDecorator();
         $type = new TypeDecorator();
-
-        $click = new class extends AbstractDecorator {
-            public function getClosure(array $arguments): ?Closure
-            {
-                $cssSelector = $arguments[0];
-
-                return function () use ($cssSelector) {
-                    $element = static::$driver->findElement(WebDriverBy::cssSelector($cssSelector));
-                    $element->click();
-                };
-            }
-        };
+        $click = new ClickDecorator();
 
         $waitForAlert = new class extends AbstractDecorator {
             public function getClosure(array $arguments): ?Closure
