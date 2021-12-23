@@ -5,13 +5,12 @@ namespace ThenLabs\PyramidalTests\Utils;
 
 use Closure;
 use Facebook\WebDriver\WebDriverBy;
-use Facebook\WebDriver\WebDriverExpectedCondition;
-use PHPUnit\Framework\Assert;
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
 use ThenLabs\PyramidalTests\Decorator\PackageInterface;
 use ThenLabs\PyramidalTests\Utils\Decorator\WebDriver\ClickDecorator;
 use ThenLabs\PyramidalTests\Utils\Decorator\WebDriver\NavigateDecorator;
 use ThenLabs\PyramidalTests\Utils\Decorator\WebDriver\TypeDecorator;
+use ThenLabs\PyramidalTests\Utils\Decorator\WebDriver\WaitForAlertDecorator;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -26,23 +25,7 @@ class WebDriverDecorators implements PackageInterface
         $navigate = new NavigateDecorator();
         $type = new TypeDecorator();
         $click = new ClickDecorator();
-
-        $waitForAlert = new class extends AbstractDecorator {
-            public function getClosure(array $arguments): ?Closure
-            {
-                $text = $arguments[0] ?? null;
-
-                return function () use ($text) {
-                    static::$driver->wait()->until(WebDriverExpectedCondition::alertIsPresent());
-
-                    $alert = static::$driver->switchTo()->alert();
-
-                    if ($text) {
-                        Assert::assertEquals($text, $alert->getText());
-                    }
-                };
-            }
-        };
+        $waitForAlert = new WaitForAlertDecorator();
 
         $acceptAlert = new class extends AbstractDecorator {
             public function getClosure(array $arguments): ?Closure
