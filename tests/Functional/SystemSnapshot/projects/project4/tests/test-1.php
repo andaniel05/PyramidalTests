@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use ThenLabs\PyramidalTests\Extension\SystemSnapshot;
-use ThenLabs\PyramidalTests\Extension\SystemSnapshot\ExpectSystemChangeDecorator;
+use ThenLabs\PyramidalTests\Extension\SystemSnapshot\Decorators;
 use ThenLabs\PyramidalTests\Extension\SystemSnapshot\ExpectSystemChangeTrait;
 use ThenLabs\PyramidalTests\Extension\SystemSnapshot\ReaderInterface;
 use ThenLabs\PyramidalTests\Extension\SystemSnapshot\SystemSnapshotInterface;
@@ -24,7 +24,7 @@ class MyTestCase extends TestCase implements SystemSnapshotInterface
 setTestCaseClass(MyTestCase::class);
 
 testCase()
-    ->importDecorators(ExpectSystemChangeDecorator::class)
+    ->importDecorators(Decorators::class)
     ->expectSystemChange('the system has the expected changes', [
         'reader1' => [
             'username' => fn () => true,
@@ -33,7 +33,7 @@ testCase()
 ;
 
 testCase()
-    ->importDecorators(ExpectSystemChangeDecorator::class)
+    ->importDecorators(Decorators::class)
     ->expectSystemChange([
         'reader1' => [
             'username' => fn () => true,
