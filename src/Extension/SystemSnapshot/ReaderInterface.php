@@ -6,7 +6,7 @@ namespace ThenLabs\PyramidalTests\Extension\SystemSnapshot;
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-interface SnapshotReaderInterface
+interface ReaderInterface
 {
     public function getSnapshot(): array;
 }

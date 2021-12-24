@@ -7,7 +7,7 @@ use Andaniel05\TestUtils\Asserts as TestUtilsAsserts;
 use PHPUnit\Runner\AfterTestHook;
 use PHPUnit\Runner\BeforeTestHook;
 use ReflectionClass;
-use ThenLabs\PyramidalTests\Extension\SystemSnapshot\SnapshotReaderInterface;
+use ThenLabs\PyramidalTests\Extension\SystemSnapshot\ReaderInterface;
 use ThenLabs\PyramidalTests\Extension\SystemSnapshot\SystemSnapshotInterface;
 use ThenLabs\PyramidalTests\Model\Record;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
@@ -38,16 +38,16 @@ class SystemSnapshot implements BeforeTestHook, AfterTestHook
     protected static $executedTests = [];
 
     /**
-     * @var array<string, SnapshotReaderInterface>
+     * @var array<string, ReaderInterface>
      */
     protected static $readers = [];
 
-    public static function registerSnapshotReader(string $key, SnapshotReaderInterface $reader): void
+    public static function addReader(string $key, ReaderInterface $reader): void
     {
         static::$readers[$key] = $reader;
     }
 
-    public static function getSystemSnapshot(): array
+    public static function getSnapshot(): array
     {
         $result = [];
 
@@ -111,7 +111,7 @@ class SystemSnapshot implements BeforeTestHook, AfterTestHook
         if (! isset(static::$executedTests[$className]) ||
             empty(static::$executedTests[$className])
         ) {
-            static::$before[$className] = static::getSystemSnapshot();
+            static::$before[$className] = static::getSnapshot();
         }
     }
 
@@ -135,7 +135,7 @@ class SystemSnapshot implements BeforeTestHook, AfterTestHook
         $totalOfTests = count($testCaseModel->getRootTestModels());
 
         if ($totalOfExecutedTests === $totalOfTests) {
-            static::$after[$className] = static::getSystemSnapshot();
+            static::$after[$className] = static::getSnapshot();
 
             TestUtilsAsserts::assertExpectedArrayDiff(
                 static::$before[$className],

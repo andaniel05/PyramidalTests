@@ -24,6 +24,7 @@ testCase('show an alert')
     ->click('#button')
     ->waitForAlert($text)
     ->sleep(1)
+    ->usleep(1)
     ->acceptAlert()
     ->test(function () {
         $this->assertTrue(true);
