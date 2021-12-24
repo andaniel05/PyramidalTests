@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace ThenLabs\PyramidalTests\Extension;
 
-use Andaniel05\TestUtils\Asserts as TestUtilsAsserts;
 use PHPUnit\Runner\AfterTestHook;
 use PHPUnit\Runner\BeforeTestHook;
 use ReflectionClass;
@@ -137,7 +136,7 @@ class SystemSnapshot implements BeforeTestHook, AfterTestHook
         if ($totalOfExecutedTests === $totalOfTests) {
             static::$after[$className] = static::getSnapshot();
 
-            TestUtilsAsserts::assertExpectedArrayDiff(
+            SystemSnapshot\Assert::assertExpectedArrayDiff(
                 static::$before[$className],
                 static::$after[$className],
                 static::$expectations[$className] ?? [],

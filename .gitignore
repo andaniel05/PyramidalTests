@@ -3,4 +3,4 @@ vendor/
 !.editorconfig
 !.gitignore
 !.php-cs-fixer.dist.php
-/nbproject/private/
+tests/Unit/Extension/SystemSnapshot/Reader/db-*.sqlite
