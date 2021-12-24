@@ -1,7 +1,7 @@
 <?php
 
 use ThenLabs\PyramidalTests\Extension\SystemSnapshot;
-use ThenLabs\PyramidalTests\Extension\SystemSnapshot\ReaderInterface;
+use ThenLabs\PyramidalTests\Extension\SystemSnapshot\Reader\ReaderInterface;
 
 $snapshotReader1 = new class implements ReaderInterface {
     public function getSnapshot(): array

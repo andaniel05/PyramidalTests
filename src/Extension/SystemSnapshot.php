@@ -7,7 +7,7 @@ use Andaniel05\TestUtils\Asserts as TestUtilsAsserts;
 use PHPUnit\Runner\AfterTestHook;
 use PHPUnit\Runner\BeforeTestHook;
 use ReflectionClass;
-use ThenLabs\PyramidalTests\Extension\SystemSnapshot\ReaderInterface;
+use ThenLabs\PyramidalTests\Extension\SystemSnapshot\Reader\ReaderInterface;
 use ThenLabs\PyramidalTests\Extension\SystemSnapshot\SystemSnapshotInterface;
 use ThenLabs\PyramidalTests\Model\Record;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
