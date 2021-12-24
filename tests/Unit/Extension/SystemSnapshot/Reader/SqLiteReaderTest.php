@@ -53,4 +53,24 @@ class SqLiteReaderTest extends UnitTestCase
 
         $this->assertEquals($expected, $this->db->getTables());
     }
+
+    public function testGetSnapshot()
+    {
+        $expected = [
+            'sqlite_sequence' => [
+                ['name' => 'persons', 'seq' => 2],
+                ['name' => 'animals', 'seq' => 2],
+            ],
+            'animals' => [
+                ['id' => 1, 'name' => 'dog'],
+                ['id' => 2, 'name' => 'cat'],
+            ],
+            'persons' => [
+                ['id' => 1, 'name' => 'Andy Navarro', 'age' => 31],
+                ['id' => 2, 'name' => 'Daniel Tano',  'age' => 32],
+            ],
+        ];
+
+        $this->assertEquals($expected, $this->db->getSnapshot());
+    }
 }
