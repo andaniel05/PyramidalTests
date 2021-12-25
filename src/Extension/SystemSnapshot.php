@@ -7,7 +7,7 @@ use PHPUnit\Runner\AfterTestHook;
 use PHPUnit\Runner\BeforeTestHook;
 use ReflectionClass;
 use ThenLabs\PyramidalTests\Extension\SystemSnapshot\Reader\ReaderInterface;
-use ThenLabs\PyramidalTests\Extension\SystemSnapshot\SystemSnapshotInterface;
+use ThenLabs\PyramidalTests\Extension\SystemSnapshot\SnapshotsPerTestsInterface;
 use ThenLabs\PyramidalTests\Model\Record;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
 
@@ -78,11 +78,11 @@ class SystemSnapshot implements BeforeTestHook, AfterTestHook
         return null;
     }
 
-    protected function implementsSystemSnapshotInterface(TestCaseModel $testCaseModel): bool
+    protected function implementsSnapshotsPerTestsInterface(TestCaseModel $testCaseModel): bool
     {
         $class = new ReflectionClass($testCaseModel->getClassBuilder()->getFCQN());
 
-        return $class->implementsInterface(SystemSnapshotInterface::class);
+        return $class->implementsInterface(SnapshotsPerTestsInterface::class);
     }
 
     public static function addDiffExpectation(string $className, array $expectations): void
@@ -102,7 +102,7 @@ class SystemSnapshot implements BeforeTestHook, AfterTestHook
         [$testCaseModel, $className] = $this->getTestCaseModelDataFromTestName($test);
 
         if (! $testCaseModel ||
-            ! $this->implementsSystemSnapshotInterface($testCaseModel)
+            ! $this->implementsSnapshotsPerTestsInterface($testCaseModel)
         ) {
             return;
         }
@@ -119,7 +119,7 @@ class SystemSnapshot implements BeforeTestHook, AfterTestHook
         [$testCaseModel, $className, $methodName] = $this->getTestCaseModelDataFromTestName($test);
 
         if (! $testCaseModel ||
-            ! $this->implementsSystemSnapshotInterface($testCaseModel)
+            ! $this->implementsSnapshotsPerTestsInterface($testCaseModel)
         ) {
             return;
         }

@@ -4,3 +4,4 @@ vendor/
 !.gitignore
 !.php-cs-fixer.dist.php
 tests/Unit/Extension/SystemSnapshot/Reader/db-*.sqlite
+tests/Integration/app/db.sqlite

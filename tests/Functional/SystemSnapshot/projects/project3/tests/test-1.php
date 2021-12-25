@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 use ThenLabs\PyramidalTests\Extension\SystemSnapshot;
 use ThenLabs\PyramidalTests\Extension\SystemSnapshot\ExpectSystemChangeTrait;
 use ThenLabs\PyramidalTests\Extension\SystemSnapshot\Reader\ReaderInterface;
-use ThenLabs\PyramidalTests\Extension\SystemSnapshot\SystemSnapshotInterface;
+use ThenLabs\PyramidalTests\Extension\SystemSnapshot\SnapshotsPerTestsInterface;
 
 SystemSnapshot::addReader('reader1', new class implements ReaderInterface {
     public function getSnapshot(): array
@@ -17,7 +17,7 @@ SystemSnapshot::addReader('reader1', new class implements ReaderInterface {
     }
 });
 
-class MyTestCase extends TestCase implements SystemSnapshotInterface
+class MyTestCase extends TestCase implements SnapshotsPerTestsInterface
 {
     use ExpectSystemChangeTrait;
 }

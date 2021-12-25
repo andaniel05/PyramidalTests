@@ -8,6 +8,10 @@
             <directory>tests/Functional</directory>
         </testsuite>
 
+        <testsuite name="Integration">
+            <directory>tests/Integration</directory>
+        </testsuite>
+
         <testsuite name="Cli">
             <directory>tests/Functional/Cli</directory>
         </testsuite>

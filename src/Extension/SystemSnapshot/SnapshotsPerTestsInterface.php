@@ -6,6 +6,6 @@ namespace ThenLabs\PyramidalTests\Extension\SystemSnapshot;
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-interface SystemSnapshotInterface
+interface SnapshotsPerTestsInterface
 {
 }

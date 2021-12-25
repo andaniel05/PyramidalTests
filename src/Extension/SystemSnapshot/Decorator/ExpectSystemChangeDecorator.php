@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace ThenLabs\PyramidalTests\Extension\SystemSnapshot\Decorator;
 
-use Closure;
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
 use ThenLabs\PyramidalTests\DSL\DSL;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
@@ -13,12 +12,6 @@ use ThenLabs\PyramidalTests\Model\TestCaseModel;
  */
 class ExpectSystemChangeDecorator extends AbstractDecorator
 {
-    public function getClosure(array $arguments): ?Closure
-    {
-        return function () {
-        };
-    }
-
     public function applyTo(TestCaseModel $testCaseModel, array $arguments)
     {
         $firstArgument = $arguments[0];
@@ -33,6 +26,8 @@ class ExpectSystemChangeDecorator extends AbstractDecorator
         } elseif (is_array($firstArgument)) {
             $expectations = $firstArgument;
         }
+
+        $testCaseModel->addDiffExpectationsForSystemSnapshot($expectations);
 
         $closure = function () use ($expectations) {
             $this->expectSystemChange($expectations);
