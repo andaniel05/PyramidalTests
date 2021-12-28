@@ -6,6 +6,7 @@ namespace ThenLabs\PyramidalTests\Extension;
 use PHPUnit\Runner\AfterTestHook;
 use PHPUnit\Runner\BeforeTestHook;
 use ReflectionClass;
+use ThenLabs\PyramidalTests\Extension\SystemSnapshot\Reader\DatabaseReaderInterface;
 use ThenLabs\PyramidalTests\Extension\SystemSnapshot\Reader\ReaderInterface;
 use ThenLabs\PyramidalTests\Extension\SystemSnapshot\SnapshotsPerTestsInterface;
 use ThenLabs\PyramidalTests\Model\Record;
@@ -141,6 +142,15 @@ class SystemSnapshot implements BeforeTestHook, AfterTestHook
                 static::$after[$className],
                 static::$expectations[$className] ?? [],
             );
+        }
+    }
+
+    public static function truncateTables(): void
+    {
+        foreach (static::$readers as $reader) {
+            if ($reader instanceof DatabaseReaderInterface) {
+                $reader->truncateTables();
+            }
         }
     }
 }
