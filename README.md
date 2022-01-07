@@ -12,7 +12,7 @@ Extends the PHPUnit possibilities to the BDD field.
 
 ## Installation.
 
-    $ composer require --dev thenlabs/pyramidal-tests 2.0.x.-dev
+    $ composer require --dev thenlabs/pyramidal-tests 2.0.x-dev
 
 >Require PHPUnit >= 8.5
 
