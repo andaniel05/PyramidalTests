@@ -7,8 +7,8 @@ Extends the PHPUnit possibilities to the BDD field.
 
 ## Documentation.
 
-- [English](doc/en/index.html)
-- [Español](doc/es/index.html)
+- [English](doc/en/index.md)
+- [Español](doc/es/index.md)
 
 ## Installation.
 
