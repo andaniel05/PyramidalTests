@@ -11,6 +11,7 @@ use PHPUnit\TextUI\Command;
 use PHPUnit\Util\TestDox\CliTestDoxPrinter;
 use ReflectionFunction;
 use Symfony\Component\Yaml\Yaml;
+use ThenLabs\PyramidalTests\Exception\PyramidalTestsException;
 use ThenLabs\PyramidalTests\Model\AbstractModel;
 use ThenLabs\PyramidalTests\Model\Record;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
@@ -25,7 +26,8 @@ class Framework extends Command
     public const VERSION = '2.0.0';
 
     public const DEFAULT_OPTIONS = [
-        'file_pattern' => '/^test.*\.php$/',
+        'dsl' => 'tdd',
+        'file_pattern' => '^test.*\.php$',
     ];
 
     /**
@@ -98,6 +100,17 @@ class Framework extends Command
                 $options,
                 Yaml::parseFile($pyramidalYamlFileName)['pyramidal']
             );
+        }
+
+        $options['file_pattern'] = '/'.$options['file_pattern'].'/';
+
+        // load the DSL to use.
+        if (0 === strcasecmp($options['dsl'], 'tdd')) {
+            require_once __DIR__.'/DSL/TDD.php';
+        } elseif (0 === strcasecmp($options['dsl'], 'bdd')) {
+            require_once __DIR__.'/DSL/BDD.php';
+        } else {
+            throw new PyramidalTestsException("The value '{$options['dsl']}' is not a valid DSL.");
         }
 
         // load the test files.
