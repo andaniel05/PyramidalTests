@@ -26,7 +26,7 @@ class Framework extends Command
     public const VERSION = '2.0.0';
 
     public const DEFAULT_OPTIONS = [
-        'dsl' => 'tdd',
+        'dsl' => ['TDD', 'BDD'],
         'file_pattern' => '^test.*\.php$',
     ];
 
@@ -105,12 +105,12 @@ class Framework extends Command
         $options['file_pattern'] = '/'.$options['file_pattern'].'/';
 
         // load the DSL to use.
-        if (0 === strcasecmp($options['dsl'], 'tdd')) {
-            require_once __DIR__.'/DSL/TDD.php';
-        } elseif (0 === strcasecmp($options['dsl'], 'bdd')) {
-            require_once __DIR__.'/DSL/BDD.php';
-        } else {
-            throw new PyramidalTestsException("The value '{$options['dsl']}' is not a valid DSL.");
+        if (is_string($options['dsl'])) {
+            $this->loadDsl($options['dsl']);
+        } elseif (is_array($options['dsl'])) {
+            foreach ($options['dsl'] as $dsl) {
+                $this->loadDsl($dsl);
+            }
         }
 
         // load the test files.
@@ -240,6 +240,17 @@ class Framework extends Command
 
                 require_once $pathName;
             }
+        }
+    }
+
+    private function loadDsl(string $dsl): void
+    {
+        if (0 === strcasecmp($dsl, 'TDD')) {
+            require_once __DIR__.'/DSL/TDD.php';
+        } elseif (0 === strcasecmp($dsl, 'BDD')) {
+            require_once __DIR__.'/DSL/BDD.php';
+        } else {
+            throw new PyramidalTestsException("The value '{$dsl}' is not a valid DSL.");
         }
     }
 }
