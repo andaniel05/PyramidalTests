@@ -7,14 +7,16 @@ Extends the PHPUnit possibilities to the BDD field.
 
 ## Documentation.
 
-- [English](doc/en/index.html)
-- [Español](doc/es/index.html)
+- [English](doc/en/index.md)
+- [Español](doc/es/index.md)
 
 ## Installation.
 
-    $ composer require --dev thenlabs/pyramidal-tests
+    $ composer require --dev thenlabs/pyramidal-tests 2.0.x-dev
 
 >Require PHPUnit >= 8.5
+
+>This project is still under development
 
 ## Example:
 
