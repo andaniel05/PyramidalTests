@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__.'/vendor/autoload.php';
-require_once __DIR__.'/src/DSL/PHPUnit/PHPUnitDSL.php';
+require_once __DIR__.'/src/DSL/TDD/TDD.php';
 
 define('ROOT_DIR', __DIR__);
 

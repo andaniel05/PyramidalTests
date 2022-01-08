@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\PyramidalTests\DSL\PHPUnit\Decorator;
+namespace ThenLabs\PyramidalTests\DSL\TDD\Decorator;
 
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
 use ThenLabs\PyramidalTests\DSL\DSL;
