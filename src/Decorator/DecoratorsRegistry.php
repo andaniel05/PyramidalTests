@@ -24,7 +24,7 @@ abstract class DecoratorsRegistry
         return self::$globals[$name] ?? null;
     }
 
-    public static function getGlobals(string $name): array
+    public static function getGlobals(): array
     {
         return self::$globals;
     }

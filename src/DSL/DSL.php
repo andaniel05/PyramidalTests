@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\PyramidalTests\DSL;
 
 use Closure;
+use ReflectionFunction;
 use ThenLabs\PyramidalTests\Exception\MacroNotFoundException;
 use ThenLabs\PyramidalTests\Model\Record;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
@@ -68,6 +69,12 @@ abstract class DSL
             Record::getCurrentTestCaseModel()
         ;
 
+        if (! $currentTestCaseModel instanceof TestCaseModel) {
+            $currentTestCaseModel = self::createRootTestCaseModel(
+                self::getTitleForRootTestCaseModelFromClosure($closure)
+            );
+        }
+
         $currentTestCaseModel->setSetUpBeforeClassClosure($closure, $invokeParents);
 
         return $currentTestCaseModel;
@@ -79,6 +86,12 @@ abstract class DSL
             $currentTestCaseModel :
             Record::getCurrentTestCaseModel()
         ;
+
+        if (! $currentTestCaseModel instanceof TestCaseModel) {
+            $currentTestCaseModel = self::createRootTestCaseModel(
+                self::getTitleForRootTestCaseModelFromClosure($closure)
+            );
+        }
 
         $wrapperClosure = function () use ($closure, $currentTestCaseModel) {
             if ($currentTestCaseModel->getInvokedSetUpBeforeClass()) {
@@ -106,6 +119,12 @@ abstract class DSL
             $currentTestCaseModel :
             Record::getCurrentTestCaseModel()
         ;
+
+        if (! $currentTestCaseModel instanceof TestCaseModel) {
+            $currentTestCaseModel = self::createRootTestCaseModel(
+                self::getTitleForRootTestCaseModelFromClosure($closure)
+            );
+        }
 
         $currentTestCaseModel->setSetUpClosure($closure, $invokeParents);
 
@@ -135,12 +154,16 @@ abstract class DSL
         ;
 
         if (! $currentTestCaseModel instanceof TestCaseModel) {
-            self::testCase('', function () {
-            }, false);
-            $currentTestCaseModel = Record::getCurrentTestCaseModel();
+            $currentTestCaseModel = self::createRootTestCaseModel(
+                self::getTitleForRootTestCaseModelFromClosure($closure)
+            );
         }
 
-        $newTestModel = new TestModel($title, $closure, uniqid('test'));
+        $totalOfCurrentTestModels = count($currentTestCaseModel->getRootTestModels());
+        $id = $totalOfCurrentTestModels + 1;
+        $methodName = 'test'.$id;
+
+        $newTestModel = new TestModel($title, $closure, $methodName);
 
         $currentTestCaseModel->addChild($newTestModel);
 
@@ -154,6 +177,12 @@ abstract class DSL
             Record::getCurrentTestCaseModel()
         ;
 
+        if (! $currentTestCaseModel instanceof TestCaseModel) {
+            $currentTestCaseModel = self::createRootTestCaseModel(
+                self::getTitleForRootTestCaseModelFromClosure($closure)
+            );
+        }
+
         $currentTestCaseModel->setTearDownClosure($closure, $invokeParents);
 
         return $currentTestCaseModel;
@@ -166,6 +195,12 @@ abstract class DSL
             Record::getCurrentTestCaseModel()
         ;
 
+        if (! $currentTestCaseModel instanceof TestCaseModel) {
+            $currentTestCaseModel = self::createRootTestCaseModel(
+                self::getTitleForRootTestCaseModelFromClosure($closure)
+            );
+        }
+
         $currentTestCaseModel->setTearDownAfterClassClosure($closure, $invokeParents);
 
         return $currentTestCaseModel;
@@ -177,6 +212,12 @@ abstract class DSL
             $currentTestCaseModel :
             Record::getCurrentTestCaseModel()
         ;
+
+        if (! $currentTestCaseModel instanceof TestCaseModel) {
+            $currentTestCaseModel = self::createRootTestCaseModel(
+                self::getTitleForRootTestCaseModelFromClosure($closure)
+            );
+        }
 
         $wrapperClosure = function () use ($closure, $currentTestCaseModel) {
             if ($currentTestCaseModel->getInvokedTearDownAfterClass()) {
@@ -223,6 +264,14 @@ abstract class DSL
             Record::getCurrentTestCaseModel()
         ;
 
+        if (! $currentTestCaseModel instanceof TestCaseModel) {
+            $backtrace = debug_backtrace();
+            $step = $backtrace[1];
+            $titleOfParent = static::getRelativePath($step['file']);
+
+            $currentTestCaseModel = self::createRootTestCaseModel($titleOfParent);
+        }
+
         if ($currentTestCaseModel) {
             $aux = $currentTestCaseModel;
 
@@ -268,6 +317,14 @@ abstract class DSL
             Record::getCurrentTestCaseModel()
         ;
 
+        if (! $currentTestCaseModel instanceof TestCaseModel) {
+            $backtrace = debug_backtrace();
+            $step = $backtrace[1];
+            $titleOfParent = static::getRelativePath($step['file']);
+
+            $currentTestCaseModel = self::createRootTestCaseModel($titleOfParent);
+        }
+
         $baseClassBuilder = $currentTestCaseModel->getBaseClassBuilder();
 
         $propery = $baseClassBuilder->addProperty($name)
@@ -285,6 +342,14 @@ abstract class DSL
             Record::getCurrentTestCaseModel()
         ;
 
+        if (! $currentTestCaseModel instanceof TestCaseModel) {
+            $backtrace = debug_backtrace();
+            $step = $backtrace[1];
+            $titleOfParent = static::getRelativePath($step['file']);
+
+            $currentTestCaseModel = self::createRootTestCaseModel($titleOfParent);
+        }
+
         $baseClassBuilder = $currentTestCaseModel->getBaseClassBuilder();
 
         $propery = $baseClassBuilder->addProperty($name)
@@ -300,6 +365,12 @@ abstract class DSL
             $currentTestCaseModel :
             Record::getCurrentTestCaseModel()
         ;
+
+        if (! $currentTestCaseModel instanceof TestCaseModel) {
+            $currentTestCaseModel = self::createRootTestCaseModel(
+                self::getTitleForRootTestCaseModelFromClosure($closure)
+            );
+        }
 
         $baseClassBuilder = $currentTestCaseModel->getBaseClassBuilder();
 
@@ -318,6 +389,12 @@ abstract class DSL
             Record::getCurrentTestCaseModel()
         ;
 
+        if (! $currentTestCaseModel instanceof TestCaseModel) {
+            $currentTestCaseModel = self::createRootTestCaseModel(
+                self::getTitleForRootTestCaseModelFromClosure($closure)
+            );
+        }
+
         $baseClassBuilder = $currentTestCaseModel->getBaseClassBuilder();
 
         $method = $baseClassBuilder->addMethod($name)
@@ -334,10 +411,40 @@ abstract class DSL
             Record::getCurrentTestCaseModel()
         ;
 
+        if (! $currentTestCaseModel instanceof TestCaseModel) {
+            $backtrace = debug_backtrace();
+            $step = $backtrace[1];
+            $titleOfParent = static::getRelativePath($step['file']);
+
+            $currentTestCaseModel = self::createRootTestCaseModel($titleOfParent);
+        }
+
         $baseClassBuilder = $currentTestCaseModel->getBaseClassBuilder();
 
         $baseClassBuilder->use($trait, $definitions);
 
         return $currentTestCaseModel;
+    }
+
+    public static function createRootTestCaseModel(string $title): TestCaseModel
+    {
+        self::testCase($title, function () {
+        }, false);
+
+        return Record::getCurrentTestCaseModel();
+    }
+
+    public static function getTitleForRootTestCaseModelFromClosure(Closure $closure): string
+    {
+        $reflectionFunction = new ReflectionFunction($closure);
+        return static::getRelativePath($reflectionFunction->getFileName());
+    }
+
+    public static function getRelativePath(string $fileName): string
+    {
+        $cwd = getcwd();
+        $result = str_replace($cwd, '', $fileName);
+
+        return $result;
     }
 }
