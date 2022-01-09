@@ -15,8 +15,6 @@ use ThenLabs\PyramidalTests\Annotation\Decorator;
 use ThenLabs\PyramidalTests\Annotation\ImportDecorators;
 use ThenLabs\PyramidalTests\Decorator\DecoratorsRegistry;
 use ThenLabs\PyramidalTests\Decorator\PackageInterface as DecoratorPackageInterface;
-use ThenLabs\PyramidalTests\Extension\SystemSnapshot;
-use ThenLabs\PyramidalTests\Extension\SystemSnapshot\SnapshotsInDecoratorsInterface;
 
 AnnotationRegistry::registerFile(__DIR__.'/../Annotation/Decorator.php');
 AnnotationRegistry::registerFile(__DIR__.'/../Annotation/ImportDecorators.php');
@@ -64,16 +62,6 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
     protected $invokedSetUpBeforeClass = false;
 
     /**
-     * @var array
-     */
-    protected $systemSnapshotBeforeFirstSetUpBeforeClassDecorator = [];
-
-    /**
-     * @var bool
-     */
-    protected $includedSetUpBeforeClassDecoratorForSystemSnapshot = false;
-
-    /**
      * @var Closure
      */
     protected $setUpClosure;
@@ -116,22 +104,7 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
     /**
      * @var array
      */
-    protected $systemSnapshotAfterLastTearDownAfterClassDecorator = [];
-
-    /**
-     * @var bool
-     */
-    protected $includedTearDownAfterClassDecoratorForSystemSnapshot = false;
-
-    /**
-     * @var array
-     */
     protected $macros = [];
-
-    /**
-     * @var array
-     */
-    protected $diffExpectationsForSystemSnapshot = [];
 
     public function __construct(string $title, Closure $closure)
     {
@@ -493,33 +466,6 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
             throw new Exception("Decorator '{$decoratorName}' for class '{$this->baseClassBuilder->getParentClass()}' is missing.");
         }
 
-        if ($this->hasSnapshotsInDecoratorsInterface()) {
-            if (! $this->includedSetUpBeforeClassDecoratorForSystemSnapshot) {
-                $setUpBeforeClassDecoratorForSystemSnapshot = function () use ($thisTestCaseModel) {
-                    $thisTestCaseModel->setSystemSnapshotBeforeFirstSetUpBeforeClassDecorator(SystemSnapshot::getSnapshot());
-                };
-
-                $this->setUpBeforeClassDecorators[] = $setUpBeforeClassDecoratorForSystemSnapshot;
-                $this->includedSetUpBeforeClassDecoratorForSystemSnapshot = true;
-            }
-
-            if (! $this->includedTearDownAfterClassDecoratorForSystemSnapshot) {
-                $tearDownAfterClassDecoratorForSystemSnapshot = function () use ($thisTestCaseModel) {
-                    $systemSnapshot = SystemSnapshot::getSnapshot();
-                    $thisTestCaseModel->setSystemSnapshotAfterLastTearDownAfterClassDecorator($systemSnapshot);
-
-                    SystemSnapshot\Assert::assertExpectedArrayDiff(
-                        $thisTestCaseModel->getSystemSnapshotBeforeFirstSetUpBeforeClassDecorator(),
-                        $thisTestCaseModel->getSystemSnapshotAfterLastTearDownAfterClassDecorator(),
-                        $thisTestCaseModel->getDiffExpectationsForSystemSnapshot()
-                    );
-                };
-
-                $this->tearDownAfterClassDecorators[] = $tearDownAfterClassDecoratorForSystemSnapshot;
-                $this->includedTearDownAfterClassDecoratorForSystemSnapshot = true;
-            }
-        }
-
         $setUpBeforeClassDecorator = $decorator->getClosure($arguments);
 
         if ($setUpBeforeClassDecorator instanceof Closure) {
@@ -598,56 +544,5 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
     public function addExecutedDecorator(string $title): void
     {
         $this->executedDecorators[] = $title;
-    }
-
-    public function hasSnapshotsInDecoratorsInterface(): bool
-    {
-        $interfaceNames = [
-            ...$this->classBuilder->getInterfaces(),
-            ...$this->baseClassBuilder->getInterfaces(),
-        ];
-
-        foreach ($interfaceNames as $interfaceName) {
-            if ($interfaceName === SnapshotsInDecoratorsInterface::class) {
-                return true;
-            }
-        }
-
-        $reflection = new ReflectionClass($this->baseClassBuilder->getParentClass());
-
-        return $reflection->implementsInterface(SnapshotsInDecoratorsInterface::class);
-    }
-
-    public function setSystemSnapshotBeforeFirstSetUpBeforeClassDecorator(array $systemSnapshot): void
-    {
-        $this->systemSnapshotBeforeFirstSetUpBeforeClassDecorator = $systemSnapshot;
-    }
-
-    public function getSystemSnapshotBeforeFirstSetUpBeforeClassDecorator(): array
-    {
-        return $this->systemSnapshotBeforeFirstSetUpBeforeClassDecorator;
-    }
-
-    public function setSystemSnapshotAfterLastTearDownAfterClassDecorator(array $systemSnapshot): void
-    {
-        $this->systemSnapshotAfterLastTearDownAfterClassDecorator = $systemSnapshot;
-    }
-
-    public function getSystemSnapshotAfterLastTearDownAfterClassDecorator(): array
-    {
-        return $this->systemSnapshotAfterLastTearDownAfterClassDecorator;
-    }
-
-    public function addDiffExpectationsForSystemSnapshot(array $expectations): void
-    {
-        $this->diffExpectationsForSystemSnapshot = array_merge_recursive(
-            $this->diffExpectationsForSystemSnapshot,
-            $expectations
-        );
-    }
-
-    public function getDiffExpectationsForSystemSnapshot(): array
-    {
-        return $this->diffExpectationsForSystemSnapshot;
     }
 }

@@ -8,20 +8,12 @@
             <directory>tests/Functional</directory>
         </testsuite>
 
-        <testsuite name="Integration">
-            <directory>tests/Integration</directory>
-        </testsuite>
-
         <testsuite name="Cli">
             <directory>tests/Functional/Cli</directory>
         </testsuite>
 
         <testsuite name="WebDriver">
             <directory>tests/Functional/WebDriver</directory>
-        </testsuite>
-
-        <testsuite name="SystemSnapshot">
-            <directory>tests/Functional/SystemSnapshot</directory>
         </testsuite>
     </testsuites>
 </phpunit>
