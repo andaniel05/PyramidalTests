@@ -163,6 +163,13 @@ abstract class DSL
         $id = $totalOfCurrentTestModels + 1;
         $methodName = 'test'.$id;
 
+        if (! $title) {
+            $reflectionFunction = new ReflectionFunction($closure);
+            $line = "\e[1;30m:{$reflectionFunction->getStartLine()}\e[0m";
+
+            $title = "{$methodName} {$line}";
+        }
+
         $newTestModel = new TestModel($title, $closure, $methodName);
 
         $currentTestCaseModel->addChild($newTestModel);
@@ -442,7 +449,7 @@ abstract class DSL
 
     public static function getRelativePath(string $fileName): string
     {
-        $cwd = getcwd();
+        $cwd = getcwd().'/';
         $result = str_replace($cwd, '', $fileName);
 
         return $result;

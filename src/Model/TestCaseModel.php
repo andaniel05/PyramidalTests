@@ -232,12 +232,7 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
         foreach ($this->getRootTestModels() as $testModel) {
             $method = $testModel->getMethodBuilder();
             $method->setClassBuilder($this->classBuilder);
-
-            if ($title = $testModel->getTitle()) {
-                $method->addComment("@testdox {$title}");
-            } else {
-                $method->addComment("@testdox {$testModel->getMethodName()}");
-            }
+            $method->addComment("@testdox {$testModel->getTitle()}");
 
             $this->classBuilder->addMember($method);
         }
