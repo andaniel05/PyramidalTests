@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ThenLabs\PyramidalTests\Tests\Functional\Cli;
+namespace ThenLabs\PyramidalTests\Tests\Functional;
 
 use PHPUnit\Framework\TestCase;
 
@@ -45,7 +45,7 @@ class Project1Test extends TestCase
         $command = sprintf(
             "php %s -c %s",
             ROOT_DIR.'/bin/pyramidal',
-            ROOT_DIR.'/tests/Functional/Cli/projects/project1/phpunit.xml',
+            __DIR__.'/projects/project1/phpunit.xml',
         );
 
         $outputString = exec($command, $outputArray, $returnValue);
@@ -70,7 +70,7 @@ class Project1Test extends TestCase
         $command = sprintf(
             "php %s -c %s --filter %s",
             ROOT_DIR.'/bin/pyramidal',
-            ROOT_DIR.'/tests/Functional/Cli/projects/project1/phpunit.xml',
+            __DIR__.'/projects/project1/phpunit.xml',
             $arg
         );
 
@@ -88,7 +88,7 @@ class Project1Test extends TestCase
         $command = sprintf(
             "php %s -c %s --filter=%s",
             ROOT_DIR.'/bin/pyramidal',
-            ROOT_DIR.'/tests/Functional/Cli/projects/project1/phpunit.xml',
+            __DIR__.'/projects/project1/phpunit.xml',
             $arg
         );
 
@@ -103,7 +103,7 @@ class Project1Test extends TestCase
         $command = sprintf(
             "php %s -c %s --filter 'my parent test case' --testdox",
             ROOT_DIR.'/bin/pyramidal',
-            ROOT_DIR.'/tests/Functional/Cli/projects/project1/phpunit.xml'
+            __DIR__.'/projects/project1/phpunit.xml'
         );
 
         $outputString = exec($command, $outputArray, $returnValue);
@@ -121,7 +121,7 @@ class Project1Test extends TestCase
         $command = sprintf(
             'php %s -c %s --filter="my child test case"',
             ROOT_DIR.'/bin/pyramidal',
-            ROOT_DIR.'/tests/Functional/Cli/projects/project1/phpunit.xml'
+            __DIR__.'/projects/project1/phpunit.xml'
         );
 
         $outputString = exec($command, $outputArray, $returnValue);
@@ -136,8 +136,8 @@ class Project1Test extends TestCase
         $command = sprintf(
             'php %s -c %s --testdox --filter="%s"',
             ROOT_DIR.'/bin/pyramidal',
-            ROOT_DIR.'/tests/Functional/Cli/projects/project1/phpunit.xml',
-            ROOT_DIR.'/tests/Functional/Cli/projects/project1/tests/test-1.php:3',
+            __DIR__.'/projects/project1/phpunit.xml',
+            __DIR__.'/projects/project1/tests/test-1.php:3',
         );
 
         $outputString = exec($command, $outputArray, $returnValue);
@@ -155,8 +155,8 @@ class Project1Test extends TestCase
         $command = sprintf(
             'php %s -c %s --testdox --filter="%s"',
             ROOT_DIR.'/bin/pyramidal',
-            ROOT_DIR.'/tests/Functional/Cli/projects/project1/phpunit.xml',
-            ROOT_DIR.'/tests/Functional/Cli/projects/project1/tests/test-1.php:25',
+            __DIR__.'/projects/project1/phpunit.xml',
+            __DIR__.'/projects/project1/tests/test-1.php:25',
         );
 
         $outputString = exec($command, $outputArray, $returnValue);
@@ -172,8 +172,8 @@ class Project1Test extends TestCase
         $command = sprintf(
             'php %s -c %s --testdox --filter="%s"',
             ROOT_DIR.'/bin/pyramidal',
-            ROOT_DIR.'/tests/Functional/Cli/projects/project1/phpunit.xml',
-            ROOT_DIR.'/tests/Functional/Cli/projects/project1/tests/test-1.php:26',
+            __DIR__.'/projects/project1/phpunit.xml',
+            __DIR__.'/projects/project1/tests/test-1.php:26',
         );
 
         $outputString = exec($command, $outputArray, $returnValue);
@@ -189,8 +189,8 @@ class Project1Test extends TestCase
         $command = sprintf(
             'php %s -c %s --testdox --filter="%s"',
             ROOT_DIR.'/bin/pyramidal',
-            ROOT_DIR.'/tests/Functional/Cli/projects/project1/phpunit.xml',
-            ROOT_DIR.'/tests/Functional/Cli/projects/project1/tests/test-1.php:12',
+            __DIR__.'/projects/project1/phpunit.xml',
+            __DIR__.'/projects/project1/tests/test-1.php:12',
         );
 
         $outputString = exec($command, $outputArray, $returnValue);
