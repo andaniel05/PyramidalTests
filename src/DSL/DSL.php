@@ -37,6 +37,10 @@ abstract class DSL
             $oldTestCaseModel = Record::getCurrentTestCaseModel();
         }
 
+        if (! $title) {
+            $title = self::getTitleForRootTestCaseModelFromClosure($closure);
+        }
+
         $newTestCaseModel = new TestCaseModel($title, $closure);
         $newTestCaseModel->getBaseClassBuilder()->extends(Record::getTestCaseClass());
 

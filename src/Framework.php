@@ -25,8 +25,9 @@ class Framework extends Command
     public const VERSION = '2.0.0';
 
     public const DEFAULT_OPTIONS = [
-        'dsl' => ['TDD', 'BDD'],
+        'dsl'          => ['TDD', 'BDD'],
         'file_pattern' => '^test.*\.php$',
+        'colors'       => true,
     ];
 
     /**
@@ -122,6 +123,10 @@ class Framework extends Command
             }
         } elseif (isset($argv[1]) && file_exists($argv[1])) {
             require_once $argv[1];
+        }
+
+        if (true == $options['colors']) {
+            $argv[] = '--colors';
         }
 
         return parent::run($argv, $exit);
