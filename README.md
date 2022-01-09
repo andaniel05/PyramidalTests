@@ -14,8 +14,6 @@ Extends the PHPUnit possibilities to the BDD field.
 
     $ composer require --dev thenlabs/pyramidal-tests 2.0.x-dev
 
->Require PHPUnit >= 8.5
-
 >This project is still under development
 
 ## Example:
@@ -69,8 +67,4 @@ Demo:
 
 ### Running the tests.
 
-For run the tests with differents versions of PHPUnit run:
-
-    $ docker run --rm -v $(pwd):/app jitesoft/phpunit:{php_version}-{phpunit_version}
-
-See [https://hub.docker.com/r/jitesoft/phpunit](https://hub.docker.com/r/jitesoft/phpunit) for get the values for `php_version` and `phpunit_version`.
+    $ composer test
