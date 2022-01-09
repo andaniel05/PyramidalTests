@@ -6,7 +6,6 @@ namespace ThenLabs\PyramidalTests;
 use DirectoryIterator;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestSuite;
-use PHPUnit\Runner\Version;
 use PHPUnit\TextUI\Command;
 use PHPUnit\Util\TestDox\CliTestDoxPrinter;
 use ReflectionFunction;
@@ -82,20 +81,6 @@ class Framework extends Command
             unset($this->arguments['filter']);
         }
 
-        $configurationFileName = $this->arguments['configuration'];
-        $directory = dirname($configurationFileName);
-        $pyramidalYamlFileName = $directory.'/pyramidal.yaml';
-
-        // load config from pyramidal.yaml file if exists.
-        if (file_exists($pyramidalYamlFileName)) {
-            $options = array_merge(
-                $options,
-                Yaml::parseFile($pyramidalYamlFileName)['pyramidal']
-            );
-        }
-
-        $options['file_pattern'] = '/'.$options['file_pattern'].'/';
-
         // load the DSL to use.
         if (is_string($options['dsl'])) {
             $this->loadDsl($options['dsl']);
@@ -105,20 +90,38 @@ class Framework extends Command
             }
         }
 
-        // load the test files.
-        $loader = new \PHPUnit\TextUI\XmlConfiguration\Loader();
-        $configuration = $loader->load($configurationFileName);
+        if (isset($this->arguments['configuration'])) {
+            $configurationFileName = $this->arguments['configuration'];
+            $directory = dirname($configurationFileName);
+            $pyramidalYamlFileName = $directory.'/pyramidal.yaml';
 
-        foreach ($configuration->testSuite() as $testSuite) {
-            if (isset($this->arguments['testsuite']) &&
-                $this->arguments['testsuite'] != $testSuite->name()
-            ) {
-                continue;
+            // load config from pyramidal.yaml file if exists.
+            if (file_exists($pyramidalYamlFileName)) {
+                $options = array_merge(
+                    $options,
+                    Yaml::parseFile($pyramidalYamlFileName)['pyramidal']
+                );
             }
 
-            foreach ($testSuite->directories() as $directory) {
-                $this->includeDirectory($directory->path(), $options['file_pattern']);
+            $options['file_pattern'] = '/'.$options['file_pattern'].'/';
+
+            // load the test files.
+            $loader = new \PHPUnit\TextUI\XmlConfiguration\Loader();
+            $configuration = $loader->load($configurationFileName);
+
+            foreach ($configuration->testSuite() as $testSuite) {
+                if (isset($this->arguments['testsuite']) &&
+                    $this->arguments['testsuite'] != $testSuite->name()
+                ) {
+                    continue;
+                }
+
+                foreach ($testSuite->directories() as $directory) {
+                    $this->includeDirectory($directory->path(), $options['file_pattern']);
+                }
             }
+        } elseif (isset($argv[1]) && file_exists($argv[1])) {
+            require_once $argv[1];
         }
 
         return parent::run($argv, $exit);

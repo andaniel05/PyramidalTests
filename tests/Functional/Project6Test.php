@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 class Project6Test extends TestCase
 {
-    public function test()
+    public function test1()
     {
         $command = sprintf(
             "php %s -c %s --testsuite=Suite2",
