@@ -54,14 +54,6 @@ class Framework extends Command
 
         $this->handleArguments($argv);
 
-        if (version_compare(Version::id(), '9', '>=')) {
-            //  Compatibility with PHPUnit 9.
-            $this->arguments['colors'] = \PHPUnit\TextUI\DefaultResultPrinter::COLOR_AUTO;
-        } else {
-            //  Compatibility with PHPUnit 8.
-            $this->arguments['colors'] = \PHPUnit\TextUI\ResultPrinter::COLOR_AUTO;
-        }
-
         printf(self::CREDITS, self::VERSION);
 
         if (isset($this->arguments['printer']) &&
@@ -114,36 +106,18 @@ class Framework extends Command
         }
 
         // load the test files.
-        if (version_compare(Version::id(), '9', '>=')) {
-            //  Compatibility with PHPUnit 9.
-            $loader = new \PHPUnit\TextUI\XmlConfiguration\Loader();
-            $configuration = $loader->load($configurationFileName);
+        $loader = new \PHPUnit\TextUI\XmlConfiguration\Loader();
+        $configuration = $loader->load($configurationFileName);
 
-            foreach ($configuration->testSuite() as $testSuite) {
-                if (isset($this->arguments['testsuite']) &&
-                    $this->arguments['testsuite'] != $testSuite->name()
-                ) {
-                    continue;
-                }
-
-                foreach ($testSuite->directories() as $directory) {
-                    $this->includeDirectory($directory->path(), $options['file_pattern']);
-                }
+        foreach ($configuration->testSuite() as $testSuite) {
+            if (isset($this->arguments['testsuite']) &&
+                $this->arguments['testsuite'] != $testSuite->name()
+            ) {
+                continue;
             }
-        } else {
-            //  Compatibility with PHPUnit 8.
-            $configuration = \PHPUnit\Util\Configuration::getInstance($configurationFileName);
 
-            $xpath = (function () {
-                return $this->xpath;
-            })->call($configuration);
-
-            $directoryNodes = $xpath->query('testsuites/testsuite/directory');
-            foreach ($directoryNodes as $directoryNode) {
-                $this->includeDirectory(
-                    dirname($configurationFileName).'/'.strval($directoryNode->textContent),
-                    $options['file_pattern']
-                );
+            foreach ($testSuite->directories() as $directory) {
+                $this->includeDirectory($directory->path(), $options['file_pattern']);
             }
         }
 
