@@ -7,7 +7,6 @@ use Closure;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestResult;
 use PHPUnit\Framework\TestSuite;
-use PHPUnit\Runner\Version;
 use PHPUnit\TextUI\TestRunner;
 use ThenLabs\PyramidalTests\Model\Record;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
@@ -44,15 +43,9 @@ class UnitTestCase extends TestCase
             }
         }
 
-        if (version_compare(Version::id(), '9', '>=')) {
-            //  Compatibility with PHPUnit 9.
-            $arguments['extensions'] = [];
+        $arguments['extensions'] = [];
 
-            $result = $runner->run($mainTestSuite, $arguments, $warnings, $exit);
-        } else {
-            //  Compatibility with PHPUnit 8.
-            $result = $runner->doRun($mainTestSuite, $arguments, $warnings, $exit);
-        }
+        $result = $runner->run($mainTestSuite, $arguments, $warnings, $exit);
 
         if ($result->riskyCount() ||
             $result->errorCount() ||
