@@ -54,7 +54,7 @@ testCase('it is created a product', function () {
 
 >The `--testdox` argument is optional.
 
-Demo:
+## Result:
 
 ![](doc/es/00-intro/result.png)
 

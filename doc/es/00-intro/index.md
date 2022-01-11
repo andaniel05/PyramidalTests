@@ -1,7 +1,5 @@
 
-# PyramidalTests
-
-## Introducción.
+# Introducción.
 
 PyramidalTests es un framework de pruebas basado en [PHPUnit][PHPUnit] que permite que se puedan crear las pruebas con el empleo de funciones anónimas anidadas. Este método tiene algunas ventajas frente al método tradicional de [PHPUnit][PHPUnit] el cual exige que se tenga que crear una clase por cada caso.
 
