@@ -14,7 +14,7 @@ Extends the PHPUnit possibilities to the BDD field.
 
     $ composer require --dev thenlabs/pyramidal-tests 2.0.x-dev
 
->This project is still under development
+>This project is still under development.
 
 ## Example:
 
@@ -22,29 +22,22 @@ Extends the PHPUnit possibilities to the BDD field.
 <?php
 // tests/test-it-is-created-a-product.php
 
-use ThenLabs\PyramidalTests\Demo\Product;
-use ThenLabs\PyramidalTests\Demo\Category;
-
 testCase('it is created a product', function () {
     setUp(function () {
-        $this->product = new Product;
+        $this->product = new Product();
     });
 
-    test('the product has a #CODE#', function () {
-        $code = $this->product->getCode();
-
-        $this->assertMatchesRegularExpression('/#\d+#/', $code);
-        $this->assertSame($code, $this->product->getCode());
+    test('the product has not name', function () {
+        $this->assertEmpty($this->product->getName());
     });
 
-    test('the product not contains categories', function () {
+    test('not contains categories', function () {
         $this->assertCount(0, $this->product->getCategories());
     });
 
     testCase('adds a category to the product', function () {
         setUp(function () {
             $this->category = $this->createMock(Category::class);
-
             $this->product->addCategory($this->category);
         });
 
@@ -61,7 +54,7 @@ testCase('it is created a product', function () {
 
 Demo:
 
-![](demo.gif)
+![](doc/es/00-intro/result.png)
 
 ## Development.
 
