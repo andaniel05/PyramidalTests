@@ -49,10 +49,13 @@ Se obtendría el siguiente resultado:
 
 ![](result.png)
 
-Como puede verse, el resultado de la ejecución contiene los mismos títulos y márgenes del código fuente, y dado que se ha empleado un lenguaje natural, se puede decir que se está contando una historia del funcionamiento del [SUT][SUT].
+Como puede verse, el resultado de la ejecución contiene los mismos títulos y márgenes del código fuente, y dado que se ha empleado un lenguaje natural, se puede decir que se está contando una historia del funcionamiento del [sistema bajo pruebas][SUT].
 
 Este ejemplo tan sencillo muestra los beneficios que PyramidalTests ofrece a la hora de trabajar con [PHPUnit][PHPUnit]. Decimos esto porque PyramidalTests está basado 100% en [PHPUnit][PHPUnit] y se podría decir que es como extensión(o framework) del mismo que lo que hace es extender sus funcionalidades.
 
 Si solo estuviéramos usando [PHPUnit][PHPUnit] y quisiéramos obtener el resultado anterior de entrada esto no sería posible por defecto este no muestra márgenes en los resultados. Además, la reutilización del código sería todo un reto porque no bastaría con solo usar la herencia entre las clases de los casos ya que los métodos cuyo nombre tienen el prefijo *test* también se estarían compartiendo entre ambas y esto implicaría que la segunda contendría tres pruebas y no solo una como ocurre en el ejemplo anterior.
 
 Lo que hemos mostrado aquí no son solo las únicas bondades que ofrece PyramidalTests y lo exhortamos a seguir leyendo para que las conozca.
+
+[PHPUnit]: https://phpunit.de/
+[SUT]: https://en.wikipedia.org/wiki/System_under_test
