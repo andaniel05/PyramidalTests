@@ -50,7 +50,9 @@ testCase('it is created a product', function () {
 
 ## Executing.
 
-    $ ./vendor/bin/pyramidal
+    $ ./vendor/bin/pyramidal --testdox
+
+>The `--testdox` argument is optional.
 
 Demo:
 
