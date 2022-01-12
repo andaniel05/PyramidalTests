@@ -48,7 +48,7 @@ testCase('it is created a product', function () {
 });
 ```
 
-## Executing.
+## Executing:
 
     $ ./vendor/bin/pyramidal --testdox
 
