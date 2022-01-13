@@ -17,10 +17,11 @@ Es muy importante comentar que este comando no es más que una envoltura de `./v
 
 Las funciones principales que hace este comando son las siguientes:
 
-1. Analizar el archivo `phpunit.xml`.
-2. Ejecutar los archivos `.php` que se encuentren en los directorios de las suites definidas en este archivo, y cuyos nombres comiencen por `test`(configurable).
-3. Crear en memoria las clases de los casos de prueba.
-4. Ejecutar dichas clases con el propio ejecutor de pruebas de [PHPUnit][PHPUnit].
+1. Analizar el archivo `phpunit.xml` del proyecto.
+2. En caso de que exista, analizar el archivo `pyramidal.yaml` el cual se usa para especificar opciones de configuración de [PyramidalTests][PyramidalTests]. Esto se abordará más adelante.
+3. Ejecutar los archivos `.php` que se encuentren en los directorios de las suites definidas en este archivo, y cuyos nombres comiencen por `test`(configurable).
+4. Crear en memoria las clases de los casos de prueba.
+5. Ejecutar dichas clases con el propio ejecutor de pruebas de [PHPUnit][PHPUnit].
 
 [PyramidalTests]: https://pyramidal-tests.thenlabs.org
 [Composer]: https://getcomposer.org/

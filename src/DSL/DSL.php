@@ -169,7 +169,7 @@ abstract class DSL
 
         if (! $title) {
             $reflectionFunction = new ReflectionFunction($closure);
-            $line = "\e[1;30m:{$reflectionFunction->getStartLine()}\e[0m";
+            $line = ':'.$reflectionFunction->getStartLine();
 
             $title = "{$methodName} {$line}";
         }
