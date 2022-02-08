@@ -45,7 +45,21 @@ Una vez que se ejecuten dichas pruebas(lo cual se hace con el siguiente comando)
 
 Se obtendría el siguiente resultado:
 
-![](result.png)
+<pre class="text-white p-2">
+<font color="#C4A000"><b>PyramidalTests 2.x.x</b></font> by Andy Daniel Navarro Taño and contributors.
+PHPUnit 9.5.11 by Sebastian Bergmann and contributors.
+
+<u style="text-decoration-style:single">it is created a product</u>
+<font color="#4E9A06">✔</font> the product has not name
+<font color="#4E9A06">✔</font> not contains categories
+
+    <u style="text-decoration-style:single">adds a category to the product</u>
+    <font color="#4E9A06">✔</font> the product contains the category
+
+Time: 00:00.009, Memory: 6.00 MB
+
+<span style="background-color:#4E9A06"><font color="#2E3436">OK (3 tests, 3 assertions)</font></span>
+</pre>
 
 Como puede verse, el resultado de la ejecución contiene los mismos títulos y márgenes del código fuente, y dado que se ha empleado un lenguaje natural, se puede decir que se está contando una historia del funcionamiento del [sistema bajo pruebas][SUT].
 
