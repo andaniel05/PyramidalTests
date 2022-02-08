@@ -1,7 +1,7 @@
 
-<h1 align="center">▴ PyramidalTests <sup><sup><sub>2.0</sub></sup></sup></h1>
+<h1 align="center">PyramidalTests</h1>
 
-### Extends the PHPUnit possibilities to the BDD field.
+### A complementary framework for PHPUnit that focuses on simplicity, reusability, and storytelling.
 
 #### If you like this project gift us a ⭐.
 
