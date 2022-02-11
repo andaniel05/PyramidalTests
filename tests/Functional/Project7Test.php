@@ -23,6 +23,7 @@ class Project7Test extends TestCase
         $output = implode(PHP_EOL, $outputArray);
 
         $this->assertSame(0, $returnValue);
+        $this->assertStringContainsString('my test case', $output);
         $this->assertStringContainsString('testName: my first test', $output);
         $this->assertStringContainsString('testName: anonymous', $output);
         $this->assertStringContainsString('END', $output);
