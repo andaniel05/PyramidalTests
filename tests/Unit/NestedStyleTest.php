@@ -1052,4 +1052,50 @@ class NestedStyleTest extends UnitTestCase
         $this->assertExpectedTotals(['success' => 1], $result);
         $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure1), $result);
     }
+
+    public function testUsingProviderAcrossTheWithMethod1()
+    {
+        test(function (int $v1, int $v2, int $result) {
+            $this->assertEquals($result, $v1 + $v2);
+        })->with([
+            [1, 1, 2],
+            [2, 2, 4],
+            [3, 3, 6],
+        ]);
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 3], $result);
+    }
+
+    public function testUsingProviderAcrossTheWithMethod2()
+    {
+        testCase(function () {
+            test(function (int $v1, int $v2, int $result) {
+                $this->assertEquals($result, $v1 + $v2);
+            })->with([
+                [1, 1, 2],
+                [2, 2, 4],
+                [3, 3, 6],
+            ]);
+
+            test(function (int $v1, int $v2, int $result) {
+                $this->assertEquals($result, $v1 + $v2);
+            })->with([
+                [1, 1, 2],
+            ]);
+
+            testCase(function () {
+                test(function (int $v1, int $v2, int $result) {
+                    $this->assertEquals($result, $v1 + $v2);
+                })->with([
+                    [1, 1, 2],
+                ]);
+            });
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 5], $result);
+    }
 }

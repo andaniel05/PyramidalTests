@@ -56,4 +56,39 @@ class TestModel extends AbstractModel implements ComponentInterface
 
         return call_user_func_array([$testCaseModel, $methodName], $arguments);
     }
+
+    public function with(array $providerData): self
+    {
+        $testCaseModel = $this->parent;
+        $classBuilder = $testCaseModel->getClassBuilder();
+        $baseClassBuilder = $testCaseModel->getBaseClassBuilder();
+
+        for ($i = 1; true; $i++) {
+            $providerMethodName = 'provider'.$i;
+
+            $methodExists = false;
+
+            if ($classBuilder->getMethod($providerMethodName) instanceof Method) {
+                $methodExists = true;
+            }
+
+            if (false === $methodExists &&
+                $baseClassBuilder->getMethod($providerMethodName) instanceof Method
+            ) {
+                $methodExists = true;
+            }
+
+            if ($methodExists) {
+                continue;
+            }
+
+            $classBuilder->addMethod($providerMethodName, function () use ($providerData): array {
+                return $providerData;
+            });
+
+            $this->method->addComment("@dataProvider {$providerMethodName}");
+
+            return $this;
+        }
+    }
 }
