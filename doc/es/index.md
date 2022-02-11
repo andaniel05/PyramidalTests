@@ -1,6 +1,4 @@
 
-# Contenidos
-
-- [Introducción](00-intro/index.md)
-- [Comenzando](01-get-started/index.md)
-- [Creando las pruebas](02-creating-tests/index.md)
+1. [Introducción](introduction.md)
+1. [Comenzando](get-started.md)
+1. [Creando las pruebas](creating-the-tests.md)
