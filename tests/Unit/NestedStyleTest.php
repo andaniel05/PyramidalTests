@@ -1098,4 +1098,134 @@ class NestedStyleTest extends UnitTestCase
 
         $this->assertExpectedTotals(['success' => 5], $result);
     }
+
+    public function testCreateARootTestWithoutTitleOrClosure()
+    {
+        test()->assertSame(50, 50);
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateARootTestWithoutAClosure()
+    {
+        test('a test without closure')->assertNull(null);
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateARootTestWithoutAClosureWithSeveralDecorators()
+    {
+        test('a test without closure')
+            ->assertTrue(true)
+            ->assertNull(null)
+        ;
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestWithoutTitleOrClosure()
+    {
+        testCase(function () {
+            test()->assertSame(50, 50);
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestWithoutAClosure()
+    {
+        testCase(function () {
+            test('a test without closure')->assertNull(null);
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestWithoutAClosureWithSeveralDecorators()
+    {
+        testCase(function () {
+            test('a test without closure')
+                ->assertTrue(true)
+                ->assertNull(null);
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateARootTestWithItAndWithoutTitleOrClosure()
+    {
+        it()->assertSame(50, 50);
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateARootTestWithItAndWithoutAClosure()
+    {
+        it('a test without closure')->assertNull(null);
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateARootTestWithItAndWithoutAClosureWithSeveralDecorators()
+    {
+        test('a test without closure')
+            ->assertTrue(true)
+            ->assertNull(null)
+        ;
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestWithItAndWithoutTitleOrClosure()
+    {
+        testCase(function () {
+            it()->assertSame(50, 50);
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestWithItAndWithoutAClosure()
+    {
+        testCase(function () {
+            it('a test without closure')->assertNull(null);
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestWithItAndWithoutAClosureWithSeveralDecorators()
+    {
+        testCase(function () {
+            it('a test without closure')
+                ->assertTrue(true)
+                ->assertNull(null);
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
 }

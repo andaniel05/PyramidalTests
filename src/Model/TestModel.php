@@ -20,8 +20,30 @@ class TestModel extends AbstractModel implements ComponentInterface
      */
     protected $method;
 
-    public function __construct(string $title, Closure $closure, string $methodName)
+    /**
+     * @var Closure[]
+     */
+    protected $decorators = [];
+
+    /**
+     * @var boolean
+     */
+    protected $isDecorated = false;
+
+    public function __construct(string $title, ?Closure $closure, string $methodName)
     {
+        if (! $closure) {
+            $thisTestModel = $this;
+            $this->isDecorated = true;
+
+            // this closure is composite by decorators.
+            $closure = function () use ($thisTestModel) {
+                foreach ($thisTestModel->getDecorators() as $decorator) {
+                    $decorator->call($this);
+                }
+            };
+        }
+
         parent::__construct($title, $closure);
 
         $this->method = new Method($methodName);
@@ -52,6 +74,14 @@ class TestModel extends AbstractModel implements ComponentInterface
 
     public function __call($methodName, $arguments)
     {
+        if ($this->isDecorated) {
+            $this->decorators[] = function () use ($methodName, $arguments) {
+                call_user_func_array([$this, $methodName], $arguments);
+            };
+
+            return $this;
+        }
+
         $testCaseModel = $this->parent;
 
         return call_user_func_array([$testCaseModel, $methodName], $arguments);
@@ -90,5 +120,10 @@ class TestModel extends AbstractModel implements ComponentInterface
 
             return $this;
         }
+    }
+
+    public function getDecorators(): array
+    {
+        return $this->decorators;
     }
 }

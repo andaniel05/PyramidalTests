@@ -136,7 +136,7 @@ abstract class DSL
     }
 
     /**
-     * @param string|Closure $title
+     * @param string|null|Closure $title
      * @param Closure $closure
      * @return TestModel
      */
@@ -148,6 +148,9 @@ abstract class DSL
         } elseif ($firstArgument instanceof Closure) {
             $title = '';
             $closure = $firstArgument;
+        } elseif ((is_string($firstArgument) || is_null($firstArgument)) && ! $secondArgument instanceof Closure) {
+            $title = strval($firstArgument);
+            $closure = null;
         } else {
             throw new TypeError('Invalid arguments.');
         }
@@ -158,9 +161,13 @@ abstract class DSL
         ;
 
         if (! $currentTestCaseModel instanceof TestCaseModel) {
-            $currentTestCaseModel = self::createRootTestCaseModel(
-                self::getTitleForRootTestCaseModelFromClosure($closure)
-            );
+            if ($closure) {
+                $currentTestCaseModel = self::createRootTestCaseModel(
+                    self::getTitleForRootTestCaseModelFromClosure($closure)
+                );
+            } else {
+                $currentTestCaseModel = self::createRootTestCaseModel(uniqid('TestCase'));
+            }
         }
 
         $totalOfCurrentTestModels = count($currentTestCaseModel->getRootTestModels());
@@ -168,10 +175,14 @@ abstract class DSL
         $methodName = 'test'.$id;
 
         if (! $title) {
-            $reflectionFunction = new ReflectionFunction($closure);
-            $line = ':'.$reflectionFunction->getStartLine();
+            if ($closure) {
+                $reflectionFunction = new ReflectionFunction($closure);
+                $line = ':'.$reflectionFunction->getStartLine();
 
-            $title = "{$methodName} {$line}";
+                $title = "{$methodName} {$line}";
+            } else {
+                $title = $methodName;
+            }
         }
 
         $newTestModel = new TestModel($title, $closure, $methodName);

@@ -51,7 +51,7 @@ function beforeEach(Closure $closure, bool $invokeParents = true): void
  * @param string|Closure
  * @param Closure|null
  */
-function it($firstArgument, Closure $secondArgument = null): TestModel
+function it($firstArgument = null, Closure $secondArgument = null): TestModel
 {
     return DSL::test($firstArgument, $secondArgument);
 }
