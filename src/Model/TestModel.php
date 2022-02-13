@@ -7,6 +7,7 @@ use Closure;
 use ThenLabs\ClassBuilder\Model\Method;
 use ThenLabs\Components\ComponentInterface;
 use ThenLabs\Components\ComponentTrait;
+use ThenLabs\PyramidalTests\Decorator\Context;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -38,8 +39,14 @@ class TestModel extends AbstractModel implements ComponentInterface
 
             // this closure is composite by decorators.
             $closure = function () use ($thisTestModel) {
+                $context = new Context($this);
+
                 foreach ($thisTestModel->getDecorators() as $decorator) {
-                    $decorator->call($this);
+                    $result = $decorator->call($context);
+
+                    if (is_object($result)) {
+                        $context = new Context($result, $context);
+                    }
                 }
             };
         }
@@ -76,7 +83,7 @@ class TestModel extends AbstractModel implements ComponentInterface
     {
         if ($this->isDecorated) {
             $this->decorators[] = function () use ($methodName, $arguments) {
-                call_user_func_array([$this, $methodName], $arguments);
+                return call_user_func_array([$this, $methodName], $arguments);
             };
 
             return $this;
