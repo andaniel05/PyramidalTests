@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace ThenLabs\PyramidalTests\Tests\Unit;
 
 use DateTime;
-use PHPUnit\Framework\Assert;
 use ReflectionClass;
 use ThenLabs\ClassBuilder\ClassBuilder;
 use ThenLabs\ClassBuilder\TraitBuilder;
@@ -1264,6 +1263,45 @@ class NestedStyleTest extends UnitTestCase
                 ->objectMethod1()
                 ->objectMethod2()
             ->end()
+            ->expectOutputString("objectMethod1\nobjectMethod2\n")
+        ;
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestComposedByMultilevelDecoratorsUsingEndForGoTheTop1()
+    {
+        $object = new class {
+            public function objectMethod1()
+            {
+                echo 'objectMethod1'.PHP_EOL;
+
+                return new class {
+                    public function objectMethod2()
+                    {
+                        echo 'objectMethod2'.PHP_EOL;
+                    }
+                };
+            }
+        };
+
+        $baseTestCaseClass = (new ClassBuilder)->extends('PHPUnit\Framework\TestCase')
+            ->addMethod('myMethod')
+                ->setClosure(function () use ($object) {
+                    return $object;
+                })
+            ->end()
+        ;
+        $baseTestCaseClass->install();
+
+        setTestCaseClass($baseTestCaseClass->getFCQN());
+
+        test()
+            ->myMethod()
+            ->objectMethod1()
+            ->objectMethod2()
             ->expectOutputString("objectMethod1\nobjectMethod2\n")
         ;
 

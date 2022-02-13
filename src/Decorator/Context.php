@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace ThenLabs\PyramidalTests\Decorator;
 
-use Exception;
-use Throwable;
+use TypeError;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -37,13 +36,13 @@ class Context
     {
         try {
             return call_user_func_array([$this->subject, $name], $arguments);
-        } catch (Throwable $exception) {
+        } catch (TypeError $exception1) {
             $parent = $this->parent;
 
             while ($parent) {
                 try {
                     return call_user_func_array([$parent, $name], $arguments);
-                } catch (Throwable $exception) {
+                } catch (TypeError $exception2) {
                     $parent = $parent->end();
                 }
             }
