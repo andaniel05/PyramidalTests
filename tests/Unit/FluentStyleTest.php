@@ -76,7 +76,7 @@ class FluentStyleTest extends UnitTestCase
                 test('the test1', $this->closure2 = function () {
                     $this->assertTrue(true);
                 });
-            })->endTestCase()
+            })->end()
 
             ->test('the root test 2', $this->closure3 = function () {
                 $this->assertTrue(true);
@@ -86,7 +86,7 @@ class FluentStyleTest extends UnitTestCase
                 ->test('the test2', $this->closure4 = function () {
                     $this->assertTrue(true);
                 })
-            ->endTestCase()
+            ->end()
 
             ->test($this->closure5 = function () {
                 $this->assertTrue(true);
@@ -242,8 +242,8 @@ class FluentStyleTest extends UnitTestCase
                     $this->assertArrayNotHasKey('MyTestCase', Registry::$data);
                     $this->assertTrue(Registry::$data['Nested1']);
                 })
-            ->endTestCase()
-        ->endTestCase();
+            ->end()
+        ->end();
 
         $result = $this->runTests();
 

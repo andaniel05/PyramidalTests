@@ -18,7 +18,7 @@ use ThenLabs\PyramidalTests\Model\TestModel;
 require_once __DIR__.'/Common.php';
 
 DecoratorsRegistry::registerGlobal('testCase', new TestCaseDecorator());
-DecoratorsRegistry::registerGlobal('endTestCase', new EndTestCaseDecorator());
+DecoratorsRegistry::registerGlobal('end', new EndTestCaseDecorator());
 DecoratorsRegistry::registerGlobal('setUpBeforeClass', new SetUpBeforeClassDecorator());
 DecoratorsRegistry::registerGlobal('setUpBeforeClassOnce', new SetUpBeforeClassOnceDecorator());
 DecoratorsRegistry::registerGlobal('setUp', new SetUpDecorator());
