@@ -1350,4 +1350,43 @@ class NestedStyleTest extends UnitTestCase
 
         $this->assertExpectedTotals(['success' => 1], $result);
     }
+
+    public function testDecoratedTestCaseCanInvokeStaticMethodsOfTestCaseClass()
+    {
+        $baseTestCaseClass = (new ClassBuilder)->extends('PHPUnit\Framework\TestCase')
+            ->addProperty('counter')
+                ->setStatic(true)
+                ->setDefaultValue(0)
+            ->end()
+
+            ->addMethod('myStaticWichReturnsNone')
+                ->setStatic(true)
+                ->setClosure(function () {
+                    static::$counter++;
+                })
+            ->end()
+
+            ->addMethod('myStaticMethodWichReturnsAnObject')
+                ->setStatic(true)
+                ->setClosure(function () {
+                    static::$counter++;
+                })
+            ->end()
+        ;
+        $baseTestCaseClass->install();
+
+        setTestCaseClass($baseTestCaseClass->getFCQN());
+
+        testCase('my test case')
+            ->myStaticWichReturnsNone()
+            ->myStaticMethodWichReturnsAnObject()
+            ->test(function () {
+                $this->assertSame(2, static::$counter);
+            })
+        ;
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
 }

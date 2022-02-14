@@ -14,6 +14,6 @@ class TestDecorator extends AbstractDecorator
 {
     public function applyTo(TestCaseModel $testCaseModel, array $arguments)
     {
-        return DSL::test($arguments[0], $arguments[1] ?? null, $testCaseModel);
+        return DSL::test($arguments[0] ?? null, $arguments[1] ?? null, $testCaseModel);
     }
 }
