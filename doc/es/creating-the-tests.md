@@ -312,11 +312,11 @@ test(function () {
 
 ## Mostrando otras formas de crear las pruebas.
 
-El estilo que hemos mostrando hasta ahora lo denominados TDD. Pero adicionalmente, se encuentran disponibles otras funciones cuyos nombres constrituyen otro estilo bastante popular en otros proyectos y preferido por muchos desarrolladores.
+El estilo que hemos mostrando hasta utiliza funciones cuyos nombres se corresponden con funciones clave en [PHPUnit][PHPUnit]. Pero adicionalmente, se encuentran disponibles otras funciones cuyos nombres constrituyen otro estilo bastante popular en otros proyectos y preferido por muchos desarrolladores.
 
 El siguiente fragmento de código es totalmente equivalente al mostrado en el primer ejemplo de este documento.
 
-### BDD.
+### Describe-It.
 
 ```php
 <?php
