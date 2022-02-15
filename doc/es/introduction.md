@@ -11,7 +11,7 @@ Para demostrar un poco lo comentado anteriormente veamos el siguiente ejemplo do
 
 ```php
 <?php
-// tests/test-it-is-created-a-product.php
+// tests/test-an-example.php
 
 testCase('it is created a product', function () {
     setUp(function () {
@@ -68,6 +68,10 @@ Este ejemplo tan sencillo muestra los beneficios que [PyramidalTests][PyramidalT
 Si solo estuviéramos usando [PHPUnit][PHPUnit] y quisiéramos obtener el mismo resultado anterior de entrada esto no sería posible ya que por defecto este no muestra márgenes en los resultados. Además, la reutilización del código sería todo un reto porque no bastaría con solo usar la herencia entre las clases de los casos ya que los métodos cuyo nombre cuentan con el prefijo *test* también se estarían heredando y esto implicaría que el segundo caso contendría tres pruebas y no solo una como ocurre en el ejemplo.
 
 Lo que hemos mostrado aquí no son solo las únicas bondades que ofrece [PyramidalTests][PyramidalTests] y lo exhortamos a seguir leyendo para que conozca más al respecto.
+
+---
+
+<span class="float-end">Siguiente: [Instalación](installation.md)</span>
 
 [PHPUnit]: https://phpunit.de/
 [SUT]: https://en.wikipedia.org/wiki/System_under_test

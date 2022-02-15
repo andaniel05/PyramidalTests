@@ -123,22 +123,17 @@ De manera general y a modo de resumen, es posible personalizar **TODO** lo que s
 
 De esta misma manera podríamos definir y usar proveedores de datos:
 
+Gracias al método `with(array $data)` es posible crear tests con proveedores de datos.
+
 ```php
 <?php
 
-testCase('title of the test case', function () {
-    method('myProvider', function () {
-        return [
-            // ...
-        ];
-    });
-
-    test('title of the test', function ($arg1, $arg2) {
-        // ...
-    })->addComment('@provider myProvider');
-
-    // ...
-});
+test('a test with data provider', function ($a, $b, $result) {
+    $this->assertSame($result, $a + $b);
+})->with([
+    [1, 1, 2],
+    [2, 2, 4],
+]);
 ```
 
 ## Definiendo la clase base de los casos de prueba.
@@ -361,10 +356,9 @@ Y de esta manera podríamos hacer uso de los mismos:
 
 ```php
 <?php
-// tests/test-example.php
 
 test(function () {
-    expect(true)->toBe(true);
+    expect(true)->toBe(true); // Pest expectations.
 });
 ```
 
@@ -392,7 +386,7 @@ testCase('title of the test case')
         ->test(function () {
             // ...
         })
-    ->endTestCase()
+    ->end()
 
     ->tearDown(function () {
         // ...
@@ -403,6 +397,11 @@ testCase('title of the test case')
     })
 ;
 ```
+
+---
+
+<span class="float-start">Anterior: [El comando pyramidal](the-pyramidal-command.md)</span>
+<span class="float-end">Siguiente: [Creando pruebas End-to-End](end-to-end.md)</span>
 
 [Pest]: https://pestphp.com/
 [PHP]: https://www.php.net/
