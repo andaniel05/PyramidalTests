@@ -25,7 +25,7 @@ class Framework extends Command
     public const VERSION = '2.0.0';
 
     public const DEFAULT_OPTIONS = [
-        'dsl'          => ['TDD', 'BDD'],
+        'dsl'          => ['phpunit', 'describe-it'],
         'file_pattern' => '^test.*\.php$',
         'colors'       => true,
         'testdox'      => false,
@@ -232,10 +232,10 @@ class Framework extends Command
 
     private function loadDsl(string $dsl): void
     {
-        if (0 === strcasecmp($dsl, 'TDD')) {
-            require_once __DIR__.'/DSL/TDD.php';
-        } elseif (0 === strcasecmp($dsl, 'BDD')) {
-            require_once __DIR__.'/DSL/BDD.php';
+        if (0 === strcasecmp($dsl, 'PHPUnit')) {
+            require_once __DIR__.'/DSL/PHPUnit.php';
+        } elseif (0 === strcasecmp($dsl, 'describe-it')) {
+            require_once __DIR__.'/DSL/DescribeIt.php';
         } else {
             throw new PyramidalTestsException("The value '{$dsl}' is not a valid DSL.");
         }
