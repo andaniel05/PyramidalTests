@@ -51,7 +51,7 @@ function setUp(Closure $closure, bool $invokeParents = true): void
  * @param string|Closure
  * @param Closure|null
  */
-function test($firstArgument, Closure $secondArgument = null): TestModel
+function test($firstArgument = null, Closure $secondArgument = null): TestModel
 {
     return DSL::test($firstArgument, $secondArgument);
 }

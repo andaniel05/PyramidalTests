@@ -28,6 +28,7 @@ class Framework extends Command
         'dsl'          => ['TDD', 'BDD'],
         'file_pattern' => '^test.*\.php$',
         'colors'       => true,
+        'testdox'      => false,
     ];
 
     /**
@@ -56,41 +57,6 @@ class Framework extends Command
 
         printf(self::CREDITS, self::VERSION);
 
-        if (isset($this->arguments['printer']) &&
-            $this->arguments['printer'] == CliTestDoxPrinter::class
-        ) {
-            $argv[] = '--printer='.PyramidalTestDoxPrinter::class;
-            $argv[] = '--columns=max';
-        }
-
-        if (array_key_exists('filter', $this->arguments)) {
-            self::$filter = $this->arguments['filter'];
-
-            // unsetting the original filter argument.
-            $filterArgKey = array_search('--filter', $argv);
-            if (is_int($filterArgKey)) { // style: --filter '...'
-                unset($argv[$filterArgKey], $argv[$filterArgKey + 1]);
-            } elseif (is_bool($filterArgKey)) { // style: --filter='...'
-                foreach ($argv as $key => $value) {
-                    if (0 === strpos($value, '--filter=')) {
-                        unset($argv[$key]);
-                        break;
-                    }
-                }
-            }
-
-            unset($this->arguments['filter']);
-        }
-
-        // load the DSL to use.
-        if (is_string($options['dsl'])) {
-            $this->loadDsl($options['dsl']);
-        } elseif (is_array($options['dsl'])) {
-            foreach ($options['dsl'] as $dsl) {
-                $this->loadDsl($dsl);
-            }
-        }
-
         if (isset($this->arguments['configuration'])) {
             $configurationFileName = $this->arguments['configuration'];
             $directory = dirname($configurationFileName);
@@ -102,6 +68,45 @@ class Framework extends Command
                     $options,
                     Yaml::parseFile($pyramidalYamlFileName)['pyramidal']
                 );
+            }
+
+            if (true === $options['testdox']) {
+                $argv[] = '--printer='.PyramidalTestDoxPrinter::class;
+            }
+
+            if (isset($this->arguments['printer']) &&
+                $this->arguments['printer'] == CliTestDoxPrinter::class
+            ) {
+                $argv[] = '--printer='.PyramidalTestDoxPrinter::class;
+                $argv[] = '--columns=max';
+            }
+
+            if (array_key_exists('filter', $this->arguments)) {
+                self::$filter = $this->arguments['filter'];
+
+                // unsetting the original filter argument.
+                $filterArgKey = array_search('--filter', $argv);
+                if (is_int($filterArgKey)) { // style: --filter '...'
+                    unset($argv[$filterArgKey], $argv[$filterArgKey + 1]);
+                } elseif (is_bool($filterArgKey)) { // style: --filter='...'
+                    foreach ($argv as $key => $value) {
+                        if (0 === strpos($value, '--filter=')) {
+                            unset($argv[$key]);
+                            break;
+                        }
+                    }
+                }
+
+                unset($this->arguments['filter']);
+            }
+
+            // load the DSL to use.
+            if (is_string($options['dsl'])) {
+                $this->loadDsl($options['dsl']);
+            } elseif (is_array($options['dsl'])) {
+                foreach ($options['dsl'] as $dsl) {
+                    $this->loadDsl($dsl);
+                }
             }
 
             $options['file_pattern'] = '/'.$options['file_pattern'].'/';

@@ -1052,4 +1052,341 @@ class NestedStyleTest extends UnitTestCase
         $this->assertExpectedTotals(['success' => 1], $result);
         $this->assertTestWasExecuted($this->getTestNameFromClosure($this->closure1), $result);
     }
+
+    public function testUsingProviderAcrossTheWithMethod1()
+    {
+        test(function (int $v1, int $v2, int $result) {
+            $this->assertEquals($result, $v1 + $v2);
+        })->with([
+            [1, 1, 2],
+            [2, 2, 4],
+            [3, 3, 6],
+        ]);
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 3], $result);
+    }
+
+    public function testUsingProviderAcrossTheWithMethod2()
+    {
+        testCase(function () {
+            test(function (int $v1, int $v2, int $result) {
+                $this->assertEquals($result, $v1 + $v2);
+            })->with([
+                [1, 1, 2],
+                [2, 2, 4],
+                [3, 3, 6],
+            ]);
+
+            test(function (int $v1, int $v2, int $result) {
+                $this->assertEquals($result, $v1 + $v2);
+            })->with([
+                [1, 1, 2],
+            ]);
+
+            testCase(function () {
+                test(function (int $v1, int $v2, int $result) {
+                    $this->assertEquals($result, $v1 + $v2);
+                })->with([
+                    [1, 1, 2],
+                ]);
+            });
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 5], $result);
+    }
+
+    public function testCreateARootTestWithoutTitleOrClosure()
+    {
+        test()->assertSame(50, 50);
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateARootTestWithoutAClosure()
+    {
+        test('a test without closure')->assertNull(null);
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateARootTestWithoutAClosureWithSeveralDecorators()
+    {
+        test('a test without closure')
+            ->assertTrue(true)
+            ->assertNull(null)
+        ;
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestWithoutTitleOrClosure()
+    {
+        testCase(function () {
+            test()->assertSame(50, 50);
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestWithoutAClosure()
+    {
+        testCase(function () {
+            test('a test without closure')->assertNull(null);
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestWithoutAClosureWithSeveralDecorators()
+    {
+        testCase(function () {
+            test('a test without closure')
+                ->assertTrue(true)
+                ->assertNull(null);
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateARootTestWithItAndWithoutTitleOrClosure()
+    {
+        it()->assertSame(50, 50);
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateARootTestWithItAndWithoutAClosure()
+    {
+        it('a test without closure')->assertNull(null);
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateARootTestWithItAndWithoutAClosureWithSeveralDecorators()
+    {
+        test('a test without closure')
+            ->assertTrue(true)
+            ->assertNull(null)
+        ;
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestWithItAndWithoutTitleOrClosure()
+    {
+        testCase(function () {
+            it()->assertSame(50, 50);
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestWithItAndWithoutAClosure()
+    {
+        testCase(function () {
+            it('a test without closure')->assertNull(null);
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestWithItAndWithoutAClosureWithSeveralDecorators()
+    {
+        testCase(function () {
+            it('a test without closure')
+                ->assertTrue(true)
+                ->assertNull(null);
+        });
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestComposedByMultilevelDecoratorsUsingEndForGoTheTop()
+    {
+        $object = new class {
+            public function objectMethod1(): self
+            {
+                echo 'objectMethod1'.PHP_EOL;
+
+                return $this;
+            }
+
+            public function objectMethod2(): self
+            {
+                echo 'objectMethod2'.PHP_EOL;
+
+                return $this;
+            }
+        };
+
+        $baseTestCaseClass = (new ClassBuilder)->extends('PHPUnit\Framework\TestCase')
+            ->addMethod('myMethod')
+                ->setClosure(function () use ($object) {
+                    return $object;
+                })
+            ->end()
+        ;
+        $baseTestCaseClass->install();
+
+        setTestCaseClass($baseTestCaseClass->getFCQN());
+
+        test()
+            ->myMethod()
+                ->objectMethod1()
+                ->objectMethod2()
+            ->end()
+            ->expectOutputString("objectMethod1\nobjectMethod2\n")
+        ;
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestComposedByMultilevelDecoratorsUsingEndForGoTheTop1()
+    {
+        $object = new class {
+            public function objectMethod1()
+            {
+                echo 'objectMethod1'.PHP_EOL;
+
+                return new class {
+                    public function objectMethod2()
+                    {
+                        echo 'objectMethod2'.PHP_EOL;
+                    }
+                };
+            }
+        };
+
+        $baseTestCaseClass = (new ClassBuilder)->extends('PHPUnit\Framework\TestCase')
+            ->addMethod('myMethod')
+                ->setClosure(function () use ($object) {
+                    return $object;
+                })
+            ->end()
+        ;
+        $baseTestCaseClass->install();
+
+        setTestCaseClass($baseTestCaseClass->getFCQN());
+
+        test()
+            ->myMethod()
+            ->objectMethod1()
+            ->objectMethod2()
+            ->expectOutputString("objectMethod1\nobjectMethod2\n")
+        ;
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testCreateATestComposedByMultilevelDecoratorsWithoutUsingEnd()
+    {
+        $object = new class {
+            public function objectMethod1(): self
+            {
+                echo 'objectMethod1'.PHP_EOL;
+
+                return $this;
+            }
+
+            public function objectMethod2(): self
+            {
+                echo 'objectMethod2'.PHP_EOL;
+
+                return $this;
+            }
+        };
+
+        $baseTestCaseClass = (new ClassBuilder)->extends('PHPUnit\Framework\TestCase')
+            ->addMethod('myMethod')
+                ->setClosure(function () use ($object) {
+                    return $object;
+                })
+            ->end()
+        ;
+        $baseTestCaseClass->install();
+
+        setTestCaseClass($baseTestCaseClass->getFCQN());
+
+        test()
+            ->myMethod()
+            ->objectMethod1()
+            ->objectMethod2()
+            ->expectOutputString("objectMethod1\nobjectMethod2\n")
+        ;
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
+
+    public function testDecoratedTestCaseCanInvokeStaticMethodsOfTestCaseClass()
+    {
+        $baseTestCaseClass = (new ClassBuilder)->extends('PHPUnit\Framework\TestCase')
+            ->addProperty('counter')
+                ->setStatic(true)
+                ->setDefaultValue(0)
+            ->end()
+
+            ->addMethod('myStaticWichReturnsNone')
+                ->setStatic(true)
+                ->setClosure(function () {
+                    static::$counter++;
+                })
+            ->end()
+
+            ->addMethod('myStaticMethodWichReturnsAnObject')
+                ->setStatic(true)
+                ->setClosure(function () {
+                    static::$counter++;
+                })
+            ->end()
+        ;
+        $baseTestCaseClass->install();
+
+        setTestCaseClass($baseTestCaseClass->getFCQN());
+
+        testCase('my test case')
+            ->myStaticWichReturnsNone()
+            ->myStaticMethodWichReturnsAnObject()
+            ->test(function () {
+                $this->assertSame(2, static::$counter);
+            })
+        ;
+
+        $result = $this->runTests();
+
+        $this->assertExpectedTotals(['success' => 1], $result);
+    }
 }

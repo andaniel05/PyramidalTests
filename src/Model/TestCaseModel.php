@@ -4,15 +4,18 @@ declare(strict_types=1);
 namespace ThenLabs\PyramidalTests\Model;
 
 use Closure;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Exception;
 use ReflectionClass;
+use ReflectionMethod;
 use ThenLabs\ClassBuilder\ClassBuilder;
-use ThenLabs\Components\CompositeComponentInterface;
+use ThenLabs\PyramidalTests\Decorator\Context;
 use ThenLabs\Components\CompositeComponentTrait;
+use Doctrine\Common\Annotations\AnnotationReader;
 use ThenLabs\PyramidalTests\Annotation\Decorator;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use ThenLabs\Components\CompositeComponentInterface;
 use ThenLabs\PyramidalTests\Annotation\ImportDecorators;
+use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
 use ThenLabs\PyramidalTests\Decorator\DecoratorsRegistry;
 use ThenLabs\PyramidalTests\Decorator\PackageInterface as DecoratorPackageInterface;
 
@@ -413,7 +416,6 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 
         // check if exists as an annotated method.
         if (null === $decorator) {
-            $baseClass = new ReflectionClass($this->baseClassBuilder->getParentClass());
             $reader = new AnnotationReader();
 
             foreach ($baseClass->getMethods() as $method) {
@@ -462,8 +464,50 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
             }
         }
 
+        // Check if exists a static method for use it as decorator.
+        if (null === $decorator /* && $baseClass->hasMethod($decoratorName) */) {
+            $auxClass = $baseClass;
+            $method = null;
+
+            while (null === $method) {
+                if ($auxClass->hasMethod($decoratorName)) {
+                    $method = $auxClass->getMethod($decoratorName);
+                    break;
+                } else {
+                    $auxClass = $auxClass->getParentClass();
+
+                    if (! $auxClass) {
+                        break;
+                    }
+                }
+            }
+
+            if ($method instanceof ReflectionMethod &&
+                $method->isStatic()
+            ) {
+                $decorator = new class($decoratorName, $arguments) extends AbstractDecorator
+                {
+                    public function __construct($methodName, $arguments)
+                    {
+                        $this->methodName = $methodName;
+                        $this->arguments = $arguments;
+                    }
+
+                    public function getClosure(array $arguments): ?Closure
+                    {
+                        $methodName = $this->methodName;
+                        $arguments = $this->arguments;
+
+                        return function () use ($methodName, $arguments) {
+                            call_user_func_array([static::class, $methodName], $arguments);
+                        };
+                    }
+                };
+            }
+        }
+
         if (! $decorator) {
-            throw new Exception("Decorator '{$decoratorName}' for class '{$this->baseClassBuilder->getParentClass()}' is missing.");
+            throw new Exception("Decorator '{$decoratorName}' for test case '{$this->title}' is missing.");
         }
 
         $setUpBeforeClassDecorator = $decorator->getClosure($arguments);

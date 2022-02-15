@@ -1,2 +1,3 @@
 pyramidal:
     dsl: bdd
+    testdox: true
