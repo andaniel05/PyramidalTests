@@ -47,7 +47,7 @@ Se obtendría el siguiente resultado:
 
 <pre class="text-white p-2">
 <font color="#C4A000"><b>PyramidalTests 2.x.x</b></font> by Andy Daniel Navarro Taño and contributors.
-PHPUnit 9.5.11 by Sebastian Bergmann and contributors.
+PHPUnit 9.5.x by Sebastian Bergmann and contributors.
 
 <u style="text-decoration-style:single">it is created a product</u>
 <font color="#4E9A06">✔</font> the product has not name

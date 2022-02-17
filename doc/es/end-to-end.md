@@ -72,7 +72,7 @@ Seguidamente se muestra el resultado de la ejecución del ejemplo donde puede ve
 
 <pre class="text-white p-2">$ ./vendor/bin/pyramidal --testdox
 <font color="#C4A000"><b>PyramidalTests 2.x.x</b></font> by Andy Daniel Navarro Taño and contributors.
-PHPUnit 9.5.13 by Sebastian Bergmann and contributors.
+PHPUnit 9.5.x by Sebastian Bergmann and contributors.
 
 <u style="text-decoration-style:single">open https://www.wikipedia.com</u>
  <font color="#4E9A06">✔</font> the title contains &quot;Wikipedia&quot;
