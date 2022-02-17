@@ -71,7 +71,7 @@ testCase('open https://www.wikipedia.com', function () {
 Seguidamente se muestra el resultado de la ejecución del ejemplo donde puede verse que toda la historia se ejecuta con una única instancia de un navegador tal y como comentamos anteriormente.
 
 <pre class="text-white p-2">$ ./vendor/bin/pyramidal --testdox
-<font color="#C4A000"><b>PyramidalTests 2.0.0</b></font> by Andy Daniel Navarro Taño and contributors.
+<font color="#C4A000"><b>PyramidalTests 2.x.x</b></font> by Andy Daniel Navarro Taño and contributors.
 PHPUnit 9.5.13 by Sebastian Bergmann and contributors.
 
 <u style="text-decoration-style:single">open https://www.wikipedia.com</u>
@@ -85,3 +85,8 @@ Time: 00:32.058, Memory: 6.00 MB
 
 <span style="background-color:#4E9A06"><font color="#2E3436">OK (3 tests, 3 assertions)</font></span>
 </pre>
+
+---
+
+<span class="float-start">Anterior: [Creando las pruebas](creating-the-tests.md)</span>
+<span class="float-end">Siguiente: [Trabajando con decoradores](decorators.md)</span>

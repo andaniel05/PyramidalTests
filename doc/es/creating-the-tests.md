@@ -350,7 +350,9 @@ Hemos visto que este estilo se ha venido popularizando en la comunidad [PHP][PHP
 
 Si quisiéramos hacer uso de esta característica primeramente tendríamos que instalar el paquete [pest-plugin-expectations](https://github.com/pestphp/pest-plugin-expectations):
 
-    $ composer require pestphp/pest-plugin-expectations --dev
+```text
+$ composer require pestphp/pest-plugin-expectations --dev
+```
 
 Y de esta manera podríamos hacer uso de los mismos:
 

@@ -12,6 +12,16 @@ Las funciones principales que hace este comando son las siguientes:
 4. Crear en memoria las clases de los casos de prueba.
 5. Ejecutar dichas clases con el propio ejecutor de pruebas de [PHPUnit][PHPUnit].
 
+## Filtrando pruebas en la ejecución.
+
+De una manera bastante similar a como se hace en [PHPUnit][PHPUnit], es posible ejecutar solamente determinadas pruebas y excluir el resto de la ejecución.
+
+```text
+$ ./vendor/bin/pyramidal --filter="title of test(or test case)"
+```
+
+De esta forma se ejecutarán solo las pruebas y/o casos cuyos títulos coincidan con el valor especificado al parámetro `--filter`.
+
 ---
 
 <span class="float-start">Anterior: [Instalación](installation.md)</span>
