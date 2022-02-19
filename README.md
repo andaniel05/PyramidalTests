@@ -9,8 +9,8 @@
 
 ## Documentation.
 
-- [English](doc/en/index.md)
-- [Español](doc/es/index.md)
+- [English](https://pyramidal-tests.thenlabs.org/en/docs)
+- [Español](https://pyramidal-tests.thenlabs.org/es/docs)
 
 ## Installation.
 
