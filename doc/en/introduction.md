@@ -63,11 +63,11 @@ Time: 00:00.009, Memory: 6.00 MB
 
 As can be seen, the result of the execution contains the same titles and margins as the source code, and since a natural language has been used, it can be said that a story of the operation of the [system under test][SUT] is being told.
 
-Este ejemplo muy simple muestra los beneficios que ofrece [PyramidalTests][PyramidalTests] cuando se trabaja con [PHPUnit][PHPUnit]. Decimos esto porque [PyramidalTests][PyramidalTests] está basado 100% en [PHPUnit][PHPUnit] y se podría decir que es como una extensión (o framework) del mismo que lo que hace es ampliar sus posibilidades.
+This very simple example shows the benefits that [PyramidalTests][PyramidalTests] offers when working with [PHPUnit][PHPUnit]. We say this because [PyramidalTests][PyramidalTests] is based 100% on [PHPUnit][PHPUnit] and it could be said that it is like an extension (or framework) of the same that what it does is expand its possibilities.
 
 If we were just using [PHPUnit][PHPUnit] and wanted to get the same result as above, this would not be possible since by default it does not show margins in the results. In addition, code reuse would be a challenge because it would not be enough to just use inheritance between classes since the methods whose names begin with *test* would also be inheriting and this would imply that the second case would contain three tests and not just one as in the example.
 
-Lo que hemos mostrado aquí no son solo los únicos beneficios que ofrece [PyramidalTests][PyramidalTests] y lo alentamos a que continúe leyendo para obtener más información al respecto.
+What we have shown here are not only the only benefits that [PyramidalTests][PyramidalTests] offers and we encourage you to continue reading to learn more about it.
 
 ---
 
