@@ -103,7 +103,7 @@ testCase('title of the test case', function () {
 });
 ```
 
-Functions used to create methods and properties return objects of type [Method](https://github.com/thenlabs/class-builder/blob/1.0/src/Model/Method.php) or [Property](https: //github.com/thenlabs/class-builder/blob/1.0/src/Model/Property.php) as the case may be. These results are [*builders*](https://en.wikipedia.org/wiki/Builder_pattern) that will allow you to customize any aspect of the member. For example, if you want to add an annotation in the comment block, you could do it as follows:
+Functions used to create methods and properties return objects of type [Method](https://github.com/thenlabs/class-builder/blob/1.0/src/Model/Method.php) or [Property](https://github.com/thenlabs/class-builder/blob/1.0/src/Model/Property.php) as the case may be. These results are [*builders*](https://en.wikipedia.org/wiki/Builder_pattern) that will allow you to customize any aspect of the member. For example, if you want to add an annotation in the comment block, you could do it as follows:
 
 ```php
 <?php
