@@ -1,13 +1,13 @@
 
-# Introducción.
+# Introduction.
 
-[PyramidalTests][PyramidalTests] es un framework de pruebas basado en [PHPUnit][PHPUnit] que permite que se puedan crear las pruebas con el empleo de funciones anónimas anidadas. Este método tiene algunas ventajas frente al método tradicional de [PHPUnit][PHPUnit] el cual exige que se tenga que crear una clase por cada caso.
+[PyramidalTests][PyramidalTests] is a testing framework based on [PHPUnit][PHPUnit] that allows tests to be created using nested anonymous functions. This method has some advantages over the traditional [PHPUnit][PHPUnit] method which requires you to create a class for each case.
 
-La principal ventaja que ofrece esta alternativa consiste en que las pruebas se crean con menos esfuerzo dado que se que escribe menos código, y además, se facilita la reutilización del mismo dado que por defecto, los casos anidados heredarán funcionalidades de sus padres.
+The main advantage offered by this alternative is that the tests are created with less effort since less code is written, and in addition, the reuse of the same is facilitated since by default, the nested cases will inherit functionalities from their parents.
 
-Otra de las ventajas que ofrece este método consiste en que las pruebas se pueden describir con un lenguaje natural, lo cual posibilita que con leer el resultado de la ejecución, se pueda comprender mejor el funcionamiento del [sistema bajo pruebas][SUT], aunque esto dependerá de lo explícito que logre y/o desee ser el desarrollador al contar en una historia lo que se está probando.
+Another advantage offered by this method is that the tests can be described in natural language, which makes it possible to better understand the operation of the [system under test][SUT] by reading the result of the execution, although this will depend on how explicit the developer manages and/or wishes to be in telling what is being tested in a story.
 
-Para demostrar un poco lo comentado anteriormente veamos el siguiente ejemplo donde en un único archivo se han creado tres pruebas pertenecientes a dos casos.
+To demonstrate a little what was said above, let's see the following example where three tests belonging to two cases have been created in a single file.
 
 ```php
 <?php
@@ -39,11 +39,11 @@ testCase('it is created a product', function () {
 });
 ```
 
-Una vez que se ejecuten dichas pruebas(lo cual se hace con el siguiente comando):
+Once those tests are executed (which is done with the following command):
 
     $ ./vendor/bin/pyramidal --testdox
 
-Se obtendría el siguiente resultado:
+The following result would be obtained:
 
 <pre class="text-white p-2">
 <font color="#C4A000"><b>PyramidalTests 2.x.x</b></font> by Andy Daniel Navarro Taño and contributors.
@@ -61,17 +61,17 @@ Time: 00:00.009, Memory: 6.00 MB
 <span style="background-color:#4E9A06"><font color="#2E3436">OK (3 tests, 3 assertions)</font></span>
 </pre>
 
-Como puede verse, el resultado de la ejecución contiene los mismos títulos y márgenes del código fuente, y dado que se ha empleado un lenguaje natural, se puede decir que se está contando una historia del funcionamiento del [sistema bajo pruebas][SUT].
+As can be seen, the result of the execution contains the same titles and margins as the source code, and since a natural language has been used, it can be said that a story of the operation of the [system under test][SUT] is being told.
 
-Este ejemplo tan sencillo muestra los beneficios que [PyramidalTests][PyramidalTests] ofrece a la hora de trabajar con [PHPUnit][PHPUnit]. Decimos esto porque [PyramidalTests][PyramidalTests] está basado 100% en [PHPUnit][PHPUnit] y se podría decir que es como una extensión(o framework) del mismo que lo que hace es extender sus posibilidades.
+Este ejemplo muy simple muestra los beneficios que ofrece [PyramidalTests][PyramidalTests] cuando se trabaja con [PHPUnit][PHPUnit]. Decimos esto porque [PyramidalTests][PyramidalTests] está basado 100% en [PHPUnit][PHPUnit] y se podría decir que es como una extensión (o framework) del mismo que lo que hace es ampliar sus posibilidades.
 
-Si solo estuviéramos usando [PHPUnit][PHPUnit] y quisiéramos obtener el mismo resultado anterior, de entrada, esto no sería posible ya que por defecto este no muestra márgenes en los resultados. Además, la reutilización del código sería todo un reto porque no bastaría con solo usar la herencia entre las clases dado que los métodos cuyos nombres comienzan por *test* también se estarían heredando y esto implicaría que el segundo caso contendría tres pruebas y no solo una como ocurre en el ejemplo.
+If we were just using [PHPUnit][PHPUnit] and wanted to get the same result as above, this would not be possible since by default it does not show margins in the results. In addition, code reuse would be a challenge because it would not be enough to just use inheritance between classes since the methods whose names begin with *test* would also be inheriting and this would imply that the second case would contain three tests and not just one as in the example.
 
-Lo que hemos mostrado aquí no son solo las únicas bondades que ofrece [PyramidalTests][PyramidalTests] y lo exhortamos a seguir leyendo para que conozca más al respecto.
+Lo que hemos mostrado aquí no son solo los únicos beneficios que ofrece [PyramidalTests][PyramidalTests] y lo alentamos a que continúe leyendo para obtener más información al respecto.
 
 ---
 
-<span class="float-end">Siguiente: [Instalación](installation.md)</span>
+<span class="float-end">Siguiente: [Installation](installation.md)</span>
 
 [PHPUnit]: https://phpunit.de/
 [SUT]: https://en.wikipedia.org/wiki/System_under_test

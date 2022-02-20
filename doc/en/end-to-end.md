@@ -1,18 +1,18 @@
-# Creando pruebas de extremo a extremo.
+# Creating end to end tests.
 
-A veces necesitamos crear ciertas pruebas que son muy costosas en tiempo y/o recursos dado que implican la interacción con otros procesos del sistema, como por ejemplo, abrir una nueva instancia de un navegador web, etc.
+Sometimes we need to create certain tests that are very expensive in terms of time and/or resources since they involve interaction with other system processes, such as opening a new instance of a web browser, etc.
 
-Con el objetivo de crear este tipo de pruebas es que existen las funciones `setUpBeforeClassOnce()` y `tearDownAfterClassOnce()`.
+In order to create this type of tests, there are the functions `setUpBeforeClassOnce()` and `tearDownAfterClassOnce()`.
 
->De manera equivalente también existen las funciones `beforeAllOnce()` y `afterAllOnce()`.
+>Equivalently there are also the `beforeAllOnce()` and `afterAllOnce()` functions.
 
-El ejemplo que se muestra a continuación consiste en una prueba de extremo a extremo que lo que hace es abrir una instancia de [Google Chrome](https://en.wikipedia.org/wiki/Google_Chrome), visitar el sitio de [Wikipedia](https://www.wikipedia.com), escribir "Cuba" en el buscador y presionar enter. A medida que se va avanzando entre los diferentes pasos se van probando cosas como los títulos de las páginas, etc.
+The example below is an end-to-end test that does is open an instance of [Google Chrome](https://en.wikipedia.org/wiki/Google_Chrome), visit the [Wikipedia ](https://www.wikipedia.com), write "Cuba" in the search engine and press enter. As you go through the different steps, things like page titles, etc. are tested.
 
->Para la interacción con el navegador se está utilizando [php-webdriver](https://github.com/php-webdriver/php-webdriver).
+>For interaction with the browser, [php-webdriver](https://github.com/php-webdriver/php-webdriver) is being used.
 
-Como se puede ver, tanto en el caso externo como en el interno, se hace uso de la función `setUpBeforeClassOnce()` la cual sirve para indicar que ese código se ejecutará una única vez independientemente de la cantidad de casos internos que existan.
+As you can see, both in the outer case and in the inner case, the `setUpBeforeClassOnce()` function is used, which is used to indicate that this code will be executed only once regardless of the number of inner cases that exist.
 
-Dicho de una manera más clara, cuando este archivo de pruebas se ejecute, se abrirá una única instancia del navegador y se llevarán a cabo los pasos antes comentados. En cambio, si solo se estuvieran utilizando las funciones `setUpBeforeClass`, esto implicaría que se abrieran dos instancias del navegador pues a la hora de ejecutar el caso más interno se estaría heredando el código del más externo tal y como hemos visto hasta ahora.
+Put more bluntly, when this test file is executed, a single instance of the browser will be opened and the steps discussed above will be carried out. On the other hand, if only the `setUpBeforeClass` functions were being used, this would imply that two instances of the browser would be opened, since when executing the innermost case, the code of the outermost one would be inherited, as we have seen so far.
 
 ```php
 <?php
@@ -68,7 +68,7 @@ testCase('open https://www.wikipedia.com', function () {
 });
 ```
 
-Seguidamente se muestra el resultado de la ejecución del ejemplo. Como comentamos anteriormente, toda la ejecución se llevó a cabo con una única instancia del navegador, a pesar de que el resultado muestra dos casos de prueba.
+The result of running the example is shown below. As we discussed earlier, all execution was carried out with a single instance of the browser, despite the fact that the result shows two test cases.
 
 <pre class="text-white p-2">$ ./vendor/bin/pyramidal --testdox
 <font color="#C4A000"><b>PyramidalTests 2.x.x</b></font> by Andy Daniel Navarro Taño and contributors.
@@ -88,5 +88,5 @@ Time: 00:32.058, Memory: 6.00 MB
 
 ---
 
-<span class="float-start">Anterior: [Creando las pruebas](creating-the-tests.md)</span>
-<span class="float-end">Siguiente: [Trabajando con decoradores](decorators.md)</span>
+<span class="float-start">Back: [Creating the tests](creating-the-tests.md)</span>
+<span class="float-end">Next: [Working with decorators](decorators.md)</span>

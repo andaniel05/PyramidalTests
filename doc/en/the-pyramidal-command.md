@@ -1,31 +1,31 @@
-# El comando pyramidal.
+# The pyramidal command.
 
-Una vez que hayamos realizado la instalación deberemos ejecutar el comando `./vendor/bin/pyramidal` para ejecutar las pruebas que [PyramidalTests][PyramidalTests] deberá ejecutar.
+Once we have done the installation we will have to execute the command `./vendor/bin/pyramidal` to execute the tests that [PyramidalTests][PyramidalTests] should execute.
 
-Es muy importante comentar que este comando no es más que una envoltura de `./vendor/bin/phpunit` y es que como comentamos en la [introducción](introduction.md), [PyramidalTests][PyramidalTests] está construído sobre [PHPUnit][PHPUnit] por lo que mantiene **TODAS** las opciones y filosofía del mismo. Esto lo podría comprobar si especifica el argumento `--help` donde se mostrarán en pantalla exactamente las mismas opciones.
+It is very important to comment that this command is nothing more than a wrapper of `./vendor/bin/phpunit` and it is that as we commented in the [introduction](introduction.md), [PyramidalTests][PyramidalTests] is built on top of [PHPUnit ][PHPUnit] therefore maintains **ALL** the options and philosophy of it. This could be checked by specifying the `--help` argument where exactly the same options will be displayed.
 
-Las funciones principales que hace este comando son las siguientes:
+The main functions of this command are the following:
 
-1. Analizar el archivo `phpunit.xml` del proyecto.
-2. En caso de que exista, analizar el archivo `pyramidal.yaml` el cual se usa para especificar [opciones de configuración de PyramidalTests](config-options.md).
-3. Ejecutar los archivos `.php` que se encuentren en los directorios de las suites definidas en este archivo, y cuyos nombres comiencen por `test`(configurable).
-4. Crear en memoria las clases de los casos de prueba.
-5. Ejecutar dichas clases con el propio ejecutor de pruebas de [PHPUnit][PHPUnit].
+1. Parse the project's `phpunit.xml` file.
+2. If it exists, parse the `pyramidal.yaml` file which is used to specify [PyramidalTests configuration options](config-options.md).
+3. Execute the `.php` files found in the directories of the suites defined in this file, and whose names start with `test`(configurable).
+4. Create test case classes in memory.
+5. Run those classes with [PHPUnit][PHPUnit]'s own test runner.
 
-## Filtrando pruebas en la ejecución.
+## Filtering tests in the execution.
 
-De una manera bastante similar a como se hace en [PHPUnit][PHPUnit], es posible ejecutar solamente determinadas pruebas y excluir el resto de la ejecución.
+In much the same way as [PHPUnit][PHPUnit], it is possible to run only certain tests and exclude the rest from execution.
 
 ```text
 $ ./vendor/bin/pyramidal --filter="title of test(or test case)"
 ```
 
-De esta forma se ejecutarán solo las pruebas y/o casos cuyos títulos coincidan con el valor especificado al parámetro `--filter`.
+This way only tests and/or cases whose titles match the value specified to the `--filter` parameter will be executed.
 
 ---
 
-<span class="float-start">Anterior: [Instalación](installation.md)</span>
-<span class="float-end">Siguiente: [Creando las pruebas](creating-the-tests.md)</span>
+<span class="float-start">Back: [Installation](installation.md)</span>
+<span class="float-end">Next: [Creating the tests](creating-the-tests.md)</span>
 
 [PyramidalTests]: https://pyramidal-tests.thenlabs.org
 [Composer]: https://getcomposer.org/

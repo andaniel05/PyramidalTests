@@ -1,11 +1,11 @@
 
-# Creando las pruebas.
+# Creating the tests.
 
-Como se comentó anteriormente, [PyramidalTests][PyramidalTests] se basa en construir de manera dinámica las clases que finalmente serán ejecutadas por [PHPUnit][PHPUnit].
+As mentioned before, [PyramidalTests][PyramidalTests] is based on dynamically building the classes that will ultimately be executed by [PHPUnit][PHPUnit].
 
->La construcción dinámica de las clases se logra gracias al proyecto [ClassBuilder][ClassBuilder].
+>The dynamic construction of the classes is achieved thanks to the [ClassBuilder][ClassBuilder] project.
 
-Las clases y sus miembros se van definiendo con llamadas a funciones cuyos nombres se corresponden con los métodos claves propios de [PHPUnit][PHPUnit]. Por ejemplo:
+The classes and their members are defined with calls to functions whose names correspond to the key methods of [PHPUnit][PHPUnit]. For example:
 
 ```php
 <?php
@@ -33,7 +33,7 @@ testCase('title of the test case', function () {
 });
 ```
 
-Del código anterior se puede deducir fácilmente lo que define cada una de las funciones que se emplean. El mismo estaría generando una clase equivalente a la siguiente:
+From the code above you can easily deduce what defines each of the functions used. It would be generating a class equivalent to the following:
 
 ```php
 <?php
@@ -73,11 +73,11 @@ class TestCaseXYZ extends \PHPUnit\Framework\TestCase
 }
 ```
 
->Es muy importante aclarar que en ningún momento el usuario interactúa con la clase generada, de hecho, este es un proceso totalmente transparente al mismo. Este ejemplo solo lo ponemos para que se comprenda mejor el uso de las funciones.
+>It is very important to clarify that at no time does the user interact with the generated class, in fact, this is a totally transparent process. We only put this example so that the use of the functions is better understood.
 
-## Definiendo miembros a las clases.
+## Defining members to classes.
 
-Cuando se trabaja con [PHPUnit][PHPUnit] suele ser frecuente que a las clases se les agreguen nuevos métodos y propiedades. Esto se puede lograr de la siguiente manera:
+When working with [PHPUnit][PHPUnit] it is often the case that new methods and properties are added to classes. This can be achieved as follows:
 
 ```php
 <?php
@@ -103,7 +103,7 @@ testCase('title of the test case', function () {
 });
 ```
 
-Las funciones que sirven para crear métodos y propiedades devuelven objetos de tipo [Method](https://github.com/thenlabs/class-builder/blob/1.0/src/Model/Method.php) o [Property](https://github.com/thenlabs/class-builder/blob/1.0/src/Model/Property.php) según sea el caso. Estos resultados son [*builders*](https://es.wikipedia.org/wiki/Builder_(patr%C3%B3n_de_dise%C3%B1o)) que le permitirán personalizar cualquier aspecto del miembro. Por ejemplo, en caso de que se desee agregar una anotación en el bloque de comentarios se podría hacer de la siguiente manera:
+Functions used to create methods and properties return objects of type [Method](https://github.com/thenlabs/class-builder/blob/1.0/src/Model/Method.php) or [Property](https: //github.com/thenlabs/class-builder/blob/1.0/src/Model/Property.php) as the case may be. These results are [*builders*](https://en.wikipedia.org/wiki/Builder_pattern) that will allow you to customize any aspect of the member. For example, if you want to add an annotation in the comment block, you could do it as follows:
 
 ```php
 <?php
@@ -117,11 +117,11 @@ testCase('title of the test case', function () {
 });
 ```
 
-### Trabajando con proveedores de datos.
+### Working with data providers.
 
-De esta misma manera podríamos definir y usar proveedores de datos:
+In this same way we could define and use data providers.
 
-Gracias al método `with(array $data)` es posible crear [tests con proveedores de datos](https://phpunit.readthedocs.io/en/9.5/writing-tests-for-phpunit.html#data-providers).
+Thanks to the `with(array $data)` method it is possible to create [tests with data providers](https://phpunit.readthedocs.io/en/9.5/writing-tests-for-phpunit.html#data-providers) .
 
 ```php
 <?php
@@ -134,9 +134,9 @@ test('a test with data provider', function ($a, $b, $result) {
 ]);
 ```
 
-## Definiendo la clase base de los casos de prueba.
+## Defining the base class of the test cases.
 
-La clase base por defecto es `PHPUnit\Framework\TestCase` pero cuando se necesite utilizar otra es posible hacerlo de la siguiente manera:
+The default base class is `PHPUnit\Framework\TestCase` but when you need to use another one you can do it like this:
 
 ```php
 <?php
@@ -148,13 +148,13 @@ testCase('title of the test case', function () {
 });
 ```
 
-## Anidación y reutilización de casos de prueba.
+## Nesting and reuse of test cases.
 
-Como se ha comentado anteriormente una de las mayores ventajas que ofrece [PyramidalTests][PyramidalTests] es que permite anidar casos de prueba lo cual posibilita la reutilización del código.
+As previously mentioned, one of the greatest advantages offered by [PyramidalTests][PyramidalTests] is that it allows nesting of test cases, which enables code reuse.
 
-Cuando se anidan dos o más casos, las clases de los más internos heredarán de los más externos pero hay que tener en cuenta que **las pruebas no son heredadas**.
+When two or more cases are nested, the classes of the innermost ones will inherit from the outermost ones but keep in mind that **tests are not inherited**.
 
-El siguiente ejemplo muestra que en la prueba se está utilizando una propiedad definida en el método `setUp()` del caso padre.
+The following example shows that a property defined in the parent case's `setUp()` method is being used in the test.
 
 ```php
 <?php
@@ -179,7 +179,7 @@ testCase('the parent test case', function () {
 });
 ```
 
-Esto ocurre porque cada método clave de [PHPUnit][PHPUnit](`setUp` en este caso) invoca al padre antes de su ejecución, pero esto puede ser desactivado indicando `false` como segundo argumento en la llamada a dicha función. Ejemplo:
+This happens because each key method of [PHPUnit][PHPUnit](`setUp` in this case) calls the parent before its execution, but this can be disabled by passing `false` as the second argument to the call to that function. Example:
 
 ```php
 <?php
@@ -204,11 +204,11 @@ testCase('the parent test case', function () {
 });
 ```
 
-## Trabajando con macros.
+## Working with macros.
 
-Con el objetivo de facilitar en la mayor medida posible la reutilización de pruebas y casos es que exiten las denominadas macros.
+With the aim of facilitating the reuse of tests and cases as much as possible, the so-called macros exist.
 
-En el siguiente ejemplo se ha creado una macro la cual contiene una prueba que depende de la propiedad `myProperty` del contexto. Puede verse que dicha prueba es reutilizada en dos casos que poseen la propiedad `myProperty` pero creadas de diferentes maneras.
+In the following example, a macro has been created which contains a test that depends on the `myProperty` property of the context. You can see that such a test is reused in two cases that have the `myProperty` property but are created in different ways.
 
 ```php
 <?php
@@ -234,7 +234,7 @@ testCase('my test case 2', function () {
 });
 ```
 
-También es importante mencionar que las macros se pueden crear dentro de los casos de prueba y que además pueden ser extendidos de la siguiente manera:
+It is also important to mention that macros can be created within test cases and can also be extended as follows:
 
 ```php
 <?php
@@ -256,9 +256,9 @@ testCase('my test case', function () {
 });
 ```
 
-## Trabajando con pruebas y casos sin títulos.
+## Working with tests and cases without titles.
 
-Hasta este momento siempre hemos visto que a las llamadas a las funciones `testCase()` y `test()` siempre se les especifica un título como su primer argumento. Algo que puede resultar útil en determinados casos es el hecho de obviar esos títulos y en su lugar centrarse directamente en la implementación del código. Ejemplo:
+Up to this point we have always seen that calls to the `testCase()` and `test()` functions always specify a title as their first argument. Something that can be useful in certain cases is to skip those titles and instead focus directly on the implementation of the code. Example:
 
 ```php
 <?php
@@ -271,7 +271,7 @@ testCase(function () {
 });
 ```
 
-Si a la hora de ejecutar esas pruebas lo hiciéramos especificando la opción `--testdox` se mostraría un resultado como el siguiente:
+If, when executing these tests, we did it by specifying the `--testdox` option, a result like the following would be displayed:
 
 <pre class="text-white p-2"><font color="#C4A000"><b>PyramidalTests 2.x.x</b></font> by Andy Daniel Navarro Taño and contributors.
 PHPUnit 9.5.x by Sebastian Bergmann and contributors.
@@ -283,11 +283,11 @@ Time: 00:00.004, Memory: 6.00 MB
 
 <span style="background-color:#4E9A06"><font color="#2E3436">OK (1 test, 1 assertion)</font></span></pre>
 
-Como puede verse, en esas situaciones se mostrará como título del caso la ruta relativa del archivo donde se encuentre definido, y como título para las pruebas se usará el prefijo `test` seguido del número que le corresponda, y por último, se mostrará el número de la línea donde se ha llamado a la función `test()`.
+As can be seen, in these situations the relative path of the file where it is defined will be displayed as the title of the case, and as title for the tests the prefix `test` will be used followed by the corresponding number, and finally, the number of the line where the `test()` function was called.
 
-### Creando pruebas sin definir un caso padre.
+### Creating tests without defining a parent case.
 
-Un resultado similar al anterior se podría obtener obviando la llamada a `testCase()` tal y como muestra el siguiente ejemplo. Esto puede ser útil en archivos donde solo contengan un único caso.
+A result similar to the above could be obtained by skipping the `testCase()` call, as the following example shows. This can be useful in files that only contain a single case.
 
 ```php
 <?php
@@ -308,11 +308,11 @@ test(function () {
 // ...
 ```
 
-## Mostrando otras formas de crear las pruebas.
+## Showing other ways to create tests.
 
-El estilo que hemos mostrando hasta utiliza funciones cuyos nombres se corresponden con funciones clave en [PHPUnit][PHPUnit]. Pero adicionalmente, se encuentran disponibles otras funciones cuyos nombres constrituyen otro estilo bastante popular en otros proyectos y preferido por muchos desarrolladores.
+The style we've shown so far uses functions whose names correspond to key functions in [PHPUnit][PHPUnit]. But additionally, other functions are available whose names constitute another style that is quite popular in other projects and preferred by many developers.
 
-El siguiente fragmento es totalmente equivalente al mostrado en el primer ejemplo de este documento. Los comentarios muestran la función equivalente al estilo original.
+The following snippet is fully equivalent to the one shown in the first example of this document. The comments show the function equivalent to the original style.
 
 ### Describe-It.
 
@@ -342,17 +342,17 @@ describe('my custom title', function () { // testCase()
 });
 ```
 
-Hemos visto que este estilo se ha venido popularizando en la comunidad [PHP][PHP] gracias al excelente *framework* [Pest][Pest]. Una de las características que más prefieren los usuarios del mismo es la de emplear expectativas en vez de los aciertos de [PHPUnit][PHPUnit].
+We have seen that this style has become popular in the [PHP][PHP] community thanks to the excellent *framework* [Pest][Pest]. One of the features that users prefer the most is to use expectations instead of [PHPUnit][PHPUnit]'s asserts.
 
-#### Usando expectativas en vez de aciertos.
+#### Using expectations instead of asserts.
 
-Si quisiéramos hacer uso de esta característica primeramente tendríamos que instalar el paquete [pest-plugin-expectations](https://github.com/pestphp/pest-plugin-expectations):
+If we wanted to make use of this feature, we would first have to install the [pest-plugin-expectations](https://github.com/pestphp/pest-plugin-expectations) package:
 
 ```text
 $ composer require pestphp/pest-plugin-expectations --dev
 ```
 
-Y de esta manera podríamos hacer uso de los mismos:
+And in this way we could make use of them:
 
 ```php
 <?php
@@ -362,9 +362,9 @@ test(function () {
 });
 ```
 
-### Usando decoradores.
+### Using decorators.
 
-Los decoradores ofrecen a los usuarios formas simplicadas de hacer cosas. Más adelante abordaremos en profundidad este tema, pero por ahora queremos mostrar que existe un estilo adicional para crear las pruebas y los casos:
+Decorators offer users simplified ways of doing things. We'll cover this in depth later, but for now we want to show that there is an additional style for creating tests and cases:
 
 ```php
 <?php
@@ -400,8 +400,8 @@ testCase('title of the test case')
 
 ---
 
-<span class="float-start">Anterior: [El comando pyramidal](the-pyramidal-command.md)</span>
-<span class="float-end">Siguiente: [Creando pruebas de extremo a extremo](end-to-end.md)</span>
+<span class="float-start">Back: [The pyramidal command](the-pyramidal-command.md)</span>
+<span class="float-end">Next: [Creating end to end tests](end-to-end.md)</span>
 
 [Pest]: https://pestphp.com/
 [PHP]: https://www.php.net/

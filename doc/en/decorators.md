@@ -1,12 +1,12 @@
-# Trabajando con decoradores.
+# Working with decorators.
 
-Hasta ahora hemos visto que las implementaciones de pruebas y casos se realizan mediante el uso de funciones [cierre](https://www.php.net/manual/es/functions.anonymous.php), pero de manera alternativa, también es posible realizar ciertas implementaciones mediante llamadas sucesivas a los modelos.
+So far we have seen that test and case implementations are done by using [closures](https://www.php.net/manual/functions.anonymous.php) functions, but alternatively, it is also It is possible to make certain implementations by means of successive calls to the models.
 
->Los modelos son los valores devueltos por las funciones usadas para crear las pruebas y los casos. En el caso de `testCase()` y `describe()` devuelven un objeto de tipo `ThenLabs\PyramidalTests\Model\TestCaseModel` mientras que `test()` e `it()`, el objeto devuelto es de tipo `ThenLabs\PyramidalTests\Model\TestModel`.
+>Models are the values returned by the functions used to create the tests and cases. In the case of `testCase()` and `describe()` they return an object of type `ThenLabs\PyramidalTests\Model\TestCaseModel` while `test()` and `it()` return an object of type ` ThenLabs\PyramidalTests\Model\TestModel`.
 
-## Creando pruebas con decoradores.
+## Creating tests with decorators.
 
-El siguiente ejemplo muestra una prueba que ha sido creada sin especificar una función [cierre][closure](y ni siquiera un título). En cambio se ha llamado directamente a `assertTrue(true)` sobre el modelo y de esta manera se ha llevado a cabo su implementación.
+The following example shows a test that has been created without specifying a [closure][closure] function (and not even a title). Instead, `assertTrue(true)` has been called directly on the model and its implementation has been carried out in this way.
 
 ```php
 <?php
@@ -14,9 +14,9 @@ El siguiente ejemplo muestra una prueba que ha sido creada sin especificar una f
 test()->assertTrue(true);
 ```
 
->Esta manera de crear pruebas está inspirada en las [pruebas de orden superior de Pest](https://pestphp.com/docs/higher-order-tests).
+>This way of creating tests is inspired by [Pest's higher order tests](https://pestphp.com/docs/higher-order-tests).
 
-Estas implementaciones pueden contener múltiples decoradores y estos se corresponden con los **métodos no estáticos** de la clase del caso en cuestión.
+These implementations can contain multiple decorators and these correspond to the **non-static** methods of the class in question.
 
 ```php
 <?php
@@ -36,7 +36,7 @@ test('my title')
     ->assertSame(50, 50);
 ```
 
-En las situaciones donde ciertos métodos devuelvan objetos, es posible usar también los métodos de esos objetos como decoradores. El siguiente ejemplo se corresponde con una prueba de un proyecto [Laravel][Laravel] donde el método `get()` devuelve un objeto que contiene el método `assertStatus()`.
+In situations where certain methods return objects, it is possible to use the methods of those objects as decorators as well. The following example is for a test of a [Laravel][Laravel] project where the `get()` method returns an object containing the `assertStatus()` method.
 
 ```php
 <?php
@@ -49,7 +49,7 @@ test('test title')
 ;
 ```
 
-Si en estos casos se necesita regresar al contexto anterior, recomendamos que use márgenes y llame al decorador `end()` tal y como se hace en el siguiente ejemplo:
+If in these cases you need to return to the previous context, we recommend that you use margins and call the `end()` decorator as in the following example:
 
 ```php
 <?php
@@ -64,11 +64,11 @@ test('test title')
 ;
 ```
 
-## Creando casos de prueba con decoradores.
+## Creating test cases with decorators.
 
-De manera muy similar a las pruebas, también es posible hacer uso de esta característica en los casos aunque con algunas diferencias.
+In a very similar way to tests, it is also possible to make use of this feature in cases, although with some differences.
 
-Lo primero que hay que comentar es que los decoradores serán ejecutados en el método `setUpBeforeClass()` del caso, y por tanto, solo se pueden emplear con los **métodos estáticos** de la clase en cuestión. Ejemplo:
+The first thing to mention is that the decorators will be executed in the `setUpBeforeClass()` method of the case, and therefore, they can only be used with the **static methods** of the class in question. Example:
 
 ```php
 <?php
@@ -101,8 +101,8 @@ testCase('my title')
 
 ---
 
-<span class="float-start">Anterior: [Creando pruebas de extremo a extremo](end-to-end.md)</span>
-<span class="float-end">Siguiente: [Opciones de configuración](config-options.md)</span>
+<span class="float-start">Back: [Creating end to end tests](end-to-end.md)</span>
+<span class="float-end">Next: [Configuration options](config-options.md)</span>
 
 [PHPUnit]: https://phpunit.de/
 [Pest]: https://pestphp.com/

@@ -1,6 +1,6 @@
-# Opciones de configuración.
+# Configuration options.
 
-Seguidamente se muestran todas las opciones de configuración que puede contener el archivo `pyramidal.yaml` así como sus valores por defecto.
+Below are all the configuration options that the `pyramidal.yaml` file can contain, as well as their default values.
 
 ```yaml
 pyramidal:
@@ -10,16 +10,16 @@ pyramidal:
     testdox: false
 ```
 
-`dsl` sirve para especificar la familia de funciones que utilizará para crear sus pruebas. En el caso de que se desee crear nuevas funciones se deberá especificar en esta opción la ruta al archivo.
+`dsl` is used to specify the family of functions that you will use to create your tests. If you want to create new functions, you must specify the path to the file in this option.
 
-`file_pattern` contiene la expresión regular que se utiliza para cargar sus archivos de prueba. Puede ver que por defecto se cargan los archivos `.php` cuyos nombres comiencen por `test`.
+`file_pattern` contains the regular expression used to load your test files. You can see that by default `.php` files whose names start with `test` are loaded.
 
-`colors` sirve para especificar si se utilizará la opción `--colors` del ejecutor de [PHPUnit][PHPUnit].
+`colors` is used to specify whether to use the `--colors` option of the [PHPUnit][PHPUnit] executor.
 
-`testdox` sirve para indicar si por defecto se usará la opción `--testdox` del ejecutor de [PHPUnit][PHPUnit]. Si esta opción vale `true` la llamada a `./vendor/bin/pyramidal` será equivalente a `./vendor/bin/pyramidal --testdox`.
+`testdox` is used to indicate whether the `--testdox` option of the [PHPUnit][PHPUnit] executor will be used by default. If this option is `true` the call to `./vendor/bin/pyramidal` will be equivalent to `./vendor/bin/pyramidal --testdox`.
 
 ---
 
-<span class="float-start">Anterior: [Trabajando con decoradores.](decorators.md)</span>
+<span class="float-start">Back: [Working with decorators](decorators.md)</span>
 
 [PHPUnit]: https://phpunit.de/
