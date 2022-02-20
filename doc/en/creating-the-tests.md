@@ -77,7 +77,7 @@ class TestCaseXYZ extends \PHPUnit\Framework\TestCase
 
 ## Definiendo miembros a las clases.
 
-Cuando se trabaja con [PHPUnit][PHPUnit] suele ser frecuente que a las clases se le agreguen nuevos métodos y propiedades. Esto también es posible de hacer empleando las siguiens funciones:
+Cuando se trabaja con [PHPUnit][PHPUnit] suele ser frecuente que a las clases se les agreguen nuevos métodos y propiedades. Esto se puede lograr de la siguiente manera:
 
 ```php
 <?php
@@ -103,7 +103,7 @@ testCase('title of the test case', function () {
 });
 ```
 
-Estas funciones que sirven para crear métodos y propiedades devuelven objetos del tipo [Method](https://github.com/thenlabs/class-builder/blob/1.0/src/Model/Method.php) o [Property](https://github.com/thenlabs/class-builder/blob/1.0/src/Model/Property.php) según sea el caso, los cuales son objetos tipo `Builder` y gracias a los mismos usted podrá personalizar cualquier aspecto del miembro. Por ejemplo, en caso de que se desee agregar una anotación en el bloque de comentarios se podría hacer de la siguiente manera:
+Las funciones que sirven para crear métodos y propiedades devuelven objetos de tipo [Method](https://github.com/thenlabs/class-builder/blob/1.0/src/Model/Method.php) o [Property](https://github.com/thenlabs/class-builder/blob/1.0/src/Model/Property.php) según sea el caso. Estos resultados son [*builders*](https://es.wikipedia.org/wiki/Builder_(patr%C3%B3n_de_dise%C3%B1o)) que le permitirán personalizar cualquier aspecto del miembro. Por ejemplo, en caso de que se desee agregar una anotación en el bloque de comentarios se podría hacer de la siguiente manera:
 
 ```php
 <?php
@@ -117,13 +117,11 @@ testCase('title of the test case', function () {
 });
 ```
 
-De manera general y a modo de resumen, es posible personalizar **TODO** lo que se necesite gracias al proyecto [ClassBuilder][ClassBuilder].
-
 ### Trabajando con proveedores de datos.
 
 De esta misma manera podríamos definir y usar proveedores de datos:
 
-Gracias al método `with(array $data)` es posible crear tests con proveedores de datos.
+Gracias al método `with(array $data)` es posible crear [tests con proveedores de datos](https://phpunit.readthedocs.io/en/9.5/writing-tests-for-phpunit.html#data-providers).
 
 ```php
 <?php
@@ -152,9 +150,9 @@ testCase('title of the test case', function () {
 
 ## Anidación y reutilización de casos de prueba.
 
-Como se ha comentado anteriormente una de las mejores ventajas que ofrece [PyramidalTests][PyramidalTests] es que permite anidar casos de prueba lo cual posibilita la reutilización del código.
+Como se ha comentado anteriormente una de las mayores ventajas que ofrece [PyramidalTests][PyramidalTests] es que permite anidar casos de prueba lo cual posibilita la reutilización del código.
 
-Cuando se anidan dos o más casos las clases de los más internos heredan desde las clases de los más externos pero hay que tener en cuenta que **las pruebas no son heredadas**.
+Cuando se anidan dos o más casos, las clases de los más internos heredarán de los más externos pero hay que tener en cuenta que **las pruebas no son heredadas**.
 
 El siguiente ejemplo muestra que en la prueba se está utilizando una propiedad definida en el método `setUp()` del caso padre.
 
@@ -208,7 +206,7 @@ testCase('the parent test case', function () {
 
 ## Trabajando con macros.
 
-Con el objetivo de facilitar la reutilización de ciertas pruebas y casos es que exiten las denominadas *macros*.
+Con el objetivo de facilitar en la mayor medida posible la reutilización de pruebas y casos es que exiten las denominadas macros.
 
 En el siguiente ejemplo se ha creado una macro la cual contiene una prueba que depende de la propiedad `myProperty` del contexto. Puede verse que dicha prueba es reutilizada en dos casos que poseen la propiedad `myProperty` pero creadas de diferentes maneras.
 
@@ -285,7 +283,7 @@ Time: 00:00.004, Memory: 6.00 MB
 
 <span style="background-color:#4E9A06"><font color="#2E3436">OK (1 test, 1 assertion)</font></span></pre>
 
-Como puede verse, en estos casos se mostrará como título del caso de prueba la ruta relativa del archivo del mismo, y como título para las pruebas se usará el prefijo `test` seguido del número que le corresponda y por último, se mostrará el número de la línea donde se ha llamado a la función `test()`.
+Como puede verse, en esas situaciones se mostrará como título del caso la ruta relativa del archivo donde se encuentre definido, y como título para las pruebas se usará el prefijo `test` seguido del número que le corresponda, y por último, se mostrará el número de la línea donde se ha llamado a la función `test()`.
 
 ### Creando pruebas sin definir un caso padre.
 
@@ -314,37 +312,37 @@ test(function () {
 
 El estilo que hemos mostrando hasta utiliza funciones cuyos nombres se corresponden con funciones clave en [PHPUnit][PHPUnit]. Pero adicionalmente, se encuentran disponibles otras funciones cuyos nombres constrituyen otro estilo bastante popular en otros proyectos y preferido por muchos desarrolladores.
 
-El siguiente fragmento de código es totalmente equivalente al mostrado en el primer ejemplo de este documento.
+El siguiente fragmento es totalmente equivalente al mostrado en el primer ejemplo de este documento. Los comentarios muestran la función equivalente al estilo original.
 
 ### Describe-It.
 
 ```php
 <?php
 
-describe('my custom title', function () {
-    beforeAll(function () {
+describe('my custom title', function () { // testCase()
+    beforeAll(function () { // setUpBeforeClass()
         // ...
     });
 
-    beforeEach(function () {
+    beforeEach(function () { // setUp()
         // ...
     });
 
-    it('title of the test', function () {
+    it('title of the test', function () { // test()
         // ...
     });
 
-    afterEach(function () {
+    afterEach(function () { // tearDown()
         // ...
     });
 
-    afterAll(function () {
+    afterAll(function () { // tearDownAfterClass()
         // ...
     });
 });
 ```
 
-Hemos visto que este estilo se ha venido popularizando en la comunidad [PHP][PHP] gracias al excelente *framework* [Pest][Pest]. Una de las características que más prefieren los usuarios del mismo es la de emplear expectativas en vez de los aciertos propios de [PHPUnit][PHPUnit].
+Hemos visto que este estilo se ha venido popularizando en la comunidad [PHP][PHP] gracias al excelente *framework* [Pest][Pest]. Una de las características que más prefieren los usuarios del mismo es la de emplear expectativas en vez de los aciertos de [PHPUnit][PHPUnit].
 
 #### Usando expectativas en vez de aciertos.
 
@@ -366,7 +364,7 @@ test(function () {
 
 ### Usando decoradores.
 
-Los decoradores ofrecen a los usuarios formas simplicadas de hacer cosas. Más adelante vamos a abordar más en profundidad este tema, pero por ahora queremos mostrar que gracias a los mismos existe otra manera de crear las pruebas tal y como mostramos seguidamente:
+Los decoradores ofrecen a los usuarios formas simplicadas de hacer cosas. Más adelante abordaremos en profundidad este tema, pero por ahora queremos mostrar que existe un estilo adicional para crear las pruebas y los casos:
 
 ```php
 <?php
@@ -403,7 +401,7 @@ testCase('title of the test case')
 ---
 
 <span class="float-start">Anterior: [El comando pyramidal](the-pyramidal-command.md)</span>
-<span class="float-end">Siguiente: [Creando pruebas End-to-End](end-to-end.md)</span>
+<span class="float-end">Siguiente: [Creando pruebas de extremo a extremo](end-to-end.md)</span>
 
 [Pest]: https://pestphp.com/
 [PHP]: https://www.php.net/

@@ -1,4 +1,4 @@
-# Creando pruebas End-To-End.
+# Creando pruebas de extremo a extremo.
 
 A veces necesitamos crear ciertas pruebas que son muy costosas en tiempo y/o recursos dado que implican la interacción con otros procesos del sistema, como por ejemplo, abrir una nueva instancia de un navegador web, etc.
 
@@ -6,7 +6,7 @@ Con el objetivo de crear este tipo de pruebas es que existen las funciones `setU
 
 >De manera equivalente también existen las funciones `beforeAllOnce()` y `afterAllOnce()`.
 
-El ejemplo que se muestra a continuación consiste en una prueba `End-To-End` que lo que hace es abrir una instancia de [Google Chrome](https://en.wikipedia.org/wiki/Google_Chrome), visitar el sitio de [Wikipedia](https://www.wikipedia.com), escribir "Cuba" en el buscador y presionar enter. A medida que se va avanzando entre los diferentes pasos se van probando cosas como los títulos de las páginas, etc.
+El ejemplo que se muestra a continuación consiste en una prueba de extremo a extremo que lo que hace es abrir una instancia de [Google Chrome](https://en.wikipedia.org/wiki/Google_Chrome), visitar el sitio de [Wikipedia](https://www.wikipedia.com), escribir "Cuba" en el buscador y presionar enter. A medida que se va avanzando entre los diferentes pasos se van probando cosas como los títulos de las páginas, etc.
 
 >Para la interacción con el navegador se está utilizando [php-webdriver](https://github.com/php-webdriver/php-webdriver).
 
@@ -68,7 +68,7 @@ testCase('open https://www.wikipedia.com', function () {
 });
 ```
 
-Seguidamente se muestra el resultado de la ejecución del ejemplo donde puede verse que toda la historia se ejecuta con una única instancia de un navegador tal y como comentamos anteriormente.
+Seguidamente se muestra el resultado de la ejecución del ejemplo. Como comentamos anteriormente, toda la ejecución se llevó a cabo con una única instancia del navegador, a pesar de que el resultado muestra dos casos de prueba.
 
 <pre class="text-white p-2">$ ./vendor/bin/pyramidal --testdox
 <font color="#C4A000"><b>PyramidalTests 2.x.x</b></font> by Andy Daniel Navarro Taño and contributors.

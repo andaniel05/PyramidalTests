@@ -14,7 +14,7 @@ El siguiente ejemplo muestra una prueba que ha sido creada sin especificar una f
 test()->assertTrue(true);
 ```
 
->Esta manera de crear pruebas está inspirada por las llamadas [pruebas de orden superior](https://pestphp.com/docs/higher-order-tests) de [Pest][Pest].
+>Esta manera de crear pruebas está inspirada en las [pruebas de orden superior de Pest](https://pestphp.com/docs/higher-order-tests).
 
 Estas implementaciones pueden contener múltiples decoradores y estos se corresponden con los **métodos no estáticos** de la clase del caso en cuestión.
 
@@ -32,7 +32,7 @@ class MyTestCase extends \PHPUnit\Framework\TestCase
 setTestCaseClass(MyTestCase::class);
 
 test('my title')
-    ->doAnything(true)
+    ->doAnything()
     ->assertSame(50, 50);
 ```
 
@@ -68,7 +68,7 @@ test('test title')
 
 De manera muy similar a las pruebas, también es posible hacer uso de esta característica en los casos aunque con algunas diferencias.
 
-Lo primero que hay que comentar es que los decoradores serán ejecutados en el método `setUpBeforeClass()` del caso, y por tanto, solo se pueden usar los **métodos estáticos** de la clase en cuestión. Ejemplo:
+Lo primero que hay que comentar es que los decoradores serán ejecutados en el método `setUpBeforeClass()` del caso, y por tanto, solo se pueden emplear con los **métodos estáticos** de la clase en cuestión. Ejemplo:
 
 ```php
 <?php
@@ -99,10 +99,9 @@ testCase('my title')
 ```
 
 
-
 ---
 
-<span class="float-start">Anterior: [Creando pruebas End-To-End](end-to-end.md)</span>
+<span class="float-start">Anterior: [Creando pruebas de extremo a extremo](end-to-end.md)</span>
 <span class="float-end">Siguiente: [Opciones de configuración](config-options.md)</span>
 
 [PHPUnit]: https://phpunit.de/
