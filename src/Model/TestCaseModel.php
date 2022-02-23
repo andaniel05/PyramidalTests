@@ -4,16 +4,15 @@ declare(strict_types=1);
 namespace ThenLabs\PyramidalTests\Model;
 
 use Closure;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Exception;
 use ReflectionClass;
 use ReflectionMethod;
 use ThenLabs\ClassBuilder\ClassBuilder;
-use ThenLabs\PyramidalTests\Decorator\Context;
-use ThenLabs\Components\CompositeComponentTrait;
-use Doctrine\Common\Annotations\AnnotationReader;
-use ThenLabs\PyramidalTests\Annotation\Decorator;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use ThenLabs\Components\CompositeComponentInterface;
+use ThenLabs\Components\CompositeComponentTrait;
+use ThenLabs\PyramidalTests\Annotation\Decorator;
 use ThenLabs\PyramidalTests\Annotation\ImportDecorators;
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
 use ThenLabs\PyramidalTests\Decorator\DecoratorsRegistry;
@@ -485,8 +484,7 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
             if ($method instanceof ReflectionMethod &&
                 $method->isStatic()
             ) {
-                $decorator = new class($decoratorName, $arguments) extends AbstractDecorator
-                {
+                $decorator = new class($decoratorName, $arguments) extends AbstractDecorator {
                     public function __construct($methodName, $arguments)
                     {
                         $this->methodName = $methodName;
