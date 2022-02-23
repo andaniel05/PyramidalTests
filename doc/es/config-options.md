@@ -4,7 +4,7 @@ Seguidamente se muestran todas las opciones de configuración que puede contener
 
 ```yaml
 pyramidal:
-    dsl: ['TDD', 'BDD']
+    dsl: ['phpunit', 'describe-it']
     file_pattern: '^test.*\.php$'
     colors: true
     testdox: false
@@ -16,6 +16,10 @@ pyramidal:
 
 `colors` sirve para especificar si se utilizará la opción `--colors` del ejecutor de [PHPUnit][PHPUnit].
 
-`testdox` sirve para especificar si siempre se especificará la opción `--testdox` del ejecutor de [PHPUnit][PHPUnit].
+`testdox` sirve para indicar si por defecto se usará la opción `--testdox` del ejecutor de [PHPUnit][PHPUnit]. Si esta opción vale `true` la llamada a `./vendor/bin/pyramidal` será equivalente a `./vendor/bin/pyramidal --testdox`.
+
+---
+
+<span class="float-start">Anterior: [Trabajando con decoradores.](decorators.md)</span>
 
 [PHPUnit]: https://phpunit.de/

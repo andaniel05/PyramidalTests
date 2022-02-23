@@ -47,7 +47,7 @@ Se obtendría el siguiente resultado:
 
 <pre class="text-white p-2">
 <font color="#C4A000"><b>PyramidalTests 2.x.x</b></font> by Andy Daniel Navarro Taño and contributors.
-PHPUnit 9.5.11 by Sebastian Bergmann and contributors.
+PHPUnit 9.5.x by Sebastian Bergmann and contributors.
 
 <u style="text-decoration-style:single">it is created a product</u>
 <font color="#4E9A06">✔</font> the product has not name
@@ -65,7 +65,7 @@ Como puede verse, el resultado de la ejecución contiene los mismos títulos y m
 
 Este ejemplo tan sencillo muestra los beneficios que [PyramidalTests][PyramidalTests] ofrece a la hora de trabajar con [PHPUnit][PHPUnit]. Decimos esto porque [PyramidalTests][PyramidalTests] está basado 100% en [PHPUnit][PHPUnit] y se podría decir que es como una extensión(o framework) del mismo que lo que hace es extender sus posibilidades.
 
-Si solo estuviéramos usando [PHPUnit][PHPUnit] y quisiéramos obtener el mismo resultado anterior de entrada esto no sería posible ya que por defecto este no muestra márgenes en los resultados. Además, la reutilización del código sería todo un reto porque no bastaría con solo usar la herencia entre las clases de los casos ya que los métodos cuyo nombre cuentan con el prefijo *test* también se estarían heredando y esto implicaría que el segundo caso contendría tres pruebas y no solo una como ocurre en el ejemplo.
+Si solo estuviéramos usando [PHPUnit][PHPUnit] y quisiéramos obtener el mismo resultado anterior, de entrada, esto no sería posible ya que por defecto este no muestra márgenes en los resultados. Además, la reutilización del código sería todo un reto porque no bastaría con solo usar la herencia entre las clases dado que los métodos cuyos nombres comienzan por *test* también se estarían heredando y esto implicaría que el segundo caso contendría tres pruebas y no solo una como ocurre en el ejemplo.
 
 Lo que hemos mostrado aquí no son solo las únicas bondades que ofrece [PyramidalTests][PyramidalTests] y lo exhortamos a seguir leyendo para que conozca más al respecto.
 
