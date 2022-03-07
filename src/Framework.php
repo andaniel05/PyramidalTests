@@ -134,6 +134,8 @@ class Framework extends Command
             $argv[] = '--colors';
         }
 
+        $argv[] = '--do-not-cache-result';
+
         return parent::run($argv, $exit);
     }
 

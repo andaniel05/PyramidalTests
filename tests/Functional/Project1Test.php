@@ -17,11 +17,13 @@ class Project1Test extends TestCase
             1 => array('pipe', 'w'),
         );
 
+        $projectDir = __DIR__.'/projects/project1';
+
         $process = proc_open(
             ROOT_DIR.'/bin/pyramidal --testdox',
             $descriptorspec,
             $pipes,
-            __DIR__.'/projects/project1'
+            $projectDir
         );
 
         $this->assertIsResource($process);
@@ -38,6 +40,7 @@ class Project1Test extends TestCase
         $this->assertStringContainsString('my parent test case', $output);
         $this->assertStringContainsString('my test 2', $output);
         $this->assertStringContainsString('my first test', $output);
+        $this->assertFalse(file_exists($projectDir.'/.phpunit.result.cache'));
     }
 
     public function test2()
