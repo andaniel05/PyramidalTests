@@ -216,6 +216,10 @@ class Framework extends Command
 
     private function includeDirectory(string $directoryPath, string $filePattern): void
     {
+        if (! is_dir($directoryPath)) {
+            return;
+        }
+
         foreach (new DirectoryIterator($directoryPath) as $fileInfo) {
             $pathName = $fileInfo->getPathname();
             $fileName = $fileInfo->getFilename();
