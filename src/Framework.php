@@ -53,6 +53,25 @@ class Framework extends Command
     {
         $options = self::DEFAULT_OPTIONS;
 
+        $pyramidalYamlFileName = getcwd().'/pyramidal.yaml';
+
+        // load config from pyramidal.yaml file if exists.
+        if (file_exists($pyramidalYamlFileName)) {
+            $options = array_merge(
+                $options,
+                Yaml::parseFile($pyramidalYamlFileName)['pyramidal']
+            );
+        }
+
+        // load the DSL to use.
+        if (is_string($options['dsl'])) {
+            $this->loadDsl($options['dsl']);
+        } elseif (is_array($options['dsl'])) {
+            foreach ($options['dsl'] as $dsl) {
+                $this->loadDsl($dsl);
+            }
+        }
+
         $this->handleArguments($argv);
 
         printf(self::CREDITS, self::VERSION);
@@ -98,15 +117,6 @@ class Framework extends Command
                 }
 
                 unset($this->arguments['filter']);
-            }
-
-            // load the DSL to use.
-            if (is_string($options['dsl'])) {
-                $this->loadDsl($options['dsl']);
-            } elseif (is_array($options['dsl'])) {
-                foreach ($options['dsl'] as $dsl) {
-                    $this->loadDsl($dsl);
-                }
             }
 
             $options['file_pattern'] = '/'.$options['file_pattern'].'/';
