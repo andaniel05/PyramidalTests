@@ -28,7 +28,7 @@ class PyramidalTestDoxPrinter extends CliTestDoxPrinter
 
             $lines = explode(PHP_EOL, $originalString);
             $lines = array_map(function ($line) use ($margin) {
-                return $margin.$line;
+                return empty($line) ? $line : $margin.$line;
             }, $lines);
 
             echo implode(PHP_EOL, $lines);
