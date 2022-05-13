@@ -2605,16 +2605,16 @@
         },
         {
             "name": "thenlabs/class-builder",
-            "version": "v1.0.9",
+            "version": "v1.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thenlabs/class-builder.git",
-                "reference": "e106c4fa8ed150b56d8c5e4cabca2817cc5a7237"
+                "reference": "5c97bb3afaa952fd3e9cc78d01bb75770aeb5bbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thenlabs/class-builder/zipball/e106c4fa8ed150b56d8c5e4cabca2817cc5a7237",
-                "reference": "e106c4fa8ed150b56d8c5e4cabca2817cc5a7237",
+                "url": "https://api.github.com/repos/thenlabs/class-builder/zipball/5c97bb3afaa952fd3e9cc78d01bb75770aeb5bbe",
+                "reference": "5c97bb3afaa952fd3e9cc78d01bb75770aeb5bbe",
                 "shasum": ""
             },
             "require": {
@@ -2651,9 +2651,9 @@
             ],
             "support": {
                 "issues": "https://github.com/thenlabs/class-builder/issues",
-                "source": "https://github.com/thenlabs/class-builder/tree/v1.0.9"
+                "source": "https://github.com/thenlabs/class-builder/tree/v1.0.10"
             },
-            "time": "2021-12-22T12:55:47+00:00"
+            "time": "2022-05-13T22:27:32+00:00"
         },
         {
             "name": "thenlabs/components",
@@ -2714,12 +2714,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thenlabs/snapshots-comparator.git",
-                "reference": "a0e9114440e05020dafcfa3f7f5f1867f901be6e"
+                "reference": "f8c4582e4b6dcda520e4478e64c6a12f2cd6d177"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thenlabs/snapshots-comparator/zipball/a0e9114440e05020dafcfa3f7f5f1867f901be6e",
-                "reference": "a0e9114440e05020dafcfa3f7f5f1867f901be6e",
+                "url": "https://api.github.com/repos/thenlabs/snapshots-comparator/zipball/f8c4582e4b6dcda520e4478e64c6a12f2cd6d177",
+                "reference": "f8c4582e4b6dcda520e4478e64c6a12f2cd6d177",
                 "shasum": ""
             },
             "require-dev": {
@@ -2747,7 +2747,7 @@
                 "issues": "https://github.com/thenlabs/snapshots-comparator/issues",
                 "source": "https://github.com/thenlabs/snapshots-comparator/tree/main"
             },
-            "time": "2022-04-02T18:55:36+00:00"
+            "time": "2022-05-14T12:45:01+00:00"
         },
         {
             "name": "theseer/tokenizer",

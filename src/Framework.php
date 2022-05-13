@@ -15,6 +15,7 @@ use ThenLabs\PyramidalTests\Model\AbstractModel;
 use ThenLabs\PyramidalTests\Model\Record;
 use ThenLabs\PyramidalTests\Model\TestCaseModel;
 use ThenLabs\PyramidalTests\Model\TestModel;
+use ThenLabs\PyramidalTests\Plugins\SystemSnapshots\SystemSnapshots;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
@@ -145,6 +146,7 @@ class Framework extends Command
         }
 
         $argv[] = '--do-not-cache-result';
+        $argv[] = '--extensions='.SystemSnapshots::class;
 
         return parent::run($argv, $exit);
     }

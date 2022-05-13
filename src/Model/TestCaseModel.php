@@ -17,6 +17,8 @@ use ThenLabs\PyramidalTests\Annotation\ImportDecorators;
 use ThenLabs\PyramidalTests\Decorator\AbstractDecorator;
 use ThenLabs\PyramidalTests\Decorator\DecoratorsRegistry;
 use ThenLabs\PyramidalTests\Decorator\PackageInterface as DecoratorPackageInterface;
+use ThenLabs\PyramidalTests\Plugins\SystemSnapshots\Contract\SnapshotsPerTestCase;
+use ThenLabs\PyramidalTests\Plugins\SystemSnapshots\SystemSnapshots;
 
 AnnotationRegistry::registerFile(__DIR__.'/../Annotation/Decorator.php');
 AnnotationRegistry::registerFile(__DIR__.'/../Annotation/ImportDecorators.php');
@@ -142,17 +144,45 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
             $this->classBuilder->addComment("@testdox {$this->title}");
         }
 
+        if ($this->hasSnapshotsPerTestCase()) {
+            $this->setUpBeforeClassDecorators[] = function () {
+                SystemSnapshots::$snapshots[static::class] = [
+                    'before' => SystemSnapshots::getSnapshot(),
+                    'after' => [],
+                ];
+            };
+
+            $this->tearDownAfterClassDecorators[] = function () {
+                SystemSnapshots::$snapshots[static::class]['after'] = SystemSnapshots::getSnapshot();
+                SystemSnapshots::compareSnapshots(static::class);
+            };
+        }
+
         // setUpBeforeClass
         $setUpBeforeClassDecorators = $this->setUpBeforeClassDecorators;
         $currentSetUpBeforeClassClosure = $this->setUpBeforeClassClosure;
 
         if (count($setUpBeforeClassDecorators)) {
-            $this->setUpBeforeClassClosure = function () use ($setUpBeforeClassDecorators, $currentSetUpBeforeClassClosure) {
+            $this->setUpBeforeClassClosure = function () use ($setUpBeforeClassDecorators, $currentSetUpBeforeClassClosure, $thisTestCaseModel) {
+                $testCaseClass = $thisTestCaseModel->getClassBuilder()->getFCQN();
+
                 foreach ($setUpBeforeClassDecorators as $setUpBeforeClassDecorator) {
+                    $setUpBeforeClassDecorator = Closure::bind(
+                        $setUpBeforeClassDecorator,
+                        null,
+                        $testCaseClass
+                    );
+
                     $setUpBeforeClassDecorator();
                 }
 
                 if ($currentSetUpBeforeClassClosure instanceof Closure) {
+                    $currentSetUpBeforeClassClosure = Closure::bind(
+                        $currentSetUpBeforeClassClosure,
+                        null,
+                        $testCaseClass
+                    );
+
                     $currentSetUpBeforeClassClosure();
                 }
             };
@@ -238,12 +268,26 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
         $currentTearDownAfterClassClosure = $this->tearDownAfterClassClosure;
 
         if (count($tearDownAfterClassDecorators)) {
-            $this->tearDownAfterClassClosure = function () use ($tearDownAfterClassDecorators, $currentTearDownAfterClassClosure) {
+            $this->tearDownAfterClassClosure = function () use ($tearDownAfterClassDecorators, $currentTearDownAfterClassClosure, $thisTestCaseModel) {
+                $testCaseClass = $thisTestCaseModel->getClassBuilder()->getFCQN();
+
                 foreach ($tearDownAfterClassDecorators as $tearDownAfterClassDecorator) {
+                    $tearDownAfterClassDecorator = Closure::bind(
+                        $tearDownAfterClassDecorator,
+                        null,
+                        $testCaseClass
+                    );
+
                     $tearDownAfterClassDecorator();
                 }
 
                 if ($currentTearDownAfterClassClosure instanceof Closure) {
+                    $currentTearDownAfterClassClosure = Closure::bind(
+                        $currentTearDownAfterClassClosure,
+                        null,
+                        $testCaseClass
+                    );
+
                     $currentTearDownAfterClassClosure();
                 }
             };
@@ -586,5 +630,30 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
     public function addExecutedDecorator(string $title): void
     {
         $this->executedDecorators[] = $title;
+    }
+
+    public function hasSnapshotsPerTestCase(): bool
+    {
+        $aux = $this;
+
+        while ($aux) {
+            if (false !== array_search(SnapshotsPerTestCase::class, $aux->getClassBuilder()->getInterfaces())) {
+                return true;
+            }
+
+            if (false !== array_search(SnapshotsPerTestCase::class, $aux->getBaseClassBuilder()->getInterfaces())) {
+                return true;
+            }
+
+            $reflectionBaseClass = new ReflectionClass($aux->getBaseClassBuilder()->getParentClass());
+
+            if ($reflectionBaseClass->implementsInterface(SnapshotsPerTestCase::class)) {
+                return true;
+            }
+
+            $aux = $aux->getParent();
+        }
+
+        return false;
     }
 }

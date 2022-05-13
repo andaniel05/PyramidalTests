@@ -11,6 +11,7 @@ use PHPUnit\Runner\AfterTestFailureHook;
 use PHPUnit\Runner\AfterTestHook;
 use PHPUnit\Runner\BeforeTestHook;
 use ReflectionClass;
+use ThenLabs\PyramidalTests\Plugins\SystemSnapshots\Contract\SnapshotsPerTest;
 use ThenLabs\PyramidalTests\Plugins\SystemSnapshots\Driver\AbstractDriver;
 use ThenLabs\SnapshotsComparator\Comparator as SnapshotsComparator;
 use ThenLabs\SnapshotsComparator\ExpectationBuilder;
@@ -18,7 +19,7 @@ use ThenLabs\SnapshotsComparator\ExpectationBuilder;
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
-class TestSnapshotsExtension implements BeforeTestHook, AfterTestHook, AfterTestErrorHook, AfterTestFailureHook
+class SystemSnapshots implements BeforeTestHook, AfterTestHook, AfterTestErrorHook, AfterTestFailureHook
 {
     /**
      * @var array<string, AbstractDriver>
@@ -28,7 +29,7 @@ class TestSnapshotsExtension implements BeforeTestHook, AfterTestHook, AfterTest
     /**
      * @var array<string, array>
      */
-    protected static $snapshots = [];
+    public static $snapshots = [];
 
     /**
      * @var array<string, ExpectationBuilder>
@@ -60,21 +61,7 @@ class TestSnapshotsExtension implements BeforeTestHook, AfterTestHook, AfterTest
 
         static::$snapshots[$testName]['after'] = static::getSnapshot();
 
-        $snapshotsDiff = SnapshotsComparator::compare(
-            static::$snapshots[$testName]['before'],
-            static::$snapshots[$testName]['after'],
-            static::getExpectationBuilderForTest($testName),
-        );
-
-        $unexpectations = $snapshotsDiff->getUnexpectations();
-
-        if (!empty($unexpectations)) {
-            throw new AssertionFailedError(
-                "\nUnexpectations in snapshots:\n".VarExporter::export($unexpectations)
-            );
-        }
-
-        Assert::assertTrue(true);
+        static::compareSnapshots($testName);
     }
 
     public function executeAfterTestError(string $test, string $message, float $time): void
@@ -96,7 +83,7 @@ class TestSnapshotsExtension implements BeforeTestHook, AfterTestHook, AfterTest
         $testInfo = $this->getTestInfo($testName);
         $class = new ReflectionClass($testInfo['class']);
 
-        return $class->isSubclassOf(SnapshotsPerTestInterface::class);
+        return $class->isSubclassOf(SnapshotsPerTest::class);
     }
 
     protected function getTestInfo(string $testName): array
@@ -104,6 +91,25 @@ class TestSnapshotsExtension implements BeforeTestHook, AfterTestHook, AfterTest
         [$class, $method] = explode('::', $testName);
 
         return compact('class', 'method');
+    }
+
+    public static function compareSnapshots(string $context): void
+    {
+        $snapshotsDiff = SnapshotsComparator::compare(
+            static::$snapshots[$context]['before'],
+            static::$snapshots[$context]['after'],
+            static::getExpectationBuilderForContext($context),
+        );
+
+        $unexpectations = $snapshotsDiff->getUnexpectations();
+
+        if (!empty($unexpectations)) {
+            throw new AssertionFailedError(
+                "\nUnexpectations in snapshots:\n".VarExporter::export($unexpectations)
+            );
+        }
+
+        Assert::assertTrue(true);
     }
 
     public static function getSnapshot(): array
@@ -153,14 +159,18 @@ class TestSnapshotsExtension implements BeforeTestHook, AfterTestHook, AfterTest
         static::$expectations = [];
     }
 
-    public static function expectSnapshotDiff(array $expectations, string $testName = null): void
+    /**
+     * @param array $expectations
+     * @param string|null $context  test name or test case class.
+     */
+    public static function expect(array $expectations, string $context = null): void
     {
-        if (null === $testName) {
+        if (null === $context) {
             $registeredTestsWithExpectations = array_keys(static::$snapshots);
-            $testName = array_pop($registeredTestsWithExpectations);
+            $context = array_pop($registeredTestsWithExpectations);
         }
 
-        $expectationBuilder = static::getExpectationBuilderForTest($testName);
+        $expectationBuilder = static::getExpectationBuilderForContext($context);
 
         if (array_key_exists('CREATED', $expectations)) {
             $expectationBuilder->expectCreated($expectations['CREATED']);
@@ -175,12 +185,12 @@ class TestSnapshotsExtension implements BeforeTestHook, AfterTestHook, AfterTest
         }
     }
 
-    protected static function getExpectationBuilderForTest(string $testName): ExpectationBuilder
+    protected static function getExpectationBuilderForContext(string $context): ExpectationBuilder
     {
-        if (! isset(static::$expectations[$testName])) {
-            static::$expectations[$testName] = new ExpectationBuilder();
+        if (! isset(static::$expectations[$context])) {
+            static::$expectations[$context] = new ExpectationBuilder();
         }
 
-        return static::$expectations[$testName];
+        return static::$expectations[$context];
     }
 }
