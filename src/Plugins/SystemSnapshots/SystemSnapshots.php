@@ -185,6 +185,33 @@ class SystemSnapshots implements BeforeTestHook, AfterTestHook, AfterTestErrorHo
         }
     }
 
+    /**
+     * @param array $expectations
+     * @param string|null $context  test name or test case class.
+     */
+    public static function expectCreated(array $expectations, string $context = null): void
+    {
+        static::expect(['CREATED' => $expectations], $context);
+    }
+
+    /**
+     * @param array $expectations
+     * @param string|null $context  test name or test case class.
+     */
+    public static function expectUpdated(array $expectations, string $context = null): void
+    {
+        static::expect(['UPDATED' => $expectations], $context);
+    }
+
+    /**
+     * @param array $expectations
+     * @param string|null $context  test name or test case class.
+     */
+    public static function expectDeleted(array $expectations, string $context = null): void
+    {
+        static::expect(['DELETED' => $expectations], $context);
+    }
+
     protected static function getExpectationBuilderForContext(string $context): ExpectationBuilder
     {
         if (! isset(static::$expectations[$context])) {
