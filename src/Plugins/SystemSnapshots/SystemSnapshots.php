@@ -183,6 +183,8 @@ class SystemSnapshots implements BeforeTestHook, AfterTestHook, AfterTestErrorHo
         if (array_key_exists('DELETED', $expectations)) {
             $expectationBuilder->expectDeleted($expectations['DELETED']);
         }
+
+        Assert::assertTrue(true);
     }
 
     /**
