@@ -4,29 +4,31 @@ declare(strict_types=1);
 namespace ThenLabs\PyramidalTests\Plugins\SystemSnapshots;
 
 use DateTime;
+use Exception;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Andy Daniel Navarro Taño <andaniel05@gmail.com>
  */
 trait UsefulMethodsTrait
 {
-    public static function expectCreated(array $expectations, ?string $context = null): void
+    public static function expectCreated(array $expectations, $context = null): void
     {
-        $context = $context ?? static::class;
+        $context = static::getRightContext($context);
 
         SystemSnapshots::expectCreated($expectations, $context);
     }
 
-    public static function expectUpdated(array $expectations, ?string $context = null): void
+    public static function expectUpdated(array $expectations, $context = null): void
     {
-        $context = $context ?? static::class;
+        $context = static::getRightContext($context);
 
         SystemSnapshots::expectUpdated($expectations, $context);
     }
 
-    public static function expectDeleted(array $expectations, ?string $context = null): void
+    public static function expectDeleted(array $expectations, $context = null): void
     {
-        $context = $context ?? static::class;
+        $context = static::getRightContext($context);
 
         SystemSnapshots::expectDeleted($expectations, $context);
     }
@@ -51,5 +53,22 @@ trait UsefulMethodsTrait
 
             return abs($diff) <= $minDiff ? true : false;
         };
+    }
+
+    public static function getRightContext($context): string
+    {
+        if (! $context) {
+            return static::class;
+        }
+
+        if (is_string($context)) {
+            return $context;
+        }
+
+        if ($context instanceof TestCase) {
+            return get_class($context).'::'.$context->getName();
+        }
+
+        throw new Exception('Invalid context.');
     }
 }
