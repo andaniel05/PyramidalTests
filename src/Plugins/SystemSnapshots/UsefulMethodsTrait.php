@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ThenLabs\PyramidalTests\Plugins\SystemSnapshots;
 
 use DateTime;
+use DateTimeInterface;
 use Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -40,7 +41,7 @@ trait UsefulMethodsTrait
         };
     }
 
-    public static function nearMomentTo(DateTime $reference, int $minDiff = 3)
+    public static function nearMomentTo(DateTimeInterface $reference, int $minDiff = 3)
     {
         return function (string $value) use ($reference, $minDiff) {
             $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $value);
