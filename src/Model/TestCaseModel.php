@@ -164,6 +164,8 @@ class TestCaseModel extends AbstractModel implements CompositeComponentInterface
 
         if (count($setUpBeforeClassDecorators)) {
             $this->setUpBeforeClassClosure = function () use ($setUpBeforeClassDecorators, $currentSetUpBeforeClassClosure, $thisTestCaseModel) {
+                parent::setUpBeforeClass();
+
                 $testCaseClass = $thisTestCaseModel->getClassBuilder()->getFCQN();
 
                 foreach ($setUpBeforeClassDecorators as $setUpBeforeClassDecorator) {
