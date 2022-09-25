@@ -146,7 +146,7 @@ class Framework extends Command
         }
 
         $argv[] = '--do-not-cache-result';
-        $argv[] = '--extensions='.SystemSnapshots::class;
+        // $argv[] = '--extensions='.SystemSnapshots::class;
 
         return parent::run($argv, $exit);
     }
