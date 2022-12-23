@@ -5,5 +5,5 @@ test(function () {
     $baseClass = $thisClass->getParentClass();
     $testCaseClass = $baseClass->getParentClass();
 
-    $this->assertEquals('PHPUnit\Framework\TestCase', $testCaseClass->getName());
+    $this->assertEquals('ThenLabs\PyramidalTests\PyramidalTestCase', $testCaseClass->getName());
 });

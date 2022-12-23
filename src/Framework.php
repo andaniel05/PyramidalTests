@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace ThenLabs\PyramidalTests;
 
 use DirectoryIterator;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestSuite;
 use PHPUnit\TextUI\Command;
 use PHPUnit\Util\TestDox\CliTestDoxPrinter;
@@ -240,7 +239,7 @@ class Framework extends Command
                 $this->includeDirectory($pathName, $filePattern);
             } elseif (preg_match($filePattern, $fileName)) {
                 // reset the base test case class per each file.
-                setTestCaseClass(TestCase::class);
+                setTestCaseClass(PyramidalTestCase::class);
                 Record::setCurrentTestCaseModel(null);
 
                 require_once $pathName;
